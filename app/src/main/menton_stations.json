@@ -1,0 +1,254 @@
+[
+  {
+    "id": "radio-vinci-autoroutes-1077",
+    "name": "Radio VINCI Autoroutes",
+    "frequency": 107.7,
+    "frequencyText": "107.7 MHz",
+    "aliases": [
+      "Radio VINCI Autoroutes"
+    ],
+    "url": "https://sc.creacast.com/rva-cofiroute-1",
+    "countrycode": "FR",
+    "source": "https://azurmenton.com/en/tools",
+    "stationWebsite": "https://www.radio-vinci-autoroutes.fr/"
+  },
+  {
+    "id": "ici-azur-france-bleu-azur",
+    "name": "Ici Azur / France Bleu Azur",
+    "frequency": 94.8,
+    "frequencyText": "94.8 MHz",
+    "aliases": [
+      "Ici Azur / France Bleu Azur",
+      "Ici Azur",
+      "France Bleu Azur"
+    ],
+    "url": "https://stream.radiofrance.fr/fbazur/fbazur.m3u8?id=radiofrance",
+    "countrycode": "FR",
+    "source": "https://azurmenton.com/en/tools",
+    "stationWebsite": "https://www.francebleu.fr/"
+  },
+  {
+    "id": "riviera-radio",
+    "name": "Riviera Radio",
+    "frequency": 106.5,
+    "frequencyText": "106.5 MHz",
+    "aliases": [
+      "Riviera Radio"
+    ],
+    "url": "https://rivieraradio.ice.infomaniak.ch/stream",
+    "countrycode": "MC",
+    "source": "https://azurmenton.com/en/tools",
+    "stationWebsite": "https://www.rivieraradio.mc/"
+  },
+  {
+    "id": "radio-monaco",
+    "name": "Radio Monaco",
+    "frequency": 95.4,
+    "frequencyText": "95.4 MHz (Nice/Menton area), 98.2 MHz (Monaco)",
+    "aliases": [
+      "Radio Monaco"
+    ],
+    "url": "https://radiomonaco.ice.infomaniak.ch/radiomonaco-128.mp3",
+    "countrycode": "MC",
+    "source": "https://azurmenton.com/en/tools",
+    "stationWebsite": "https://www.radiomonaco.org/"
+  },
+  {
+    "id": "france-info",
+    "name": "France Info",
+    "frequency": 105.5,
+    "frequencyText": "105.5 MHz",
+    "aliases": [
+      "France Info",
+      "Franceinfo"
+    ],
+    "url": "https://icecast.radiofrance.fr/franceinfo-hifi.aac",
+    "countrycode": "FR",
+    "source": "https://azurmenton.com/en/tools",
+    "stationWebsite": "https://www.francetvinfo.fr/"
+  },
+  {
+    "id": "france-inter",
+    "name": "France Inter",
+    "frequency": 97.0,
+    "frequencyText": "97.0 MHz",
+    "aliases": [
+      "France Inter"
+    ],
+    "url": "https://icecast.radiofrance.fr/franceinter-hifi.aac",
+    "countrycode": "FR",
+    "source": "https://azurmenton.com/en/tools",
+    "stationWebsite": "https://www.radiofrance.fr/franceinter"
+  },
+  {
+    "id": "france-culture",
+    "name": "France Culture",
+    "frequency": 89.6,
+    "frequencyText": "89.6 MHz",
+    "aliases": [
+      "France Culture"
+    ],
+    "url": "https://icecast.radiofrance.fr/franceculture-hifi.aac",
+    "countrycode": "FR",
+    "source": "https://azurmenton.com/en/tools",
+    "stationWebsite": "https://www.radiofrance.fr/franceculture"
+  },
+  {
+    "id": "france-musique",
+    "name": "France Musique",
+    "frequency": 91.7,
+    "frequencyText": "91.7 MHz",
+    "aliases": [
+      "France Musique"
+    ],
+    "url": "https://icecast.radiofrance.fr/francemusique-hifi.aac",
+    "countrycode": "FR",
+    "source": "https://azurmenton.com/en/tools",
+    "stationWebsite": "https://www.radiofrance.fr/francemusique"
+  },
+  {
+    "id": "radio-classique",
+    "name": "Radio Classique",
+    "frequency": 102.7,
+    "frequencyText": "102.7 MHz",
+    "aliases": [
+      "Radio Classique"
+    ],
+    "url": "https://radioclassique.ice.infomaniak.ch/radioclassique-high.mp3",
+    "countrycode": "FR",
+    "source": "https://azurmenton.com/en/tools",
+    "stationWebsite": "https://www.radioclassique.fr/"
+  },
+  {
+    "id": "rmc",
+    "name": "RMC",
+    "frequency": 98.5,
+    "frequencyText": "98.5 MHz",
+    "aliases": [
+      "RMC"
+    ],
+    "url": "https://audio.bfmtv.com/rmcradio_128.mp3",
+    "countrycode": "FR",
+    "source": "https://azurmenton.com/en/tools",
+    "stationWebsite": "https://rmc.bfmtv.com/"
+  },
+  {
+    "id": "radio-monte-carlo-italia",
+    "name": "Radio Monte Carlo",
+    "frequency": 106.8,
+    "frequencyText": "106.8 MHz",
+    "aliases": [
+      "Radio Monte Carlo"
+    ],
+    "url": "https://icy.unitedradio.it/RMC.mp3",
+    "countrycode": "IT",
+    "source": "https://azurmenton.com/en/tools",
+    "stationWebsite": "https://www.radiomontecarlo.it/"
+  },
+  {
+    "id": "nrj-cote-dazur",
+    "name": "NRJ Côte d’Azur",
+    "frequency": 99.8,
+    "frequencyText": "99.8 MHz",
+    "aliases": [
+      "NRJ Côte d’Azur",
+      "NRJ Nice"
+    ],
+    "url": "https://streaming.nrjaudio.fm/ou5k6tirv93h",
+    "countrycode": "FR",
+    "source": "https://azurmenton.com/en/tools",
+    "stationWebsite": "https://www.nrj.fr/"
+  },
+  {
+    "id": "rtl2-cote-dazur",
+    "name": "RTL2 Côte d’Azur",
+    "frequency": 92.9,
+    "frequencyText": "92.9 MHz",
+    "aliases": [
+      "RTL2 Côte d’Azur",
+      "RTL2 Nice"
+    ],
+    "url": "https://icecast.rtl2.fr/rtl2-1-44-128",
+    "countrycode": "FR",
+    "source": "https://azurmenton.com/en/tools",
+    "stationWebsite": "https://www.rtl2.fr/"
+  },
+  {
+    "id": "nostalgie",
+    "name": "Nostalgie",
+    "frequency": 93.5,
+    "frequencyText": "93.5 MHz",
+    "aliases": [
+      "Nostalgie"
+    ],
+    "url": "https://streaming.nrjaudio.fm/ouwgwqsk6j4d",
+    "countrycode": "FR",
+    "source": "https://azurmenton.com/en/tools",
+    "stationWebsite": "https://www.nostalgie.fr/"
+  },
+  {
+    "id": "europe-2",
+    "name": "Europe 2",
+    "frequency": 92.1,
+    "frequencyText": "92.1 MHz",
+    "aliases": [
+      "Europe 2"
+    ],
+    "url": "https://europe2.ice.infomaniak.ch/europe2-128.mp3",
+    "countrycode": "FR",
+    "source": "https://azurmenton.com/en/tools",
+    "stationWebsite": "https://www.europe2.fr/"
+  },
+  {
+    "id": "rfm",
+    "name": "RFM",
+    "frequency": 97.6,
+    "frequencyText": "97.6 MHz",
+    "aliases": [
+      "RFM"
+    ],
+    "url": "https://rfm.lmn.fm/rfm.mp3",
+    "countrycode": "FR",
+    "source": "https://azurmenton.com/en/tools",
+    "stationWebsite": "https://www.rfm.fr/"
+  },
+  {
+    "id": "m-radio",
+    "name": "M Radio",
+    "frequency": 104.1,
+    "frequencyText": "90.3 MHz / 104.1 MHz",
+    "aliases": [
+      "M Radio"
+    ],
+    "url": "https://mfm.ice.infomaniak.ch/mfm-128.mp3?aw_0_1st.playerId=mradio_web&i=26641",
+    "countrycode": "FR",
+    "source": "https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000054132637",
+    "stationWebsite": "https://www.mradio.fr/"
+  },
+  {
+    "id": "melody-dazur",
+    "name": "Melody d’Azur",
+    "frequency": 100.5,
+    "frequencyText": "100.5 MHz",
+    "aliases": [
+      "Melody d’Azur"
+    ],
+    "url": "https://stream.rcs.revma.com/4ty9verpuf9uv",
+    "countrycode": "FR",
+    "source": "https://azurmenton.com/en/tools",
+    "stationWebsite": null
+  },
+  {
+    "id": "agora-cote-dazur",
+    "name": "Agora Côte d’Azur",
+    "frequency": 88.9,
+    "frequencyText": "88.9 MHz",
+    "aliases": [
+      "Agora Côte d’Azur"
+    ],
+    "url": "https://agoracotedazur.ice.infomaniak.ch/agoracotedazur.mp3",
+    "countrycode": "FR",
+    "source": "https://azurmenton.com/en/tools",
+    "stationWebsite": null
+  }
+]

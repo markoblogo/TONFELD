@@ -121,7 +121,7 @@
         </div>
         <div class="radio-toolbar" id="radio-location-toolbar"><button id="radio-locate" type="button">Use device location</button><span id="radio-location-label" role="status">Local FM uses your device location; online stations work everywhere.</span></div>
         <div class="radio-toolbar">
-            <button id="radio-all" aria-pressed="true">All stations</button><button id="radio-favorites" aria-pressed="false">Favorites</button><button id="radio-local" aria-pressed="false">Local FM</button>
+            <button id="radio-all" aria-pressed="true">All stations</button><button id="radio-favorites" aria-pressed="false">Favorites</button><button id="radio-local" aria-pressed="false">Local stations</button>
             <button id="radio-retry">Retry stream</button>
             <label><input type="checkbox" id="radio-noise" checked> Tuning noise</label>
             <span id="radio-record-status" role="status"></span>
@@ -129,7 +129,7 @@
         <details id="radio-settings">
             <summary>Custom streams and local frequencies</summary>
             <form id="radio-custom-form" class="radio-toolbar"><input id="radio-custom-name" placeholder="Station name" aria-label="Custom station name" maxlength="200" required><input id="radio-custom-url" placeholder="https://… direct audio stream" type="url" aria-label="Custom station stream URL" maxlength="4096" required><button type="submit">Add stream</button></form>
-            <p>FM uses the device location and supplied frequencies within 60 km. Coverage may be incomplete. General station search works without location permission.</p>
+            <p>Local FM reproduces the local broadcast dial using online streams. Internet-only stations stay in All stations. Frequency coverage is partial. Radio refreshes location periodically and after wake/focus; use device location to retry now.</p>
         </details>
         <p id="radio-notice" role="status">Loading online stations. Location is used only for the local FM dial.</p>
         <div id="radio-results"><div id="radio-grid"></div><button id="radio-more" hidden>More stations</button></div>

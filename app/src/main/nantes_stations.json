@@ -1,0 +1,360 @@
+[
+  {
+    "name": "Radio Nova",
+    "frequency": 87.8,
+    "aliases": [
+      "Radio Nova",
+      "Nova"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/radio-nova"
+  },
+  {
+    "name": "Rire et Chansons",
+    "frequency": 88.4,
+    "aliases": [
+      "Rire et Chansons",
+      "Rire & Chansons",
+      "Rire et Chansons France"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/rire-et-chansons"
+  },
+  {
+    "name": "M Radio",
+    "frequency": 88.8,
+    "aliases": [
+      "M Radio",
+      "MRadio",
+      "MFM"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/m-radio",
+    "url": "https://mfm.ice.infomaniak.ch/mfm-128.mp3?aw_0_1st.playerId=mradio_web&i=26641"
+  },
+  {
+    "name": "Alouette",
+    "frequency": 89.5,
+    "aliases": [
+      "Alouette"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/alouette"
+  },
+  {
+    "name": "RFM",
+    "frequency": 90.1,
+    "aliases": [
+      "RFM",
+      "RFM France"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/rfm",
+    "url": "https://rfm.lmn.fm/rfm.mp3"
+  },
+  {
+    "name": "France Inter",
+    "frequency": 90.6,
+    "aliases": [
+      "France Inter"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/france-inter",
+    "url": "https://icecast.radiofrance.fr/franceinter-hifi.aac"
+  },
+  {
+    "name": "Jet FM",
+    "frequency": 91.2,
+    "aliases": [
+      "Jet FM",
+      "JetFM"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/jet-fm"
+  },
+  {
+    "name": "Prun’",
+    "frequency": 92,
+    "aliases": [
+      "Prun’",
+      "Prun'",
+      "Prun"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/prun",
+    "query": "Prun"
+  },
+  {
+    "name": "Radio Orient",
+    "frequency": 92.4,
+    "aliases": [
+      "Radio Orient"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/radio-orient"
+  },
+  {
+    "name": "SUN",
+    "frequency": 93,
+    "aliases": [
+      "SUN",
+      "SUN Le Son Unique",
+      "SUN Nantes",
+      "Le Son Unique"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/sun",
+    "preferredAliases": [
+      "SUN Nantes"
+    ]
+  },
+  {
+    "name": "NTI",
+    "frequency": 93.4,
+    "aliases": [
+      "NTI",
+      "Radio NTI",
+      "NTI 93.4"
+    ],
+    "source": "https://www.radionti.com/"
+  },
+  {
+    "name": "France Culture",
+    "frequency": 94.2,
+    "aliases": [
+      "France Culture"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/france-culture",
+    "url": "https://icecast.radiofrance.fr/franceculture-hifi.aac"
+  },
+  {
+    "name": "Europe 2",
+    "frequency": 94.7,
+    "aliases": [
+      "Europe 2",
+      "Europe2",
+      "Europe 2 Pays de la Loire",
+      "Europe 2 Nantes",
+      "Europe 2 Pays de la Loire Nantes"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/europe-2-pays-de-la-loire",
+    "preferredAliases": [
+      "Europe 2 Pays de la Loire",
+      "Europe 2 Nantes",
+      "Europe 2 Pays de la Loire Nantes"
+    ],
+    "query": "Europe 2"
+  },
+  {
+    "name": "FIP",
+    "frequency": 95.7,
+    "aliases": [
+      "FIP",
+      "FIP France",
+      "FIP Radio",
+      "FIP Radio France"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/fip"
+  },
+  {
+    "name": "Nostalgie",
+    "frequency": 96.8,
+    "aliases": [
+      "Nostalgie",
+      "Nostalgie Nantes",
+      "Nostalgie France"
+    ],
+    "source": "https://www.nostalgie.fr/frequences",
+    "preferredAliases": [
+      "Nostalgie Nantes"
+    ]
+  },
+  {
+    "name": "RTL2",
+    "frequency": 97.7,
+    "aliases": [
+      "RTL2",
+      "RTL2 Nantes",
+      "RTL 2"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/rtl2-nantes",
+    "preferredAliases": [
+      "RTL2 Nantes"
+    ]
+  },
+  {
+    "name": "Alternantes FM",
+    "frequency": 98.1,
+    "aliases": [
+      "Alternantes FM",
+      "Alternantes",
+      "AlterNantes"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/alternantes-fm",
+    "preferredAliases": [
+      "Alternantes",
+      "AlterNantes"
+    ]
+  },
+  {
+    "name": "France Info",
+    "frequency": 98.9,
+    "aliases": [
+      "France Info",
+      "Franceinfo"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/france-info",
+    "url": "https://icecast.radiofrance.fr/franceinfo-hifi.aac"
+  },
+  {
+    "name": "RCA",
+    "frequency": 99.5,
+    "aliases": [
+      "RCA",
+      "Radio Cote d'Amour",
+      "RCA La Radio"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/rca"
+  },
+  {
+    "name": "RMC",
+    "frequency": 99.9,
+    "aliases": [
+      "RMC",
+      "RMC Info",
+      "RMC France"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/rmc",
+    "url": "https://audio.bfmtv.com/rmcradio_128.mp3"
+  },
+  {
+    "name": "Hit West",
+    "frequency": 100.9,
+    "aliases": [
+      "Hit West",
+      "HitWest"
+    ],
+    "source": "https://hitwest.ouest-france.fr/comment-ecouter-hit-west"
+  },
+  {
+    "name": "Euradio",
+    "frequency": 101.3,
+    "aliases": [
+      "Euradio",
+      "Euradio Nantes",
+      "Euradionantes"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/euradio",
+    "preferredAliases": [
+      "Euradio Nantes",
+      "Euradionantes"
+    ]
+  },
+  {
+    "name": "ici Loire Océan",
+    "frequency": 101.8,
+    "aliases": [
+      "ici Loire Océan",
+      "Ici Loire Ocean",
+      "France Bleu Loire Ocean"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/ici-loire-ocean"
+  },
+  {
+    "name": "NRJ",
+    "frequency": 102.4,
+    "aliases": [
+      "NRJ",
+      "NRJ Nantes",
+      "NRJ France"
+    ],
+    "source": "https://www.nrj.fr/frequences",
+    "preferredAliases": [
+      "NRJ Nantes"
+    ]
+  },
+  {
+    "name": "Skyrock",
+    "frequency": 102.9,
+    "aliases": [
+      "Skyrock"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/skyrock"
+  },
+  {
+    "name": "Fun Radio",
+    "frequency": 103.4,
+    "aliases": [
+      "Fun Radio",
+      "Fun Radio Atlantique",
+      "Fun Radio Nantes"
+    ],
+    "source": "https://www.funradio.fr/frequences",
+    "preferredAliases": [
+      "Fun Radio Atlantique",
+      "Fun Radio Nantes"
+    ]
+  },
+  {
+    "name": "Radio Fidélité",
+    "frequency": 103.8,
+    "aliases": [
+      "Radio Fidélité",
+      "Fidelite",
+      "Fidelite Nantes"
+    ],
+    "source": "https://radio-fidelite.fr/ecouter/",
+    "preferredAliases": [
+      "Fidelite Nantes"
+    ]
+  },
+  {
+    "name": "RTL",
+    "frequency": 104.3,
+    "aliases": [
+      "RTL",
+      "RTL France"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/rtl"
+  },
+  {
+    "name": "Europe 1",
+    "frequency": 104.7,
+    "aliases": [
+      "Europe 1",
+      "Europe1",
+      "Europe 1 France"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/europe-1"
+  },
+  {
+    "name": "France Musique",
+    "frequency": 105.5,
+    "aliases": [
+      "France Musique"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/france-musique",
+    "url": "https://icecast.radiofrance.fr/francemusique-hifi.aac"
+  },
+  {
+    "name": "Chérie FM",
+    "frequency": 106.2,
+    "aliases": [
+      "Chérie FM",
+      "Cherie FM Nantes",
+      "Cherie FM France"
+    ],
+    "source": "https://www.cheriefm.fr/frequences",
+    "preferredAliases": [
+      "Cherie FM Nantes"
+    ]
+  },
+  {
+    "name": "Radio Classique",
+    "frequency": 106.7,
+    "aliases": [
+      "Radio Classique"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/radio-classique",
+    "url": "https://radioclassique.ice.infomaniak.ch/radioclassique-high.mp3"
+  },
+  {
+    "name": "BFM Business",
+    "frequency": 107.2,
+    "aliases": [
+      "BFM Business",
+      "BFM Business France"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/bfm-business"
+  }
+]

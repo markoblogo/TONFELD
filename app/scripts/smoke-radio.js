@@ -7,6 +7,8 @@ const path = require('node:path');
 const { taggedWav } = require('./audio-fixture');
 const { RadioLibrary } = require('../src/main/radio_library');
 const network = require('../src/main/radio_network');
+// Keep real curated channels out of the generated-audio transport fixture.
+require('../src/main/fm_catalog').areas = [];
 require('../src/main/device_location').locateMac = async () => ({ lat: 47.22, lon: -1.55, label: 'Test location', countrycode: 'FR' });
 const temporary = fs.mkdtempSync(path.join(os.tmpdir(), 'ytmamp-radio-desktop-'));
 const output = path.join(temporary, 'recorded.wav');
@@ -18,7 +20,8 @@ const first = { name: 'Test Jazz 92.1 FM', url: 'https://radio.example.org/first
 const second = { ...first, name: 'Test Rock FM 101.3', url: 'https://radio.example.org/second', tags: 'rock' };
 const online = { ...first, name: 'Internet Only', url: 'https://radio.example.org/online', geo_lat: null, geo_long: null };
 const broken = { ...online, name: 'Broken station', url: 'https://radio.example.org/broken' };
-network.RadioBrowser.prototype.search = async () => [first, second, online, broken];
+const destination = { ...first, name: 'Menton Test FM 96.1', url: 'https://radio.example.org/menton', geo_lat: 43.78, geo_long: 7.5 };
+network.RadioBrowser.prototype.search = async () => [first, second, online, broken, destination];
 network.RadioBrowser.prototype.click = () => {};
 const wav = taggedWav({ seconds: 60, frequency: 440 });
 // Stub only the exported transport in this test process. Production has no LAN bypass.
@@ -49,7 +52,7 @@ async function run(window) {
     await evaluate('window.electronAPI.setSource("radio")');
     await waitFor(() => evaluate('document.body.classList.contains("radio-mode")'), 'radio source');
     await evaluate('document.getElementById("queue-toggle").click(); document.getElementById("radio-search-form").requestSubmit()');
-    await waitFor(() => evaluate('document.querySelectorAll("#radio-grid .album-card").length === 3'), 'radio cards');
+    await waitFor(() => evaluate('document.querySelectorAll("#radio-grid .album-card").length === 4'), 'radio cards');
     await waitFor(() => evaluate('document.getElementById("radio-notice").textContent.includes("1 unavailable hidden")'), 'broken stream is checked and hidden');
     assert.equal(report?.playing === true, false, 'muted catalog checks must not start the main player');
     assert.equal(await evaluate('document.getElementById("radio-grid").textContent.includes("Broken station")'), false);
@@ -105,11 +108,17 @@ async function run(window) {
         assert.equal(fit, true, 'compact radio fit at ' + factor);
     }
     window.webContents.setZoomFactor(1); window.setContentSize(360, 116);
+    const beforeMove = { id: report.id, revision: report.revision };
+    await action('location', { lat: 43.78, lon: 7.5, label: 'Menton', countrycode: 'FR' });
+    assert.equal(report.id, beforeMove.id); assert.equal(report.revision, beforeMove.revision); assert.equal(report.playing, true);
+    await evaluate('document.getElementById("next-btn").click()');
+    await waitFor(() => report?.playing && report.id !== beforeMove.id, 'Next uses the new city queue');
+    assert.equal(await evaluate('document.getElementById("radio-frequency").textContent.startsWith("96.1 MHz")'), true);
     fs.writeFileSync(path.join(__dirname, '../radio-smoke.png'), (await window.webContents.capturePage()).toPNG());
     await evaluate('window.electronAPI.setSource("local")');
     await waitFor(() => evaluate('!document.body.classList.contains("radio-mode")'), 'back to local');
     assert.equal(await evaluate('window.readRadioWave() === null'), true);
-    const library = new RadioLibrary({ directory: temporary }); assert.equal(library.local().length, 2);
+    const library = new RadioLibrary({ directory: temporary }); assert.equal(library.local().length, 1); assert.equal(library.local()[0].frequency, 96.1);
     finish();
 }
 app.on('browser-window-created', (_event, window) => window.webContents.once('did-finish-load', () => setTimeout(() => run(window).catch(finish), 80)));

@@ -2,6 +2,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const crypto = require('node:crypto');
 const { RadioBrowser, checkedUrl } = require('./radio_network');
+const fmCatalog = require('./fm_catalog');
 const clean = (value, max = 200) => typeof value === 'string' ? value.replace(/[\x00-\x1f]/g, ' ').trim().slice(0, max) : '';
 const normalize = (value) => clean(value).normalize('NFKD').replace(/\p{M}/gu, '').toLowerCase();
 function frequency(name) {
@@ -48,7 +49,7 @@ function distinctStations(stations) {
 class RadioLibrary {
     constructor({ directory, browser = new RadioBrowser() }) {
         this.file = path.join(directory, 'radio-library-v1.json'); this.browser = browser;
-        this.stations = new Map(); this.favorites = new Set(); this.tuning = new Map(); this.failed = new Map(); this.checked = new Map(); this.location = null; this.searchController = null;
+        this.stations = new Map(); this.favorites = new Set(); this.tuning = new Map(); this.failed = new Map(); this.checked = new Map(); this.location = null; this.searchController = null; this.locatedAt = 0;
         try {
             if (fs.statSync(this.file).size > 8 * 1024 * 1024) return;
             const saved = JSON.parse(fs.readFileSync(this.file, 'utf8'));
@@ -61,7 +62,9 @@ class RadioLibrary {
         } catch { /* first launch */ }
     }
     save() {
-        const keep = [...this.stations.values()].reverse().sort((a, b) => Number(this.favorites.has(b.id) || this.tuning.has(b.id) || b.custom || this.activeId === b.id) - Number(this.favorites.has(a.id) || this.tuning.has(a.id) || a.custom || this.activeId === a.id)).slice(0, 2000);
+        const mapped = this.broadcasts();
+        const important = (s) => this.favorites.has(s.id) || this.tuning.has(s.id) || s.custom || this.activeId === s.id || mapped.some((b) => s.countrycode === b.countrycode && fmCatalog.matches(s, b));
+        const keep = [...this.stations.values()].reverse().sort((a, b) => Number(important(b)) - Number(important(a))).slice(0, 2000);
         const temp = this.file + '.tmp';
         const keptIds = new Set(keep.map((s) => s.id));
         this.checked = new Map([...this.checked].filter(([id, item]) => keptIds.has(id) && item.at > Date.now() - 900000));
@@ -74,18 +77,37 @@ class RadioLibrary {
     markSuccessful(id) { if (!this.stations.has(id)) return; const prior = this.checked.get(id); if (this.failed.delete(id) || !prior || prior.address !== this.addressKey(id) || Date.now() - prior.at > 60000) { this.checked.set(id, { id, at: Date.now(), address: this.addressKey(id) }); this.save(); } }
     retryStation(id) { const station = this.stations.get(id); if (!station) return; for (const candidate of this.stations.values()) if (stationKey(candidate) === stationKey(station)) this.failed.delete(candidate.id); this.save(); }
     public(station) { const { url, favicon, ...rest } = station; const check = this.checked.get(station.id); return { ...rest, checkedAt: check?.address === this.addressKey(station.id) ? check.at : 0, playable: this.usable(station), cover: favicon ? 'ytmamp-media://radio-art/' + station.id : '', favorite: this.favorites.has(station.id) }; }
-    alternatives(id) { const selected = this.stations.get(id); return selected ? [...this.stations.values()].filter((s) => this.usable(s) && stationKey(s) === stationKey(selected)) : []; }
+    alternatives(id) { const selected = this.stations.get(id); const broadcast = selected && this.broadcasts().find((b) => b.countrycode === selected.countrycode && fmCatalog.matches(selected, b)); return selected ? [...this.stations.values()].filter((s) => this.usable(s) && (stationKey(s) === stationKey(selected) || broadcast && s.countrycode === broadcast.countrycode && fmCatalog.matches(s, broadcast))) : []; }
+    areas() { return this.location ? fmCatalog.areas.filter((area) => area.countrycode === this.location.countrycode && distanceKm(this.location, area) <= area.radiusKm) : []; }
+    broadcasts() {
+        if (!this.location) return [];
+        return this.areas().flatMap((area) => area.stations.map((s) => ({ ...s, area: area.label, countrycode: s.countrycode || area.countrycode })));
+    }
     local() {
         if (!this.location) return [];
-        return [...this.stations.values()].filter((s) => this.usable(s)).map((station) => {
+        const usable = [...this.stations.values()].filter((s) => this.usable(s));
+        const broadcasts = this.broadcasts();
+        const mapped = broadcasts.filter((b) => Number.isFinite(b.frequency)).map((broadcast) => {
+            const candidates = usable.filter((s) => s.countrycode === broadcast.countrycode && fmCatalog.matches(s, broadcast));
+            const score = (s) => (s.id === this.activeId ? 100 : 0) + (fmCatalog.regional(s, broadcast) ? 50 : 0) + (this.checked.has(s.id) ? 20 : 0) + (/MP3|AAC|OGG|OPUS/i.test(s.codec) ? 10 : 0);
+            candidates.sort((a, b) => score(b) - score(a) || a.id.localeCompare(b.id));
+            const station = candidates[0];
+            if (!station) return null;
+            const manual = this.tuning.get(station.id);
+            if (manual && distanceKm(this.location, manual) <= 60) return null;
+            return { ...this.public(station), frequency: broadcast.frequency, frequencySource: broadcast.source, frequencyArea: broadcast.area, frequencyReviewed: fmCatalog.reviewed };
+        }).filter(Boolean);
+        const supplied = usable.map((station) => {
             const override = this.tuning.get(station.id);
+            if (!override && broadcasts.some((b) => station.countrycode === b.countrycode && fmCatalog.matches(station, b))) return null;
             const point = override || station;
             const mhz = override?.frequency || station.frequency;
             if (!mhz || point.lat === null || point.lon === null || distanceKm(this.location, point) > 60) return null;
             return { ...this.public(station), frequency: mhz, frequencySource: override ? 'Your local frequency' : 'Frequency supplied in station name' };
-        }).filter(Boolean).sort((a, b) => a.frequency - b.frequency || a.name.localeCompare(b.name));
+        }).filter(Boolean);
+        return [...supplied, ...mapped].sort((a, b) => a.frequency - b.frequency || a.name.localeCompare(b.name));
     }
-    snapshot() { return { stations: distinctStations([...this.stations.values()].filter((s) => this.usable(s) && (this.favorites.has(s.id) || s.custom))).map((s) => this.public(s)), local: this.local(), location: this.location }; }
+    snapshot() { return { stations: distinctStations([...this.stations.values()].filter((s) => this.usable(s) && (this.favorites.has(s.id) || s.custom))).map((s) => this.public(s)), local: this.local(), location: this.location, fmCoverage: { partial: true, mapped: this.broadcasts().length } }; }
     async search(query = {}) {
         this.searchController?.abort(); this.searchController = new AbortController();
         const controller = this.searchController;
@@ -119,22 +141,41 @@ class RadioLibrary {
         this.tuning.set(id, { id, frequency: mhz, lat: this.location.lat, lon: this.location.lon }); this.save();
     }
     async chooseLocation(data) {
-        let lat = data?.lat; let lon = data?.lon; let label = clean(data?.label); let countrycode = clean(data?.countrycode, 2);
+        let lat = data?.lat; let lon = data?.lon; let label = clean(data?.label); let countrycode = clean(data?.countrycode, 2).toUpperCase();
         if (!Number.isFinite(lat) || Math.abs(lat) > 90 || !Number.isFinite(lon) || Math.abs(lon) > 180) throw new Error('Allow device location for the local FM dial. Online stations remain available without it.');
         lat = Math.round(lat * 100) / 100; lon = Math.round(lon * 100) / 100;
+        const changed = !this.location || this.location.countrycode !== countrycode || distanceKm(this.location, { lat, lon }) >= 5;
         this.location = { lat, lon, label: label || 'Device location', countrycode }; this.save();
+        for (const broadcast of this.broadcasts()) {
+            if (!broadcast.url) continue;
+            const station = stationFrom({ name: broadcast.name, url: broadcast.url, countrycode: broadcast.countrycode, hls: /\.m3u8(?:\?|$)/i.test(broadcast.url) ? 1 : 0 });
+            if (station && !this.stations.has(station.id)) this.stations.set(station.id, station);
+        }
+        if (!changed && data.refresh !== true && Date.now() - this.locatedAt < 900000) return this.snapshot();
         // Geographical station metadata is community supplied, not a reception map.
         const params = { limit: '1000', hidebroken: 'true', has_geo_info: 'true', order: 'clickcount', reverse: 'true' };
         if (/^[A-Z]{2}$/.test(countrycode)) params.countrycode = countrycode;
+        const signal = AbortSignal.timeout(18000);
+        const mappedTask = (async () => {
+            const pending = [...new Map(this.broadcasts().map((b) => [b.name, b])).values()];
+            const worker = async () => { while (pending.length && !signal.aborted) {
+                const broadcast = pending.shift();
+                try {
+                    const result = await this.browser.search({ name: broadcast.query || broadcast.name, countrycode: broadcast.countrycode, limit: '40', hidebroken: 'true', order: 'clickcount', reverse: 'true' }, signal);
+                    for (const item of Array.isArray(result) ? result.slice(0, 40) : []) { const station = stationFrom(item); if (station && station.countrycode === broadcast.countrycode && fmCatalog.matches(station, broadcast)) this.stations.set(station.id, station); }
+                } catch { /* retain cached compatible addresses */ }
+            } };
+            await Promise.all([worker(), worker(), worker()]);
+        })();
         try {
-            const signal = AbortSignal.timeout(18000);
             for (let offset = 0; offset < (countrycode ? 4000 : 1000); offset += 1000) {
                 const raw = await this.browser.search({ ...params, offset: String(offset) }, signal);
-                for (const item of Array.isArray(raw) ? raw.slice(0, 1000) : []) { const station = stationFrom(item); if (station?.frequency && station.lat !== null && station.lon !== null && distanceKm(this.location, station) <= 60) this.stations.set(station.id, station); }
+                for (const item of Array.isArray(raw) ? raw.slice(0, 1000) : []) { const station = stationFrom(item); if (station && station.lat !== null && station.lon !== null && distanceKm(this.location, station) <= 60) this.stations.set(station.id, station); }
                 if (!Array.isArray(raw) || raw.length < 1000) break;
             }
             this.save();
         } catch { /* retain known local stations and manually assigned frequencies */ }
+        await mappedTask; this.locatedAt = Date.now(); this.save();
         return this.snapshot();
     }
 }

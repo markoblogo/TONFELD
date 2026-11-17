@@ -5,6 +5,8 @@ const os = require('node:os');
 const path = require('node:path');
 const { checkedUrl, publicAddress } = require('../src/main/radio_network');
 const { RadioLibrary, stationFrom, frequency, filterStations } = require('../src/main/radio_library');
+// Keep generated fallback-frequency fixtures independent of bundled city facts.
+require('../src/main/fm_catalog').areas = [];
 const { RadioPlayer } = require('../src/main/radio_player');
 const { RadioRecorder } = require('../src/main/radio_recorder');
 const raw = (name, url, extra = {}) => ({ name, url, countrycode: 'FR', state: 'Loire-Atlantique', language: 'French', tags: 'jazz', geo_lat: 47.22, geo_long: -1.55, ...extra });

@@ -25,7 +25,9 @@ final class LocationRequest: NSObject, CLLocationManagerDelegate {
     }
     func authorize() {
         switch manager.authorizationStatus {
-        case .notDetermined: manager.requestWhenInUseAuthorization()
+        case .notDetermined:
+            NSApplication.shared.activate(ignoringOtherApps: true)
+            manager.requestWhenInUseAuthorization()
         case .authorizedAlways, .authorizedWhenInUse: manager.startUpdatingLocation()
         case .denied, .restricted: finish(["error": "Allow YTMamp in System Settings > Privacy & Security > Location Services, then try again.", "denied": true])
         @unknown default: finish(["error": "Location Services are unavailable."])
@@ -53,7 +55,6 @@ final class LocationRequest: NSObject, CLLocationManagerDelegate {
 if CommandLine.arguments.contains("--check") { print("YTMAMP_CORE_LOCATION_READY"); exit(0) }
 let application = NSApplication.shared
 application.setActivationPolicy(.accessory)
-application.activate(ignoringOtherApps: true)
 let request = LocationRequest()
 DispatchQueue.main.async { request.start() }
 application.run()

@@ -1,4 +1,4 @@
-const { app, BrowserWindow, clipboard, ipcMain, Tray, Menu, nativeImage, screen, dialog, protocol, shell } = require('electron');
+const { app, BrowserWindow, clipboard, ipcMain, Tray, Menu, nativeImage, screen, dialog, protocol, shell, powerMonitor } = require('electron');
 const { createYtmLauncher } = require('./ytm_launcher');
 const { locateMac } = require('./device_location');
 const { pathToFileURL } = require('node:url');
@@ -1412,7 +1412,7 @@ async function radioAction(event, action, data = {}) {
             radioActionBusy = true;
             try {
                 const location = await locateMac({ appPath: app.getAppPath(), packaged: app.isPackaged });
-                const result = await radioLibrary.chooseLocation(location); radioPlayer.publish(); return result;
+                const result = await radioLibrary.chooseLocation({ ...location, refresh: data.refresh === true }); radioPlayer.publish(); return result;
             } finally { radioActionBusy = false; }
         }
         if (action === 'location') {
@@ -1513,6 +1513,7 @@ app.whenReady().then(() => {
     createTray();
     updateApplicationMenu();
     setupIpc();
+    powerMonitor?.on('resume', () => { if (activeSource === 'radio') mainWindow?.webContents.send('radio-location-refresh'); });
     configurePlayerCastBridge({
         getPlayerSnapshot: () => ({
             track: playerState.track,

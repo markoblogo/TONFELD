@@ -28,6 +28,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
     radio: (action, data) => ipcRenderer.invoke('radio-action', action, data),
     onRadioAudioCommand: (callback) => ipcRenderer.on('radio-audio-command', (_event, value) => callback(value)),
     onRadioSelection: (callback) => ipcRenderer.on('radio-selection', (_event, value) => callback(value)),
+    onRadioLocationRefresh: (callback) => ipcRenderer.on('radio-location-refresh', () => callback()),
     onRadioRecording: (callback) => ipcRenderer.on('radio-recording', (_event, value) => callback(value)),
     reportRadioAudio: (report) => ipcRenderer.send('radio-audio-report', report),
     recordRadioChunk: (data) => ipcRenderer.send('radio-record-chunk', data),
