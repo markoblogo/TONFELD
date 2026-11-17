@@ -51,6 +51,7 @@ class RadioLibrary {
     constructor({ directory, browser = new RadioBrowser(), places, frequencyProvider }) {
         this.file = path.join(directory, 'radio-library-v1.json'); this.browser = browser;
         this.places = places || new RadioPlaces({directory,provider:frequencyProvider}); this.placeArea = null; this.placeWarning = '';
+        this.selectedPlaceId = ''; this.deviceLocation = null;
         this.stations = new Map(); this.favorites = new Set(); this.tuning = new Map(); this.failed = new Map(); this.checked = new Map(); this.location = null; this.searchController = null; this.locatedAt = 0;
         try {
             if (fs.statSync(this.file).size > 8 * 1024 * 1024) return;
@@ -61,6 +62,9 @@ class RadioLibrary {
             for (const item of (saved.checked || []).slice(0, 2000)) if (this.stations.has(item.id) && Number.isFinite(item.at) && item.at <= Date.now() && item.at > Date.now() - 900000 && item.address === this.addressKey(item.id)) this.checked.set(item.id, item);
             for (const item of (saved.tuning || []).slice(0, 500)) if (/^[a-f0-9]{64}$/.test(item.id) && Number.isFinite(item.frequency) && item.frequency >= 87.5 && item.frequency <= 108 && Number.isFinite(item.lat) && Math.abs(item.lat) <= 90 && Number.isFinite(item.lon) && Math.abs(item.lon) <= 180) this.tuning.set(item.id, item);
             if (saved.location && Number.isFinite(saved.location.lat) && Math.abs(saved.location.lat) <= 90 && Number.isFinite(saved.location.lon) && Math.abs(saved.location.lon) <= 180) this.location = { lat: saved.location.lat, lon: saved.location.lon, label: clean(saved.location.label), countrycode: clean(saved.location.countrycode, 2), postalCode: clean(saved.location.postalCode, 12) };
+            this.deviceLocation = Object.hasOwn(saved,'deviceLocation') ? null : this.location;
+            if (saved.deviceLocation && Number.isFinite(saved.deviceLocation.lat) && Math.abs(saved.deviceLocation.lat)<=90 && Number.isFinite(saved.deviceLocation.lon) && Math.abs(saved.deviceLocation.lon)<=180) this.deviceLocation={...saved.deviceLocation};
+            if (typeof saved.selectedPlaceId === 'string' && this.places.available().some((a)=>a.id===saved.selectedPlaceId)) this.selectedPlaceId=saved.selectedPlaceId;
         } catch { /* first launch */ }
     }
     save() {
@@ -70,7 +74,7 @@ class RadioLibrary {
         const temp = this.file + '.tmp';
         const keptIds = new Set(keep.map((s) => s.id));
         this.checked = new Map([...this.checked].filter(([id, item]) => keptIds.has(id) && item.at > Date.now() - 900000));
-        fs.writeFileSync(temp, JSON.stringify({ stations: keep, favorites: [...this.favorites], tuning: [...this.tuning.values()], failed: [...this.failed].filter(([,until]) => until > Date.now()).map(([id,until]) => ({id,until})), checked: [...this.checked.values()], location: this.location }), { mode: 0o600 });
+        fs.writeFileSync(temp, JSON.stringify({ stations: keep, favorites: [...this.favorites], tuning: [...this.tuning.values()], failed: [...this.failed].filter(([,until]) => until > Date.now()).map(([id,until]) => ({id,until})), checked: [...this.checked.values()], location: this.location, deviceLocation:this.deviceLocation, selectedPlaceId:this.selectedPlaceId }), { mode: 0o600 });
         fs.renameSync(temp, this.file); this.stations = new Map(keep.map((s) => [s.id, s]));
     }
     usable(station) { return !station.hls && !(this.failed.get(station.id) > Date.now()); }
@@ -109,7 +113,7 @@ class RadioLibrary {
         }).filter(Boolean);
         return [...supplied, ...mapped].sort((a, b) => a.frequency - b.frequency || a.name.localeCompare(b.name));
     }
-    snapshot() { return { stations: distinctStations([...this.stations.values()].filter((s) => this.usable(s) && (this.favorites.has(s.id) || s.custom))).map((s) => this.public(s)), local: this.local(), location: this.location, fmCoverage: { partial: true, mapped: this.broadcasts().length, source: this.placeArea?.source || '', warning: this.placeWarning, attribution: this.placeArea?.attribution || '' } }; }
+    snapshot() { return { stations: distinctStations([...this.stations.values()].filter((s) => this.usable(s) && (this.favorites.has(s.id) || s.custom))).map((s) => this.public(s)), local: this.local(), location: this.location, selectedPlaceId:this.selectedPlaceId, places:this.places.available().map(({id,label,countrycode,stations})=>({id,label,countrycode,count:stations.length})), fmCoverage: { partial: true, mapped: this.broadcasts().length, source: this.placeArea?.source || '', warning: this.placeWarning, attribution: this.placeArea?.attribution || '' } }; }
     async search(query = {}) {
         this.searchController?.abort(); this.searchController = new AbortController();
         const controller = this.searchController;
@@ -142,10 +146,22 @@ class RadioLibrary {
         if (this.tuning.size >= 500 && !this.tuning.has(id)) throw new Error('Local tuning list is full.');
         this.tuning.set(id, { id, frequency: mhz, lat: this.location.lat, lon: this.location.lon }); this.save();
     }
-    async chooseLocation(data) {
+    async choosePlace(id) {
+        if (typeof id !== 'string') throw new Error('Choose a saved city or device location.');
+        const area=id && this.places.available().find((a)=>a.id===id);
+        if (id && !area) throw new Error('This city has no saved directory. Visit it or add a reviewed directory first.');
+        this.selectedPlaceId=id;
+        if (!id && !this.deviceLocation) { this.location=null;this.placeArea=null;this.save();return this.snapshot(); }
+        return this.chooseLocation(area || this.deviceLocation,{selection:true});
+    }
+    async chooseLocation(data, {selection=false}={}) {
         let lat = data?.lat; let lon = data?.lon; let label = clean(data?.label); let countrycode = clean(data?.countrycode, 2).toUpperCase();
         if (!Number.isFinite(lat) || Math.abs(lat) > 90 || !Number.isFinite(lon) || Math.abs(lon) > 180) throw new Error('Allow device location for the local FM dial. Online stations remain available without it.');
         lat = Math.round(lat * 100) / 100; lon = Math.round(lon * 100) / 100;
+        if (!selection) {
+            this.deviceLocation={lat,lon,label:label||'Device location',countrycode,postalCode:clean(data.postalCode,12)};
+            if (this.selectedPlaceId) { await this.places.resolve(this.deviceLocation);this.save();return this.snapshot(); }
+        }
         const changed = !this.location || this.location.countrycode !== countrycode || distanceKm(this.location, { lat, lon }) >= 5;
         this.location = { lat, lon, label: label || 'Device location', countrycode, postalCode: clean(data.postalCode,12) }; this.placeArea = this.places.cached(this.location); this.save();
         const place = await this.places.resolve(this.location, {force: data.refresh === true});

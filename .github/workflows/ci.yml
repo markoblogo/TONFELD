@@ -133,14 +133,14 @@ jobs:
           name: recording-trace-${{ github.sha }}
           path: app/recording-smoke-trace.log
 
-      - name: Nantes live streams and new-place directory diagnostic
+      - name: Nantes/Kyiv live streams and saved-place directory diagnostic
         timeout-minutes: 5
         if: always() && matrix.os == 'ubuntu-latest'
         continue-on-error: true
         working-directory: app
         run: |
-          node scripts/check-radio-stream-sources.js
           xvfb-run -a ./node_modules/.bin/electron --no-sandbox scripts/smoke-radio-live.js
+          YTMAMP_LIVE_CITY=kyiv xvfb-run -a ./node_modules/.bin/electron --no-sandbox scripts/smoke-radio-live.js
 
       - name: Upload smoke summary artifact
         if: always()
@@ -154,6 +154,7 @@ jobs:
             app/library-smoke.png
             app/library-albums-smoke.png
             app/radio-smoke.png
+            app/kyiv-radio-check.json
             app/nantes-radio-check.json
             app/rennes-directory-check.json
 

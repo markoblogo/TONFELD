@@ -56,6 +56,27 @@ test('technical stream labels match a reviewed channel, but themed and similarly
     assert.equal(matches({ name: 'FIP Radio France - MP3' }, channel), true);
     for (const name of ['FIP Jazz', 'FIP Rock', 'FIP 1980']) assert.equal(matches({ name }, channel), false);
 });
+test('saved-city selection survives GPS refresh and restart, while automatic mode follows the actual device again', async(t)=>{
+    const {directory,library}=fixture(t);
+    await library.chooseLocation({lat:47.22,lon:-1.55,label:'Nantes',countrycode:'FR'});
+    const player=new RadioPlayer({library});t.after(()=>player.close());player.select(library.local()[0].id);
+    const revision=player.revision;const id=player.id;
+    await library.choosePlace('fr-menton');assert.equal(library.location.label,'Menton');assert.equal(library.selectedPlaceId,'fr-menton');
+    await library.chooseLocation({lat:48.11,lon:-1.68,label:'Rennes',countrycode:'FR'});
+    assert.equal(library.location.label,'Menton');assert.equal(library.deviceLocation.label,'Rennes');
+    assert.equal(player.id,id);assert.equal(player.revision,revision);
+    const restored=new RadioLibrary({directory,browser:library.browser,frequencyProvider:library.places.provider});
+    assert.equal(restored.selectedPlaceId,'fr-menton');assert.equal(restored.location.label,'Menton');
+    await assert.rejects(restored.choosePlace('fr-unvisited'),/no saved directory/);assert.equal(restored.selectedPlaceId,'fr-menton');
+    await restored.choosePlace('');assert.equal(restored.location.label,'Rennes');assert.equal(restored.selectedPlaceId,'');
+});
+test('Kyiv is explicitly selectable and Cyrillic identities never collapse into the same channel',async(t)=>{
+    const {directory,library}=fixture(t);await library.choosePlace('ua-kyiv');
+    assert.equal(library.location.countrycode,'UA');assert.ok(library.snapshot().places.some(p=>p.id==='ua-kyiv'&&p.count>=30));
+    assert.ok(library.local().some(s=>s.frequency===103.6));assert.ok(library.local().every(s=>s.countrycode==='UA'));
+    const broadcast={aliases:['Радіо Культура']};assert.equal(matches({name:'Радіо Культура'},broadcast),true);assert.equal(matches({name:'Українське радіо'},broadcast),false);
+    const restored=new RadioLibrary({directory});assert.equal(restored.deviceLocation,null);await restored.choosePlace('');assert.equal(restored.location,null);
+});
 test('Menton retains all 19 owner station candidates and resolves M Radio to the authorized local frequency', async (t) => {
     const { library } = fixture(t);
     const { areas } = require('../src/main/fm_catalog');

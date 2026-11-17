@@ -54,7 +54,7 @@ class FranceFrequencyProvider {
         const links=stationLinks(await this.read(source,signal));
         if (!links.length) throw new Error('Frequency source did not return readable FM station records. Saved data is retained.');
         const stations=[]; const pending=[...links]; let failures=0;
-        const known=[...(location.seed?.stations||[]),...fmCatalog.areas.flatMap((a)=>a.stations)];
+        const known=[...(location.seed?.stations||[]),...fmCatalog.areas.filter((a)=>a.countrycode===location.countrycode).flatMap((a)=>a.stations)];
         const localNames=new Set((location.seed?.stations||[]).map((s)=>s.name));
         const worker=async()=>{ while(pending.length && !signal.aborted) {
             const item=pending.shift();

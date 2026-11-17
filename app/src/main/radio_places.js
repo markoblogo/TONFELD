@@ -24,6 +24,7 @@ class RadioPlaces {
         fs.writeFileSync(this.file+'.tmp', json, { mode:0o600 }); fs.renameSync(this.file+'.tmp', this.file);
     }
     seed(location) { return fmCatalog.areas.find((a) => a.countrycode === location.countrycode && distance(a,location) <= a.radiusKm); }
+    available() { return [...new Map([...fmCatalog.areas,...[...this.entries.values()].map((p)=>p.area)].map((a)=>[a.id,a])).values()].sort((a,b)=>a.label.localeCompare(b.label)); }
     cached(location) {
         const seed = this.seed(location);
         return [...this.entries.values()].find((p) => p.area.countrycode === location.countrycode && (seed ? p.area.id === seed.id : slug(p.area.label) === slug(location.label) && distance(p.area,location) <= p.area.radiusKm))?.area || seed || null;
@@ -33,6 +34,11 @@ class RadioPlaces {
         const id = seed?.id || (location.countrycode + ':' + slug(location.label) + ':' + String(location.postalCode || '').replace(/[^a-zA-Z0-9]/g,'').slice(0,12)).toLowerCase();
         const previous = this.entries.get(id);
         if (previous) previous.usedAt = this.now();
+        if (seed && location.countrycode !== 'FR') {
+            // Explicitly added references stay usable outside the automatic French provider.
+            this.entries.set(id,{area:seed,fetchedAt:0,usedAt:this.now(),streamsAt:previous?.streamsAt||0});this.save();
+            return {area:seed,cached:true};
+        }
         if (!force && previous && this.now()-previous.fetchedAt < WEEK) { this.save(); return {area:previous.area,cached:true}; }
         if (this.pending.has(id)) return this.pending.get(id);
         const task = (async () => {

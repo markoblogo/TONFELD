@@ -1,0 +1,461 @@
+[
+  {
+    "name": "Прямий FM",
+    "frequency": 88.4,
+    "aliases": [
+      "Прямий FM",
+      "Прямий",
+      "Priamyi FM",
+      "Pryamiy FM"
+    ],
+    "query": "Прямий",
+    "source": "https://radiomap.eu/ua/kyiv",
+    "reviewedAt": "2026-11-17"
+  },
+  {
+    "name": "Радіо М",
+    "frequency": 89.4,
+    "aliases": [
+      "Радіо М",
+      "Radio M",
+      "Радио М"
+    ],
+    "query": "Radio M",
+    "source": "https://radiomap.eu/ua/kyiv",
+    "reviewedAt": "2026-11-17"
+  },
+  {
+    "name": "Класик Радіо",
+    "frequency": 92.4,
+    "aliases": [
+      "Класик Радіо",
+      "Classic Radio",
+      "Classic Radio Ukraine"
+    ],
+    "query": "Класик",
+    "source": "https://radiomap.eu/ua/kyiv",
+    "reviewedAt": "2026-11-17"
+  },
+  {
+    "name": "Радіо Чемпіон",
+    "frequency": 92.8,
+    "aliases": [
+      "Радіо Чемпіон",
+      "Radio Champion",
+      "Champion Radio"
+    ],
+    "query": "Champion",
+    "source": "https://radiomap.eu/ua/kyiv",
+    "reviewedAt": "2026-11-17"
+  },
+  {
+    "name": "Magic Radio",
+    "frequency": 93.8,
+    "aliases": [
+      "Magic Radio",
+      "Magic Radio Ukraine"
+    ],
+    "query": "Magic",
+    "source": "https://radiomap.eu/ua/kyiv",
+    "reviewedAt": "2026-11-17"
+  },
+  {
+    "name": "Радіо Максимум",
+    "frequency": 94.2,
+    "aliases": [
+      "Радіо Максимум",
+      "Радио Максимум",
+      "Radio Maximum",
+      "Radio Maximum Ukraine"
+    ],
+    "query": "Maximum",
+    "source": "https://radiomap.eu/ua/kyiv",
+    "reviewedAt": "2026-11-17"
+  },
+  {
+    "name": "Армія FM",
+    "frequency": 94.6,
+    "aliases": [
+      "Армія FM",
+      "Армия FM",
+      "Army FM",
+      "Armiya FM"
+    ],
+    "query": "Армія",
+    "source": "https://radiomap.eu/ua/kyiv",
+    "reviewedAt": "2026-11-17"
+  },
+  {
+    "name": "Мелодія FM",
+    "frequency": 95.2,
+    "aliases": [
+      "Мелодія FM",
+      "Мелодия FM",
+      "Melodia FM",
+      "Melodiya FM"
+    ],
+    "query": "Melodia",
+    "source": "https://radiomap.eu/ua/kyiv",
+    "reviewedAt": "2026-11-17",
+    "url": "https://online.melodiafm.ua/MelodiaFM",
+    "streamName": "Мелодія FM"
+  },
+  {
+    "name": "Best FM",
+    "frequency": 95.6,
+    "aliases": [
+      "Best FM",
+      "Best FM Ukraine"
+    ],
+    "query": "Best FM",
+    "source": "https://radiomap.eu/ua/kyiv",
+    "reviewedAt": "2026-11-17"
+  },
+  {
+    "name": "Радіо NV",
+    "frequency": 96.0,
+    "aliases": [
+      "Радіо NV",
+      "Радио НВ",
+      "Radio NV",
+      "Radio NV Ukraine",
+      "Radio NV 96.0"
+    ],
+    "query": "Radio NV",
+    "source": "https://radiomap.eu/ua/kyiv",
+    "reviewedAt": "2026-11-17"
+  },
+  {
+    "name": "Хіт FM",
+    "frequency": 96.4,
+    "aliases": [
+      "Хіт FM",
+      "Хит FM",
+      "Hit FM",
+      "Hit FM Ukraine",
+      "Hit FM 96.4"
+    ],
+    "query": "Hit FM",
+    "source": "https://www.hitfm.ua/about/",
+    "reviewedAt": "2026-11-17",
+    "url": "https://online.hitfm.ua/HitFM",
+    "streamName": "Хіт FM"
+  },
+  {
+    "name": "DJFM",
+    "frequency": 96.8,
+    "aliases": [
+      "DJFM",
+      "DJ FM",
+      "DJFM Ukraine"
+    ],
+    "query": "DJFM",
+    "source": "https://radiomap.eu/ua/kyiv",
+    "reviewedAt": "2026-11-17"
+  },
+  {
+    "name": "Радіо Промінь",
+    "frequency": 97.2,
+    "aliases": [
+      "Радіо Промінь",
+      "Промінь",
+      "Radio Promin",
+      "Ukrainian Radio Promin"
+    ],
+    "query": "Промінь",
+    "source": "https://radiomap.eu/ua/kyiv",
+    "reviewedAt": "2026-11-17"
+  },
+  {
+    "name": "Радіо Культура",
+    "frequency": 97.6,
+    "aliases": [
+      "Радіо Культура",
+      "Radio Kultura",
+      "Ukrainian Radio Kultura",
+      "UR-3 Культура"
+    ],
+    "query": "Культура",
+    "source": "https://radiomap.eu/ua/kyiv",
+    "reviewedAt": "2026-11-17"
+  },
+  {
+    "name": "Київ FM",
+    "frequency": 98.0,
+    "aliases": [
+      "Київ FM",
+      "Киев FM",
+      "Kyiv FM",
+      "KyivFM"
+    ],
+    "query": "Київ",
+    "source": "https://radiomap.eu/ua/kyiv",
+    "reviewedAt": "2026-11-17"
+  },
+  {
+    "name": "Радіо Байрактар",
+    "frequency": 98.5,
+    "aliases": [
+      "Радіо Байрактар",
+      "Radio Bayraktar",
+      "RadioBayraktar"
+    ],
+    "query": "Bayraktar",
+    "source": "https://radiomap.eu/ua/kyiv",
+    "reviewedAt": "2026-11-17",
+    "url": "https://online.radiobayraktar.com.ua/RadioBayraktar",
+    "streamName": "Радіо Байрактар"
+  },
+  {
+    "name": "Nostalgie Ukraine",
+    "frequency": 99.0,
+    "aliases": [
+      "Nostalgie Ukraine",
+      "Радіо Ностальжі",
+      "Radio Nostalgie Ukraine",
+      "Nostalgie 99 FM"
+    ],
+    "query": "Nostalgie",
+    "source": "https://radiomap.eu/ua/kyiv",
+    "reviewedAt": "2026-11-17"
+  },
+  {
+    "name": "Громадське радіо",
+    "frequency": 99.4,
+    "aliases": [
+      "Громадське радіо",
+      "Hromadske Radio",
+      "Hromadske",
+      "Громадське"
+    ],
+    "query": "Hromadske",
+    "source": "https://radiomap.eu/ua/kyiv",
+    "reviewedAt": "2026-11-17"
+  },
+  {
+    "name": "Країна ФМ",
+    "frequency": 100.0,
+    "aliases": [
+      "Країна ФМ",
+      "Країна FM",
+      "Kraina FM",
+      "Kraina FM Ukraine"
+    ],
+    "query": "Kraina",
+    "source": "https://radiomap.eu/ua/kyiv",
+    "reviewedAt": "2026-11-17"
+  },
+  {
+    "name": "Радіо Марія",
+    "frequency": 100.5,
+    "aliases": [
+      "Радіо Марія",
+      "Radio Maria Ukraine",
+      "Radio Mariya"
+    ],
+    "query": "Maria",
+    "source": "https://radiomap.eu/ua/kyiv",
+    "reviewedAt": "2026-11-17"
+  },
+  {
+    "name": "Радіо П’ятниця",
+    "frequency": 101.1,
+    "aliases": [
+      "Радіо П’ятниця",
+      "Радіо Пятниця",
+      "Radio Piatnytsia",
+      "Radio Pyatnitsa",
+      "Радіо П'ятниця"
+    ],
+    "query": "Пятниця",
+    "source": "https://radiomap.eu/ua/kyiv",
+    "reviewedAt": "2026-11-17"
+  },
+  {
+    "name": "Radio Relax",
+    "frequency": 101.5,
+    "aliases": [
+      "Radio Relax",
+      "Radio Relax Ukraine",
+      "Радіо Relax"
+    ],
+    "query": "Relax",
+    "source": "https://radiomap.eu/ua/kyiv",
+    "reviewedAt": "2026-11-17",
+    "url": "https://online.radiorelax.ua/RadioRelax",
+    "streamName": "Radio Relax"
+  },
+  {
+    "name": "Шлягер FM",
+    "frequency": 101.9,
+    "aliases": [
+      "Шлягер FM",
+      "Шлягер ФМ",
+      "Shlyager FM",
+      "Radio Shliager"
+    ],
+    "query": "Шлягер",
+    "source": "https://radiomap.eu/ua/kyiv",
+    "reviewedAt": "2026-11-17"
+  },
+  {
+    "name": "Просто Раді.О",
+    "frequency": 102.5,
+    "aliases": [
+      "Просто Раді.О",
+      "Просто Радио",
+      "Prosto Radio",
+      "Prosto Radi.O"
+    ],
+    "query": "Prosto",
+    "source": "https://radiomap.eu/ua/kyiv",
+    "reviewedAt": "2026-11-17"
+  },
+  {
+    "name": "Люкс FM",
+    "frequency": 103.1,
+    "aliases": [
+      "Люкс FM",
+      "Люкс ФМ",
+      "Lux FM",
+      "Lux FM Ukraine"
+    ],
+    "query": "Lux FM",
+    "source": "https://radiomap.eu/ua/kyiv",
+    "reviewedAt": "2026-11-17"
+  },
+  {
+    "name": "Radio ROKS",
+    "frequency": 103.6,
+    "aliases": [
+      "Radio ROKS",
+      "Радіо Рокс",
+      "Radio ROKS Ukraine",
+      "Радіо РОКС Україна"
+    ],
+    "query": "ROKS",
+    "source": "https://www.radioroks.ua/about/",
+    "reviewedAt": "2026-11-17",
+    "url": "https://online.radioroks.ua/RadioROKS",
+    "streamName": "Radio ROKS"
+  },
+  {
+    "name": "Power FM",
+    "frequency": 104.0,
+    "aliases": [
+      "Power FM",
+      "Power FM Ukraine"
+    ],
+    "query": "Power FM",
+    "source": "https://radiomap.eu/ua/kyiv",
+    "reviewedAt": "2026-11-17"
+  },
+  {
+    "name": "Radio Jazz",
+    "frequency": 104.6,
+    "aliases": [
+      "Radio Jazz",
+      "Radio Jazz Ukraine",
+      "Радіо Джаз",
+      "Jazz Radio"
+    ],
+    "query": "Jazz",
+    "source": "https://www.radiojazz.ua/about/",
+    "reviewedAt": "2026-11-17",
+    "url": "https://online.radiojazz.ua/RadioJazz",
+    "streamName": "Radio Jazz"
+  },
+  {
+    "name": "Українське радіо",
+    "frequency": 105.0,
+    "aliases": [
+      "Українське радіо",
+      "Ukrainian Radio",
+      "UR-1",
+      "Ukrainian Radio First Channel"
+    ],
+    "query": "Українське",
+    "source": "https://radiomap.eu/ua/kyiv",
+    "reviewedAt": "2026-11-17"
+  },
+  {
+    "name": "Перець FM",
+    "frequency": 105.5,
+    "aliases": [
+      "Перець FM",
+      "Перець ФМ",
+      "Perets FM",
+      "Perec FM"
+    ],
+    "query": "Перець",
+    "source": "https://radiomap.eu/ua/kyiv",
+    "reviewedAt": "2026-11-17"
+  },
+  {
+    "name": "Радіо Ми Україна",
+    "frequency": 106.0,
+    "aliases": [
+      "Радіо Ми Україна",
+      "Ми Україна",
+      "My Ukraine Radio"
+    ],
+    "query": "Ми Україна",
+    "source": "https://radiomap.eu/ua/kyiv",
+    "reviewedAt": "2026-11-17"
+  },
+  {
+    "name": "Kiss FM Ukraine",
+    "frequency": 106.5,
+    "aliases": [
+      "Kiss FM Ukraine",
+      "Kiss FM",
+      "Kiss FM 106.5"
+    ],
+    "query": "Kiss FM",
+    "source": "https://www.kissfm.ua/about/",
+    "reviewedAt": "2026-11-17",
+    "url": "https://online.kissfm.ua/KissFM",
+    "streamName": "Kiss FM Ukraine"
+  },
+  {
+    "name": "Європа Плюс Київ",
+    "frequency": 107.0,
+    "aliases": [
+      "Європа Плюс Київ",
+      "Europa Plus Kyiv",
+      "Europa Plus Ukraine",
+      "Европа Плюс Украина"
+    ],
+    "query": "Europa Plus",
+    "source": "https://radiomap.eu/ua/kyiv",
+    "reviewedAt": "2026-11-17"
+  },
+  {
+    "name": "Авторадіо Україна",
+    "frequency": 107.4,
+    "aliases": [
+      "Авторадіо",
+      "Авторадіо Україна",
+      "Avtoradio Ukraine",
+      "Autoradio Ukraine"
+    ],
+    "query": "Avtoradio",
+    "source": "https://radiomap.eu/ua/kyiv",
+    "reviewedAt": "2026-11-17"
+  },
+  {
+    "name": "Наше Радіо",
+    "frequency": 107.9,
+    "aliases": [
+      "Наше Радіо",
+      "Наше Радио",
+      "Nashe Radio Ukraine",
+      "Nashe Radio"
+    ],
+    "query": "Nashe",
+    "source": "https://www.nasheradio.ua/about/",
+    "reviewedAt": "2026-11-17",
+    "url": "https://online.nasheradio.ua/NasheRadio",
+    "streamName": "Наше Радіо"
+  }
+]

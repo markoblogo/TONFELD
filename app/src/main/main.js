@@ -1468,6 +1468,11 @@ async function radioAction(event, action, data = {}) {
     if (!isPlayerSender(event) || typeof action !== 'string' || !data || typeof data !== 'object') return { error: 'Invalid radio request.' };
     try {
         if (action === 'snapshot') return radioLibrary.snapshot();
+        if (action === 'place') {
+            if (radioActionBusy) return {error:'Location lookup is already running.'};
+            radioActionBusy=true;
+            try { const result=await radioLibrary.choosePlace(data.id);radioPlayer.publish();return result; } finally { radioActionBusy=false; }
+        }
         if (action === 'search') return await radioLibrary.search(data);
         if (action === 'stream-check') {
             if (activeSource !== 'radio' || typeof data.ok !== 'boolean' || !radioLibrary.stations.has(data.id)) return { error: 'Invalid station check.' };

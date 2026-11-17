@@ -78,7 +78,20 @@
         } catch (error) { if (ticket === serial) notice(error.message); }
         finally { if (ticket === serial) { busy = false; $('radio-more').disabled = false; } }
     }
-    function snapshot(data) { frequencyCoverage = data.fmCoverage || {}; local = data.local || []; location = data.location; $('radio-location-label').textContent = location?.label || 'Location not set'; updateDial(); }
+    function snapshot(data) {
+        frequencyCoverage = data.fmCoverage || {}; local = data.local || []; location = data.location;
+        const picker=$('radio-place');const automatic=document.createElement('option');automatic.value='';automatic.textContent='Device location';
+        picker.replaceChildren(automatic);
+        for(const place of data.places||[]) { const option=document.createElement('option');option.value=place.id;option.textContent=place.label+' / '+place.countrycode;picker.append(option); }
+        picker.value=data.selectedPlaceId||'';
+        $('radio-location-label').textContent = (location?.label || 'Location not set') + (picker.value ? ' / saved city' : ' / device'); updateDial();
+    }
+    $('radio-place').addEventListener('change',async()=>{
+        $('radio-place').disabled=true;
+        try { snapshot(await call('place',{id:$('radio-place').value}));if(!location)await locateDevice(false);else if(view==='local')search(); }
+        catch(error){notice(error.message);await refreshSnapshot();}
+        finally{$('radio-place').disabled=false;}
+    });
     async function refreshSnapshot() { snapshot(await call('snapshot')); }
     $('radio-search-form').addEventListener('submit', (event) => { event.preventDefault(); search(); });
     $('radio-sort').addEventListener('change', () => search());

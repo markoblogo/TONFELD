@@ -22,6 +22,11 @@ const second = { ...first, name: 'Test Rock FM 101.3', url: 'https://radio.examp
 const online = { ...first, name: 'Internet Only', url: 'https://radio.example.org/online', geo_lat: null, geo_long: null };
 const broken = { ...online, name: 'Broken station', url: 'https://radio.example.org/broken' };
 const destination = { ...first, name: 'Menton Test FM 96.1', url: 'https://radio.example.org/menton', geo_lat: 43.78, geo_long: 7.5 };
+const broadcast=(station,frequency)=>({name:station.name,aliases:[station.name],frequency,source:'https://example.org/fixture-frequency'});
+require('../src/main/fm_catalog').areas=[
+    {id:'test-nantes',label:'Nantes',countrycode:'FR',lat:47.22,lon:-1.55,radiusKm:25,stations:[broadcast(first,92.1),broadcast(second,101.3)]},
+    {id:'test-menton',label:'Menton',countrycode:'FR',lat:43.78,lon:7.5,radiusKm:8,stations:[broadcast(destination,96.1)]}
+];
 network.RadioBrowser.prototype.search = async () => [first, second, online, broken, destination];
 network.RadioBrowser.prototype.click = () => {};
 const wav = taggedWav({ seconds: 60, frequency: 440 });
@@ -112,6 +117,13 @@ async function run(window) {
     const beforeMove = { id: report.id, revision: report.revision };
     await action('location', { lat: 43.78, lon: 7.5, label: 'Menton', countrycode: 'FR' });
     assert.equal(report.id, beforeMove.id); assert.equal(report.revision, beforeMove.revision); assert.equal(report.playing, true);
+    await evaluate('window.electronAPI.radio("snapshot").then(data=>{const picker=document.getElementById("radio-place");picker.value="test-nantes";picker.dispatchEvent(new Event("change"));});');
+    await waitFor(async()=>!(await evaluate('document.getElementById("radio-place").disabled')) && (await action('snapshot')).selectedPlaceId==='test-nantes','saved city selection');
+    await action('location',{lat:43.78,lon:7.5,label:'Menton',countrycode:'FR'});
+    assert.equal((await action('snapshot')).location.label,'Nantes','GPS must preserve manual selection');
+    await evaluate('document.getElementById("radio-place").value="";document.getElementById("radio-place").dispatchEvent(new Event("change"));');
+    await waitFor(async()=>!(await evaluate('document.getElementById("radio-place").disabled')) && (await action('snapshot')).location.label==='Menton','return to device city');
+    assert.equal(report.id,beforeMove.id);assert.equal(report.revision,beforeMove.revision);
     await evaluate('document.getElementById("next-btn").click()');
     await waitFor(() => report?.playing && report.id !== beforeMove.id, 'Next uses the new city queue');
     assert.equal(await evaluate('document.getElementById("radio-frequency").textContent.startsWith("96.1 MHz")'), true);

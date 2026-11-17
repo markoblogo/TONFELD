@@ -5,14 +5,15 @@ const mentonStations = require('./menton_stations.json');
 const areas = [
     { id: 'fr-nantes', label: 'Nantes', countrycode: 'FR', lat: 47.22, lon: -1.55, radiusKm: 25, stations: require('./nantes_stations.json') },
     { id: 'fr-rennes', label: 'Rennes', countrycode: 'FR', lat: 48.11, lon: -1.68, radiusKm: 15, stations: require('./rennes_stations.json') },
-    { id: 'fr-menton', label: 'Menton', countrycode: 'FR', lat: 43.78, lon: 7.5, radiusKm: 8, stations: mentonStations }
+    { id: 'fr-menton', label: 'Menton', countrycode: 'FR', lat: 43.78, lon: 7.5, radiusKm: 8, stations: mentonStations },
+    { id: 'ua-kyiv', label: 'Kyiv / Київ', countrycode: 'UA', lat: 50.45, lon: 30.52, radiusKm: 25, stations: require('./kyiv_stations.json') }
 ];
 function channelName(name) {
     return String(name || '').normalize('NFKD').replace(/\p{M}/gu, '').toLowerCase()
         .replace(/\([^)]*(?:aac|mp3|hifi|metadata|bose|kbps|kbit)[^)]*\)/g, '')
         .replace(/\b\d{2,3}(?:[.,]\d+)?\s*(?:mhz|fm)\b/g, '')
         .replace(/\b(?:aac|mp3|ogg|opus|hifi|\d+\s*(?:kbps|kbits?|k))\b/g, '')
-        .replace(/[^a-z0-9]/g, '');
+        .replace(/[^\p{L}\p{N}]/gu, '');
 }
 function matches(station, broadcast) {
     return broadcast.aliases.some((name) => channelName(name) === channelName(station.name));

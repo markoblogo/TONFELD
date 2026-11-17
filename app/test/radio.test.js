@@ -115,6 +115,17 @@ test('a failed station address switches to a compatible alternate and rejects ol
     assert.equal(player.id, b.id); assert.ok(player.revision > oldRevision);
     assert.equal(player.receive({ id: a.id, revision: oldRevision, playing: true }), false);
 });
+test('FM SEEK skips unavailable channels once, stops at working audio and pause cancels further scanning',t=>{
+    t.mock.timers.enable({apis:['setTimeout']});const {library}=fixture(t);
+    const channels=[92.1,96.2,101.3].map((f,i)=>stationFrom(raw('Channel '+i+' FM '+f,'https://example.org/seek/'+i)));
+    for(const s of channels)library.stations.set(s.id,s);library.location={lat:47.22,lon:-1.55};
+    const player=new RadioPlayer({library});t.after(()=>player.close());
+    player.command({cmd:'next'});assert.equal(player.id,channels[0].id);
+    player.receive({id:player.id,revision:player.revision,playing:false,error:true});t.mock.timers.tick(1000);assert.equal(player.id,channels[1].id);
+    player.receive({id:player.id,revision:player.revision,playing:true});assert.equal(player.scan,null);
+    player.command({cmd:'next'});assert.equal(player.id,channels[2].id);
+    player.receive({id:player.id,revision:player.revision,playing:false,error:true});player.pause();t.mock.timers.tick(10000);assert.equal(player.id,channels[2].id);assert.equal(player.wanted,false);
+});
 test('recording writes bounded stereo PCM WAV, pause excludes samples, Save copies a finalized file', async (t) => {
     const { directory } = fixture(t); const recorder = new RadioRecorder({ directory });
     recorder.start('Jazz / FM');

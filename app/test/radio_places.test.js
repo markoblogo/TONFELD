@@ -10,6 +10,7 @@ const area={label:'Angers',countrycode:'FR',stations:[{name:'Test FM',frequency:
 test('new places fetch on demand, survive restart, and separate weekly frequency from daily stream refresh',async(t)=>{
  let calls=0;const f=fixture(t,{lookup:async()=>{calls++;return area;}});
  const first=await f.places.resolve(location);assert.equal(calls,1);assert.equal(f.places.needsStreams(first.area.id),true);
+ assert.ok(f.places.available().some(a=>a.label==='Angers'));assert.equal(f.places.available().some(a=>a.label==='Unvisited'),false);
  f.places.markStreams(first.area.id);assert.equal(f.places.needsStreams(first.area.id),false);
  await f.places.resolve(location);assert.equal(calls,1);f.advance(DAY+1);assert.equal(f.places.needsStreams(first.area.id),true);
  const restored=new RadioPlaces({directory:f.directory,provider:{lookup:async()=>{throw Error('Should use cache');}},now:f.clock});assert.equal((await restored.resolve(location)).area.stations[0].frequency,99.1);

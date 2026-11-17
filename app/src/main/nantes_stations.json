@@ -17,7 +17,9 @@
     "aliases": [
       "Rire et Chansons",
       "Rire & Chansons",
-      "Rire et Chansons France"
+      "Rire et Chansons France",
+      "Rire & Chansons France",
+      "Rire & Chansons (France)"
     ],
     "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/rire-et-chansons",
     "query": "Rire",
@@ -256,9 +258,20 @@
       "Radio Cote d'Amour",
       "RCA La Radio",
       "RCA Radio Cote d’Amour",
-      "RCA La Radio de Loire Atlantique"
+      "RCA La Radio de Loire Atlantique",
+      "RCA Nantes",
+      "RCA - Nantes",
+      "RCA La Radio",
+      "RCA La Radio Nantes",
+      "RCA Nantes 99.5"
     ],
-    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/rca"
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/rca",
+    "preferredAliases": [
+      "RCA Nantes",
+      "RCA - Nantes",
+      "RCA La Radio Nantes",
+      "RCA Nantes 99.5"
+    ]
   },
   {
     "name": "RMC",

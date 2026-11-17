@@ -121,7 +121,7 @@
             <input id="radio-language" placeholder="Language" aria-label="Radio language" maxlength="100">
             <select id="radio-sort" aria-label="Sort radio stations"><option value="popular">Popular</option><option value="name">Name</option><option value="genre">Genre</option><option value="language">Language</option><option value="country">Country</option><option value="region">Region</option></select>
         </div>
-        <div class="radio-toolbar" id="radio-location-toolbar"><button id="radio-locate" type="button">Use device location</button><span id="radio-location-label" role="status">Local FM uses your device location; online stations work everywhere.</span></div>
+        <div class="radio-toolbar" id="radio-location-toolbar"><label for="radio-place">FM city</label><select id="radio-place"><option value="">Device location</option></select><button id="radio-locate" type="button">Refresh location</button><span id="radio-location-label" role="status">Choose a saved city or use device location.</span></div>
         <div class="radio-toolbar">
             <button id="radio-all" aria-pressed="true">All stations</button><button id="radio-favorites" aria-pressed="false">Favorites</button><button id="radio-local" aria-pressed="false">Local stations</button>
             <button id="radio-retry">Retry stream</button>
