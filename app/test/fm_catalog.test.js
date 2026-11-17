@@ -3,7 +3,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
-const { RadioLibrary } = require('../src/main/radio_library');
+const { RadioLibrary,stationFrom } = require('../src/main/radio_library');
 const { RadioPlayer } = require('../src/main/radio_player');
 const { matches, areas, regional } = require('../src/main/fm_catalog');
 
@@ -76,6 +76,12 @@ test('Kyiv is explicitly selectable and Cyrillic identities never collapse into 
     assert.ok(library.local().some(s=>s.frequency===103.6));assert.ok(library.local().every(s=>s.countrycode==='UA'));
     const broadcast={aliases:['Радіо Культура']};assert.equal(matches({name:'Радіо Культура'},broadcast),true);assert.equal(matches({name:'Українське радіо'},broadcast),false);
     const restored=new RadioLibrary({directory});assert.equal(restored.deviceLocation,null);await restored.choosePlace('');assert.equal(restored.location,null);
+});
+test('a directory frequency label never duplicates an already mapped broadcast on the dial',async(t)=>{
+    const {library}=fixture(t);await library.choosePlace('ua-kyiv');
+    const duplicate=stationFrom({name:'Radio ROCKS Kyiv 103.6FM HD',url:'https://example.org/other-roks',countrycode:'UA',geo_lat:50.45,geo_long:30.52});
+    library.stations.set(duplicate.id,duplicate);
+    const slots=library.local().filter(s=>s.frequency===103.6);assert.equal(slots.length,1);assert.equal(slots[0].name,'Radio ROKS');
 });
 test('Menton retains all 19 owner station candidates and resolves M Radio to the authorized local frequency', async (t) => {
     const { library } = fixture(t);

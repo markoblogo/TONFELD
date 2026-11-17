@@ -111,7 +111,9 @@ class RadioLibrary {
             if (!mhz || point.lat === null || point.lon === null || distanceKm(this.location, point) > 60) return null;
             return { ...this.public(station), frequency: mhz, frequencySource: override ? 'Your local frequency' : 'Frequency supplied in station name' };
         }).filter(Boolean);
-        return [...supplied, ...mapped].sort((a, b) => a.frequency - b.frequency || a.name.localeCompare(b.name));
+        const dial=new Map();
+        for(const station of [...mapped,...supplied])if(!dial.has(station.frequency))dial.set(station.frequency,station);
+        return [...dial.values()].sort((a, b) => a.frequency - b.frequency || a.name.localeCompare(b.name));
     }
     snapshot() { return { stations: distinctStations([...this.stations.values()].filter((s) => this.usable(s) && (this.favorites.has(s.id) || s.custom))).map((s) => this.public(s)), local: this.local(), location: this.location, selectedPlaceId:this.selectedPlaceId, places:this.places.available().map(({id,label,countrycode,stations})=>({id,label,countrycode,count:stations.length})), fmCoverage: { partial: true, mapped: this.broadcasts().length, source: this.placeArea?.source || '', warning: this.placeWarning, attribution: this.placeArea?.attribution || '' } }; }
     async search(query = {}) {
