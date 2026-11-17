@@ -132,6 +132,7 @@ function createBridgeServer(options) {
         expectedAuthToken = '',
         authTimeoutMs = 5000,
         onConnection = () => { },
+        onDisconnect = () => { },
         onAuth = () => { },
         onMessage = () => { },
         onStatus = () => { },
@@ -169,8 +170,9 @@ function createBridgeServer(options) {
             clearTimeout(ws.__ytmampAuthTimer);
             ws.__ytmampAuthTimer = null;
         }
-        clients.delete(ws);
+        const wasConnected = clients.delete(ws);
         if (activeClient === ws) activeClient = null;
+        if (wasConnected) onDisconnect(ws);
     }
 
     function activateClient(ws, req) {

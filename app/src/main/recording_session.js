@@ -14,8 +14,8 @@ class RecordingSession extends EventEmitter {
         if (!['local', 'radio', 'ytm'].includes(source)) throw new Error('Unknown recording source.');
         if (this.request || this.recorder.recording || this.recorder.pending) throw new Error('Finish, save or discard the previous recording first.');
         this.source = source; this.session = crypto.randomBytes(16).toString('hex');
-        this.request = { source, name, until: Date.now() + (source === 'ytm' ? 90000 : 30000) };
-        this.timer = setTimeout(() => this.cancel('Recording request expired. Press REC to retry.'), source === 'ytm' ? 90000 : 30000); this.timer.unref?.();
+        this.request = { source, name, until: Date.now() + (source === 'ytm' ? 90000 : 120000) };
+        this.timer = setTimeout(() => this.cancel('Recording request expired. Press REC to retry.'), source === 'ytm' ? 90000 : 120000); this.timer.unref?.();
         this.recorder.publish(source === 'ytm' ? 'Open the YTMamp browser extension on YouTube Music and press START RECORDING.' : 'Allow microphone access to start the dictaphone.');
         return this.session;
     }

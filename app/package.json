@@ -65,7 +65,9 @@
       ],
       "category": "public.app-category.music",
       "icon": "assets/icon.png",
-      "artifactName": "YTMamp-${version}-mac.${ext}"
+      "artifactName": "YTMamp-${version}-mac.${ext}",
+      "entitlements": "native/macos/Entitlements.plist",
+      "entitlementsInherit": "native/macos/Entitlements.plist"
     },
     "win": {
       "target": [

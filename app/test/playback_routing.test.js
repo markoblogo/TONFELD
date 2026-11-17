@@ -174,3 +174,22 @@ test('radio stays isolated from inactive sources and untrusted frames; hide pres
     assert.equal(fixture.snapshot().track.title, 'First');
     assert.equal(fixture.snapshot().state.playing, false);
 });
+
+test('YT recording binds one requested socket/session, publishes progress and rejects other-source PCM', async (t) => {
+    const f = await appFixture(t);
+    const client={readyState:1,send(){}}; f.context.captureSocket=client;
+    vm.runInContext('bridge.activeClient = captureSocket; ytmSnapshot.track = {title:"YT sample"};', f.context);
+    f.handlers.get('set-source')(f.event,'ytm');
+    const result = await f.handlers.get('record-action')(f.event,'start');
+    assert.equal(result.waiting,true);
+    f.bridgeOptions.onMessage({v:1,type:'ytm-record',action:'ready',session:result.session},client);
+    const data=Buffer.from(new Float32Array(8192).fill(0.25).buffer).toString('base64');
+    f.bridgeOptions.onMessage({v:1,type:'ytm-record',action:'chunk',session:result.session,sequence:0,data},{});
+    assert.equal(vm.runInContext('radioRecorder.bytes',f.context),0);
+    f.bridgeOptions.onMessage({v:1,type:'ytm-record',action:'chunk',session:result.session,sequence:1,data},client);
+    assert.equal(vm.runInContext('radioRecorder.bytes',f.context),16384);
+    assert.ok(f.messages.some(m=>m.name==='radio-recording'&&m.value.source==='ytm'&&m.value.seconds>0));
+    f.bridgeOptions.onMessage({v:1,type:'ytm-record',action:'chunk',session:result.session,sequence:1,data},client);
+    assert.equal(vm.runInContext('radioRecorder.bytes',f.context),16384);
+    vm.runInContext('recordingSession.cancel(); radioRecorder.discard();',f.context);
+});

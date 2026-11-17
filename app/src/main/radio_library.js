@@ -166,9 +166,9 @@ class RadioLibrary {
             const worker = async () => { while (pending.length && !signal.aborted) {
                 const broadcast = pending.shift();
                 try {
-                    const result = await this.browser.search({ name: broadcast.query || broadcast.name, countrycode: broadcast.countrycode, limit: '40', hidebroken: 'true', order: 'clickcount', reverse: 'true' }, signal);
+                    const result = await this.browser.search({ name: broadcast.query || broadcast.name, countrycode: broadcast.countrycode, limit: '100', hidebroken: 'false', order: 'clickcount', reverse: 'true' }, signal);
                     if (Array.isArray(result)) resolvedStreams = true;
-                    for (const item of Array.isArray(result) ? result.slice(0, 40) : []) { const station = stationFrom(item); if (station && station.countrycode === broadcast.countrycode && fmCatalog.matches(station, broadcast)) this.stations.set(station.id, station); }
+                    for (const item of Array.isArray(result) ? result.slice(0, 100) : []) { const station = stationFrom({ ...item, lastcheckok: undefined }); if (station && station.countrycode === broadcast.countrycode && fmCatalog.matches(station, broadcast)) this.stations.set(station.id, station); }
                 } catch { /* retain cached compatible addresses */ }
             } };
             await Promise.all([worker(), worker(), worker()]);
