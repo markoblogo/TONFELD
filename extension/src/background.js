@@ -188,6 +188,9 @@ function setupWebSocket(isRetry = false) {
                     armHeartbeat();
                 }
 
+                if (message.type === 'capture-request') { receiveCaptureRequest(message).catch(() => {}); return; }
+                if (message.type === 'capture-control') { captureControl(message).catch(() => {}); return; }
+
                 // Handle app status updates (visibility, etc)
                 if (message.type === 'app') {
                     lastAppStatus.windowVisible = message.windowVisible;
@@ -219,6 +222,9 @@ function setupWebSocket(isRetry = false) {
         };
 
         socket.onclose = () => {
+            chrome.action.setBadgeText({text: ''}).catch(() => {});
+            chrome.runtime.sendMessage({ target: 'ytmamp-capture', type: 'control', session: '', active: false, disconnect: true }).catch(() => {});
+            chrome.storage.session.set({ captureState: 'idle', captureRequest: null }).catch(() => {});
             isAuthenticated = false;
             isConnected = false;
             isConnecting = false;
@@ -353,3 +359,5 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         }
     }
 });
+
+importScripts('capture_background.js');

@@ -25,6 +25,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
     removeLibraryFolder: (id) => ipcRenderer.send('remove-library-folder', id),
     reportLocalAudio: (report) => ipcRenderer.send('local-audio-report', report),
     setQueueVisible: (visible) => ipcRenderer.send('set-queue-visible', visible),
+    record: (action, data) => ipcRenderer.invoke('record-action', action, data),
     radio: (action, data) => ipcRenderer.invoke('radio-action', action, data),
     onRadioAudioCommand: (callback) => ipcRenderer.on('radio-audio-command', (_event, value) => callback(value)),
     onRadioSelection: (callback) => ipcRenderer.on('radio-selection', (_event, value) => callback(value)),

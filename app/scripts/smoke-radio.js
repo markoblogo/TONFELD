@@ -9,6 +9,7 @@ const { RadioLibrary } = require('../src/main/radio_library');
 const network = require('../src/main/radio_network');
 // Keep real curated channels out of the generated-audio transport fixture.
 require('../src/main/fm_catalog').areas = [];
+require('../src/main/radio_frequency_provider').FranceFrequencyProvider.prototype.lookup = async () => { throw new Error('Isolated generated-audio fixture.'); };
 require('../src/main/device_location').locateMac = async () => ({ lat: 47.22, lon: -1.55, label: 'Test location', countrycode: 'FR' });
 const temporary = fs.mkdtempSync(path.join(os.tmpdir(), 'ytmamp-radio-desktop-'));
 const output = path.join(temporary, 'recorded.wav');
@@ -78,7 +79,7 @@ async function run(window) {
     await waitFor(() => report?.playing && report.id === stationAt101 && report.revision > revisionAt101, 'new seek supersedes old seek');
     assert.equal(await evaluate('document.getElementById("radio-frequency").textContent.startsWith("101.3 MHz")'), true);
     await evaluate('document.getElementById("radio-record").click()');
-    await waitFor(() => record?.byteLength > 0, 'PCM worklet recording');
+    await waitFor(() => record?.data?.byteLength > 0, 'PCM worklet recording');
     const bytesBefore = fs.statSync(fs.readdirSync(temporary).filter((name) => /^radio-recording-[a-f0-9]{24}\.wav$/.test(name)).map((name) => path.join(temporary, name))[0]).size;
     assert.ok(bytesBefore > 44);
     await evaluate('document.getElementById("radio-record-pause").click()');
@@ -104,7 +105,7 @@ async function run(window) {
     for (const factor of [0.75, 1, 1.25, 1.5]) {
         window.webContents.setZoomFactor(factor); window.setContentSize(Math.round(360 * factor), Math.round(116 * factor));
         await new Promise((resolve) => setTimeout(resolve, 50));
-        const fit = await evaluate('(()=>{const root=document.getElementById("container").getBoundingClientRect();return ["radio-dial","radio-record-stop","volume-slider","close-btn"].every(id=>{const r=document.getElementById(id).getBoundingClientRect();return r.width>0&&r.right<=root.right+1&&r.bottom<=root.bottom+1;});})()');
+        const fit = await evaluate('(()=>{const root=document.getElementById("container").getBoundingClientRect();return ["radio-dial","radio-record","volume-slider","close-btn"].every(id=>{const r=document.getElementById(id).getBoundingClientRect();return r.width>0&&r.right<=root.right+1&&r.bottom<=root.bottom+1;});})()');
         assert.equal(fit, true, 'compact radio fit at ' + factor);
     }
     window.webContents.setZoomFactor(1); window.setContentSize(360, 116);

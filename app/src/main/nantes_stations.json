@@ -16,7 +16,8 @@
       "Rire & Chansons",
       "Rire et Chansons France"
     ],
-    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/rire-et-chansons"
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/rire-et-chansons",
+    "query": "Rire"
   },
   {
     "name": "M Radio",
@@ -63,7 +64,8 @@
       "Jet FM",
       "JetFM"
     ],
-    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/jet-fm"
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/jet-fm",
+    "query": "Jet"
   },
   {
     "name": "Prun’",
@@ -184,7 +186,8 @@
     "preferredAliases": [
       "Alternantes",
       "AlterNantes"
-    ]
+    ],
+    "query": "Alternantes"
   },
   {
     "name": "France Info",
@@ -202,7 +205,9 @@
     "aliases": [
       "RCA",
       "Radio Cote d'Amour",
-      "RCA La Radio"
+      "RCA La Radio",
+      "RCA Radio Cote d’Amour",
+      "RCA La Radio de Loire Atlantique"
     ],
     "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/rca"
   },
@@ -224,7 +229,8 @@
       "Hit West",
       "HitWest"
     ],
-    "source": "https://hitwest.ouest-france.fr/comment-ecouter-hit-west"
+    "source": "https://hitwest.ouest-france.fr/comment-ecouter-hit-west",
+    "query": "Hit"
   },
   {
     "name": "Euradio",

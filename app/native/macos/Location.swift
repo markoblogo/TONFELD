@@ -46,9 +46,9 @@ final class LocationRequest: NSObject, CLLocationManagerDelegate {
         let fallback: [String: Any] = ["lat": lat, "lon": lon, "label": "Device location", "countrycode": ""]
         DispatchQueue.main.asyncAfter(deadline: .now() + 5) { self.finish(fallback) }
         let lookup = CLGeocoder(); geocoder = lookup
-        lookup.reverseGeocodeLocation(location) { places, _ in
+        lookup.reverseGeocodeLocation(location, preferredLocale: Locale(identifier: "en_US")) { places, _ in
             let place = places?.first
-            self.finish(["lat": lat, "lon": lon, "label": place?.locality ?? "Device location", "countrycode": place?.isoCountryCode ?? ""])
+            self.finish(["lat": lat, "lon": lon, "label": place?.locality ?? "Device location", "countrycode": place?.isoCountryCode ?? "", "postalCode": place?.postalCode ?? ""])
         }
     }
 }

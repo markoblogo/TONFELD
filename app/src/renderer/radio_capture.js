@@ -2,7 +2,7 @@
 class RadioCapture extends AudioWorkletProcessor {
     constructor() {
         super(); this.active = false; this.offset = 0; this.buffer = new Float32Array(8192);
-        this.port.onmessage = ({ data }) => { this.active = data === true; this.offset = 0; };
+        this.port.onmessage = ({ data }) => { const active = data === true; if (active !== this.active) { this.active = active; this.offset = 0; } };
     }
     process(inputs) {
         const channels = inputs[0];

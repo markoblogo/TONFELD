@@ -8,7 +8,7 @@ function locateMac({ resourcesPath = process.resourcesPath, appPath, packaged, e
             const result = JSON.parse(stdout);
             if (result.error) throw new Error(result.error);
             if (!Number.isFinite(result.lat) || Math.abs(result.lat) > 90 || !Number.isFinite(result.lon) || Math.abs(result.lon) > 180) throw new Error('macOS returned an invalid location.');
-            resolve({ lat: Math.round(result.lat * 100) / 100, lon: Math.round(result.lon * 100) / 100, label: String(result.label || 'Device location').slice(0, 120), countrycode: String(result.countrycode || '').slice(0, 2).toUpperCase() });
+            resolve({ lat: Math.round(result.lat * 100) / 100, lon: Math.round(result.lon * 100) / 100, label: String(result.label || 'Device location').slice(0, 120), countrycode: String(result.countrycode || '').slice(0, 2).toUpperCase(), postalCode: String(result.postalCode || '').replace(/[^a-zA-Z0-9 -]/g,'').slice(0,12) });
         } catch (failure) { reject(failure); }
     }));
 }

@@ -102,3 +102,24 @@ btnSaveToken.onclick = () => {
 btnInstall.onclick = () => {
     chrome.tabs.create({ url: chrome.runtime.getURL('help.html') });
 };
+
+const recordButton = document.getElementById('btn-record');
+const recordHint = document.getElementById('record-hint');
+async function updateCaptureUI() {
+    const value = await chrome.runtime.sendMessage({ type: 'capture_status' });
+    recordButton.hidden = !value?.captureRequest || value.captureState !== 'requested';
+    if (!recordButton.hidden) recordHint.textContent = 'Record audio from the active YouTube Music tab. Pause and STOP are in the desktop player.';
+    else if (value?.captureState === 'recording') recordHint.textContent = 'Recording YouTube Music. Use desktop STOP to save WAV.';
+}
+recordButton.addEventListener('click', async () => {
+    recordButton.disabled = true;
+    try {
+        const result = await chrome.runtime.sendMessage({ type: 'capture_start' });
+        if (result?.error) throw new Error(result.error);
+        recordHint.textContent = 'Recording started. Use the player to pause or stop.';
+    } catch (error) { recordHint.textContent = error.message; }
+    finally { recordButton.disabled = false; }
+});
+updateCaptureUI().catch(() => {});
+
+setInterval(() => updateCaptureUI().catch(() => {}), 1000);

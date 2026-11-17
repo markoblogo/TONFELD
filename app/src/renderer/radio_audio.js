@@ -2,6 +2,7 @@
     const api = window.electronAPI;
     const audio = new Audio(); audio.preload = 'none'; audio.crossOrigin = 'anonymous';
     let source = 'local'; let id = ''; let revision = 0; let context; let analyser; let gain; let capture;
+    let recordingSession = '';
     let volume = 0.5; let stallTimer; let loadTimer; let noise; let ready; let tuningFrame; let finishTuning;
     const samples = new Uint8Array(128);
     const report = (data) => { if (source === 'radio' && id) api.reportRadioAudio({ id, revision, playing: !audio.paused, offline: navigator.onLine === false, ...data }); };
@@ -17,7 +18,7 @@
                 capture = new AudioWorkletNode(context, 'radio-capture');
                 const silence = context.createGain(); silence.gain.value = 0;
                 input.connect(capture); capture.connect(silence); silence.connect(context.destination);
-                capture.port.onmessage = ({ data }) => api.recordRadioChunk(data);
+                capture.port.onmessage = ({ data }) => api.recordRadioChunk({ source: 'radio', session: recordingSession, data });
             } catch { /* Playback remains available if recording initialization fails. */ }
         })();
         return ready;
@@ -82,6 +83,6 @@
         if (analyser && !audio.paused && context.state === 'running') analyser.getByteTimeDomainData(samples); else samples.fill(128);
         return samples;
     };
-    api.onRadioRecording((state) => capture?.port.postMessage(state.active && !state.paused && source === 'radio'));
+    api.onRadioRecording((state) => { recordingSession = state.session || ''; capture?.port.postMessage(state.active && !state.paused && state.source === 'radio' && source === 'radio'); });
     window.canRecordRadio = () => !!capture;
 })();

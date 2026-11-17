@@ -15,3 +15,5 @@ app/library-albums-smoke.png
 .tmp/
 app/radio-smoke.png
 app/native/bin/
+app/nantes-radio-check.json
+app/rennes-directory-check.json

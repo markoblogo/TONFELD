@@ -30,7 +30,7 @@ class RadioRecorder extends EventEmitter {
                 if (header.toString('ascii', 0, 4) !== 'RIFF' || header.toString('ascii', 8, 16) !== 'WAVEfmt ' || header.readUInt32LE(24) !== RATE || header.readUInt16LE(22) !== CHANNELS) return;
                 this.bytes = Math.floor((stat.size - 44) / 4) * 4;
                 fs.ftruncateSync(fd, this.bytes + 44); fs.writeSync(fd, wavHeader(this.bytes), 0, 44, 0);
-                this.pending = { file, name: String(saved.name || 'Recovered radio').slice(0, 80), bytes: this.bytes };
+                this.pending = { file, name: String(saved.name || 'Recovered recording').slice(0, 80), bytes: this.bytes };
             } finally { fs.closeSync(fd); }
         } catch { /* no recoverable prior recording */ }
     }

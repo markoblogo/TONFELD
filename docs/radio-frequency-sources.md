@@ -6,7 +6,7 @@ Reviewed 17 November 2026. The local dial recreates terrestrial FM stations rece
 
 | Source | Useful data | Access / remaining issue |
 | --- | --- | --- |
-| [Arcom Ma radio FM et DAB+](https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab) | Indicative reception by commune, station identity, FM/DAB+ and transmitter facts | Useful primary reference, not an assumed open API. Its [terms](https://www.arcom.fr/mentions-legales) require express agreement for electronic reproduction. No unattended scraping adapter is integrated. |
+| [Arcom Ma radio FM et DAB+](https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab) | Indicative reception by commune, station identity, FM/DAB+ and transmitter facts | Useful primary reference, not an assumed open API. Its [terms](https://www.arcom.fr/mentions-legales) require express agreement for electronic reproduction. 0.8.0 adds a bounded per-city factual lookup for the user’s private local cache; it is not an official API or a licence to republish the site or national dataset. |
 | [Radio Browser API](https://api.radio-browser.info/) | Online URLs, UUIDs, codecs, availability checks, alternate streams | Free API usable in apps; does not supply a complete city-specific FM frequency/coverage model. Existing stream provider. |
 | [ANFR Open Data](https://data.anfr.fr/) and [API](https://data.anfr.fr/node/2) | Open-licence radio-installation and spectrum data, geographic search | Matching technical installations to program identity and online streams is unresolved; not a confirmed drop-in frequency provider. |
 | [Radio Data Center](https://www.radiodatacenter.com/en/radio-database/) | Combined worldwide RF/frequencies, calculated coverage and online URLs, daily updates | Licensed API/raw data; price by quotation. No account, purchase or contact initiated. |
@@ -15,20 +15,13 @@ Reviewed 17 November 2026. The local dial recreates terrestrial FM stations rece
 
 A free, comprehensive, openly reusable location-to-frequency-to-stream API has not been established. Do not claim that no such service exists: the combined licensed Radio Data Center offering is a concrete counterexample. For a small project, keep Radio Browser and our own compact reviewed area records while investigating a reusable geographic frequency source. Do not silently add a paid dependency or embed partner credentials.
 
-## Owner-approved on-demand design (pending implementation)
+## On-demand lookup in 0.8.0
 
-Store an area directory only when that place is first visited. Use a stable country/commune or provider area identifier, not a translated city label. Keep broadcast records separate from stream records: one station may have multiple transmitters/frequencies, and an exact regional program may have several online URLs.
+`radio_frequency_provider.js` reads public French commune membership and numeric FM table rows, retaining names/frequencies/source references rather than HTML pages, artwork or a national dataset. Only the current requested city is resolved. City index/detail routes are pinned to the source origin, responses are bounded, three detail requests run at once under a 45-second lookup deadline, and DAB-only records never enter FM. If a service has several frequencies, the best indicated reception is selected. These are indicative city coverage facts, not a measurement at the device. This personal-cache implementation does not establish an open licence for republishing source content or a shared derivative national database. Source attribution and the website's reuse conditions remain relevant to any wider redistribution/service plan.
 
-Proposed initial policy:
+`radio_places.js` persists at most 50 recently used areas within 1 MiB, and stores only visited areas. Frequencies refresh after seven days when that area is used. Online URLs are resolved separately after 24 hours or a failed stream; muted device decoder checks remain independent. A fresh area is available again after restart without a new source request. Source time (unknown when not supplied), local fetch time, stream resolution time and decoder-check time are separate. Empty/time-out results never overwrite useful area data or mark it fresh. Favorites/audio files are unaffected by area eviction.
 
-- On location change, load only the current area's saved directory immediately. An unvisited area triggers one bounded provider lookup, never a country/world crawl.
-- Revalidate frequency/coverage data after 7 days, only while that area is in use. Re-resolve stream URLs after 24 hours or a playback failure. Continue short decoder checks on the device; an HTTP success is not an audio check.
-- Use conditional requests/source versions where supported, update atomically and retain the last good area during timeouts. Keep source URL, source update date, local fetch date and last stream-check time separate.
-- Keep at most 50 recently used areas and a small metadata size cap. Evict old area metadata first; retain user favorites and their playback addresses. Download no audio/archive as part of directory refresh.
-- Prefer the exact regional stream. Mark a national fallback when the local edition has no usable online address. A failed URL is not evidence that the terrestrial station ceased broadcasting.
-- Do not place web-only stations or DAB-only services on the FM scale. Keep unknown frequencies unresolved rather than inventing positions. A future DAB/AM mode needs its own band model.
-
-This cache/provider pipeline is a next bounded implementation step, not working behavior of 0.7.2 or the current two-area draft. There is no background scheduled collection job and no guarantee of automatic complete coverage for an arbitrary city yet.
+France is the initial automatic frequency provider. Cities absent from the source or source layout/network failures keep saved/reference facts and show a warning; other countries retain the global online catalog and supplied-frequency fallback. This is not guaranteed worldwide FM coverage. Nantes/Menton reviewed seeds remain useful during outages; the owner's Monaco/Italian/motorway Menton selection supplements the French-only source. Exact regional streams are preferred; a national online edition may still differ from local advertising/programs.
 
 ## Initial Nantes reference
 
@@ -80,6 +73,6 @@ The explicit Nice/Menton Radio Monaco value is 95.4, versus 98.2 in Monaco. M Ra
 
 ## Current implementation limits
 
-The two coarse city centres/radii select reference areas locally; they are not transmitter positions or reception contours. Stream addresses are resolved separately through exact station aliases, with regional variants preferred. The current playing stream is preserved when location changes; local dial and Prev/Next use the newly selected area's frequency queue. One-shot location updates occur on radio entry, wake/focus after cooldown and every 15 minutes in RADIO; automatic retries pause after a permission/location failure until manual retry.
+Location is refreshed on radio entry, wake/focus after cooldown and every 15 minutes in RADIO; automatic retries pause after location failure until manual retry. Numeric device coordinates stay local; French frequency lookups request city paths, not the device coordinates. The playing stream is preserved when location changes; the dial and Prev/Next use the newly selected local queue. Native location returns a locale-neutral city label plus postcode for lookup.
 
-Bundled area facts plus sparse directory frequency/coordinate labels remain a fallback pending the on-demand provider/cache above. Generated tests establish mapping and queue behavior, not real reception, stream uptime, exact regional programming or native Mac acceptance.
+Generated tests establish parsing, cache lifecycle, source isolation and queue behavior. The live Nantes decoder report and an unseeded Rennes lookup are separate service diagnostics. They do not establish audible program quality, exact regional editions or reception on the owner's Mac. Browser tab capture and native microphone permission still require interactive acceptance in the test build.

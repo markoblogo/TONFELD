@@ -1,6 +1,6 @@
 {
   "name": "ytmamp",
-  "version": "0.7.3",
+  "version": "0.8.0",
   "description": "Retro mini-player for YouTube Music with a Chromium extension bridge.",
   "author": {
     "name": "markoblogo",
@@ -48,9 +48,15 @@
       "buildResources": "assets"
     },
     "mac": {
-      "extraResources": [{ "from": "native/bin/ytmamp-location", "to": "native/ytmamp-location" }],
+      "extraResources": [
+        {
+          "from": "native/bin/ytmamp-location",
+          "to": "native/ytmamp-location"
+        }
+      ],
       "extendInfo": {
-        "NSLocationUsageDescription": "Find nearby radio stations for the local FM dial when you choose Use device location."
+        "NSLocationUsageDescription": "Find nearby radio stations for the local FM dial when you choose Use device location.",
+        "NSMicrophoneUsageDescription": "Record your voice as a dictaphone when you press REC in LOCAL mode."
       },
       "identity": "-",
       "target": [

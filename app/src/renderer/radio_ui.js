@@ -4,6 +4,7 @@
     const notice = (message) => { $('radio-notice').textContent = message; };
     const call = async (action, data) => { const result = await api.radio(action, data); if (result?.error) throw new Error(result.error); return result; };
     const verifier = new window.RadioStationVerifier({ report: (id, ok) => call('stream-check', { id, ok }) });
+    let frequencyCoverage = {};
     let lastLocationAttempt = 0; let automaticLocationPaused = false;
     let ranks = new Map();
     function sortRows() {
@@ -77,7 +78,7 @@
         } catch (error) { if (ticket === serial) notice(error.message); }
         finally { if (ticket === serial) { busy = false; $('radio-more').disabled = false; } }
     }
-    function snapshot(data) { local = data.local || []; location = data.location; $('radio-location-label').textContent = location?.label || 'Location not set'; updateDial(); }
+    function snapshot(data) { frequencyCoverage = data.fmCoverage || {}; local = data.local || []; location = data.location; $('radio-location-label').textContent = location?.label || 'Location not set'; updateDial(); }
     async function refreshSnapshot() { snapshot(await call('snapshot')); }
     $('radio-search-form').addEventListener('submit', (event) => { event.preventDefault(); search(); });
     $('radio-sort').addEventListener('change', () => search());
@@ -99,7 +100,7 @@
             }
             snapshot(data);
             automaticLocationPaused = false;
-            $('radio-location-label').textContent = (location?.label || 'Device location') + ': ' + local.length + ' local FM stations. Partial coverage.';
+            $('radio-location-label').textContent = (location?.label || 'Device location') + ': ' + local.length + ' local FM stations. ' + (frequencyCoverage.warning || frequencyCoverage.attribution || 'Frequency coverage is partial.');
         } catch (e) { automaticLocationPaused = true; $('radio-location-label').textContent = e.message; }
         finally { locating = false; $('radio-locate').disabled = false; updateDial(); if (view === 'local') search(); }
     }
@@ -127,26 +128,11 @@
         const station = [...local].sort((a, b) => Math.abs(a.frequency - frequency) - Math.abs(b.frequency - frequency))[0];
         if (station) call('tune', { id: station.id }).catch((e) => notice(e.message));
     });
-    $('radio-record').addEventListener('click', () => { if (!window.canRecordRadio()) { notice('Start a supported radio stream before recording.'); return; } call('record', { action: 'start' }).catch((e) => notice(e.message)); });
-    $('radio-record-pause').addEventListener('click', () => call('record', { action: 'pause' }).catch((e) => notice(e.message)));
-    $('radio-record-stop').addEventListener('click', () => call('record', { action: 'stop' }).catch((e) => notice(e.message)));
-    $('radio-save').addEventListener('click', () => call('record', { action: 'save' }).catch((e) => notice(e.message)));
-    $('radio-discard').addEventListener('click', () => call('record', { action: 'discard' }).catch((e) => notice(e.message)));
-    api.onRadioRecording((state) => {
-        $('radio-record').disabled = state.active || state.pending;
-        $('radio-record').classList.toggle('recording', state.active && !state.paused);
-        $('radio-record-pause').disabled = !state.active; $('radio-record-stop').disabled = !state.active;
-        $('radio-record-pause').textContent = state.paused ? 'REC' : 'II';
-        $('radio-record-pause').setAttribute('aria-label', state.paused ? 'Resume radio recording' : 'Pause radio recording');
-        $('radio-record-status').textContent = state.active ? (state.paused ? 'REC PAUSED ' : 'REC ') + Math.floor(state.seconds) + 's' : state.message;
-        $('radio-pending').hidden = !state.pending;
-        if (state.message) notice(state.message);
-    });
     api.onRadioSelection((data) => { const moved = data.location && (!location || location.lat !== data.location.lat || location.lon !== data.location.lon || location.countrycode !== data.location.countrycode); selected = data.id; local = data.local || []; location = data.location; if (source === 'radio') { updateDial(); if (moved && view === 'local') search(); $('like-btn').setAttribute('aria-pressed', String(data.favorite)); for (const button of $('radio-grid').querySelectorAll('[data-id]')) button.setAttribute('aria-current', String(button.dataset.id === selected)); } });
     api.onSourceChange((value) => {
         source = value; document.body.classList.toggle('radio-mode', value === 'radio');
         $('radio-tuner').hidden = value !== 'radio'; $('progress-container').hidden = value === 'radio'; $('timer-container').hidden = value === 'radio';
-        $('shuffle-btn').hidden = value === 'radio'; $('repeat-btn').hidden = value === 'radio'; $('radio-record-controls').hidden = value !== 'radio';
+        $('shuffle-btn').hidden = value === 'radio'; $('repeat-btn').hidden = value === 'radio';
         $('prev-btn').title = value === 'radio' ? 'Previous local FM station' : 'Previous track'; $('next-btn').title = value === 'radio' ? 'Next local FM station' : 'Next track';
         if (value === 'radio') { refreshSnapshot().then(() => { if (!loaded || busy) search(); locateDevice(true); }).catch((e) => notice(e.message)); updateDial(); }
         else { ++serial; verifier.cancel(); if (busy) loaded = false; busy = false; $('prev-btn').disabled = false; $('next-btn').disabled = false; }

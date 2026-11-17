@@ -62,10 +62,11 @@
                 <button id="like-btn" class="mini-btn" title="Like">Like</button>
                 <button id="shuffle-btn" class="mini-btn" title="Shuffle">Shuf</button>
                 <button id="repeat-btn" class="mini-btn" title="Repeat">Rep</button>
-                <span id="radio-record-controls" hidden>
+                <span id="radio-record-controls">
                     <button id="radio-record" title="Record radio to WAV" aria-label="Start radio recording">REC</button>
                     <button id="radio-record-pause" title="Pause recording, keep listening" aria-label="Pause radio recording" disabled>II</button>
                     <button id="radio-record-stop" title="Stop recording and Save as" aria-label="Stop recording and save" disabled>STOP</button>
+                <button id="record-discard" title="Discard unsaved recording" aria-label="Discard unsaved recording" hidden>DEL</button>
                 </span>
             </div>
             <div id="volume-container">
@@ -74,6 +75,7 @@
             </div>
         </div>
         <div id="plugin-panels" aria-live="polite"></div>
+        <div id="recording-notice" role="status" aria-live="polite"></div>
         <div id="debug-info"></div>
     </div>
     <section id="local-queue" aria-label="Music library" hidden>
@@ -142,6 +144,7 @@
     <script src="radio_audio.js"></script>
     <script src="radio_verifier.js"></script>
     <script src="radio_ui.js"></script>
+    <script src="recording_ui.js"></script>
 </body>
 
 </html>

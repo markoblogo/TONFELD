@@ -13,7 +13,7 @@ const raw = (name, url, extra = {}) => ({ name, url, countrycode: 'FR', state: '
 function fixture(t, browser = { search: async () => [], click() {} }) {
     const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'ytmamp-radio-'));
     t.after(() => fs.rmSync(directory, { recursive: true, force: true }));
-    return { directory, library: new RadioLibrary({ directory, browser }) };
+    return { directory, library: new RadioLibrary({ directory, browser, frequencyProvider: { lookup: async () => { throw new Error('Isolated directory fixture.'); } } }) };
 }
 test('radio URLs reject local, mapped, credential and non-HTTP destinations', () => {
     for (const url of ['file:///etc/passwd', 'http://127.0.0.1/a', 'http://2130706433/a', 'http://[::1]/a', 'http://[::ffff:127.0.0.1]/a', 'http://10.0.0.1', 'https://user:pass@example.org', 'http://169.254.169.254/latest', 'http://station.local']) assert.throws(() => checkedUrl(url), url);

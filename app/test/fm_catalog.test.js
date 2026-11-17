@@ -15,7 +15,7 @@ function fixture(t) {
     const nearby = [station('Nantes online', 'nantes', { geo_lat: 47.22, geo_long: -1.55 }), station('Menton online', 'menton', { geo_lat: 43.78, geo_long: 7.5 })];
     const calls = [];
     const browser = { search: async (query) => { calls.push(query); return query.has_geo_info ? nearby : channels; } };
-    return { directory, calls, library: new RadioLibrary({ directory, browser }) };
+    return { directory, calls, library: new RadioLibrary({ directory, browser, frequencyProvider: { lookup: async () => { throw new Error('Isolated directory fixture.'); } } }) };
 }
 test('known local frequencies resolve to national streams even when their directory coordinates are elsewhere', async (t) => {
     const { library } = fixture(t);

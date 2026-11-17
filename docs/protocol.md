@@ -30,4 +30,10 @@ The extension reports `Client connected`, `Need YTM Tab`, `OFFLINE`, or `WAITING
 
 The app validates protocol version, message types, commands, numeric ranges, and waveform payload size. Track titles and artists are trimmed and limited to 300 characters before renderer IPC.
 
-The 0.7.3 development preview also has RADIO. Radio commands are handled in the desktop app, never forwarded to the YouTube companion. Play/pause starts/stops the selected online stream, Prev/Next select only the local FM queue, and Like toggles a station favorite. Seek/shuffle/repeat have no radio operation. Recording and location use sender-checked desktop IPC and are not exposed by the browser bridge.
+The 0.8.0 development preview also has RADIO. Radio commands are handled in the desktop app, never forwarded to the YouTube companion. Play/pause starts/stops the selected online stream, Prev/Next select only the local FM queue, and Like toggles a station favorite. Seek/shuffle/repeat have no radio operation. Microphone/radio recording and location use sender-checked desktop IPC. Explicit browser-tab recording uses the authenticated extension bridge described below.
+
+## Tab recording in 0.8.0
+
+The desktop sends `capture-request` with a random 32-hex session ID after a YT MUSIC REC click. The companion requires an explicit action on the active music.youtube.com tab before capture. `ytm-record` messages have `v:1`, the session ID and action `ready`, `chunk`, `ended` or `error`. Chunks contain a nonnegative monotonic integer sequence and base64 stereo 48 kHz Float32 PCM, at most 64 KiB decoded; the desktop pins them to the accepted socket/session/source and applies its disk/real-time writer limits. General WebSocket frames are capped at 128 KiB.
+
+Desktop `capture-control` messages report active/paused state; stop, source change and disconnect end capture. These messages are internal to the paired companion, not public integration API controls. Production authentication, loopback binding and renderer isolation remain enabled.

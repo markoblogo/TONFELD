@@ -557,3 +557,8 @@ button:active {
 #radio-more { width: 100%; padding: 8px; margin-top: 8px; }
 #radio-record-status { color: #e9b890; margin-left: auto; font-size: 9px; }
 #radio-pending { display: flex; gap: 6px; align-items: center; color: #f1bb78; }
+
+/* Keep shared recording controls inside the original mini-player dimensions. */
+#recording-notice { position: absolute; bottom: 0; left: 6px; z-index: 101; pointer-events: none; line-height: 8px; font-size: 7px; color: #e9b890; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 346px; height: 8px; }
+body.recording-active #like-btn, body.recording-active #shuffle-btn, body.recording-active #repeat-btn { display: none; }
+#radio-record-controls [hidden] { display: none; }
