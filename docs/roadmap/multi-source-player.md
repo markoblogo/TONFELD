@@ -1,6 +1,6 @@
 # TONFELD development plan
 
-Updated 17 November 2026. The owner accepted the 0.8.0 combined radio/recording test block and selected **TONFELD** as the new name, with a purely typographic T + 180-degree-rotated F symbol. The repository is now markoblogo/TONFELD.
+Updated 17 November 2026. The owner accepted **TONFELD 0.9.0** on macOS and authorized the public release. The typographic identity uses T + 180-degree-rotated F. The repository is markoblogo/TONFELD.
 
 ## Working agreement
 
@@ -18,7 +18,7 @@ Work in agreed, bounded blocks. Implement/check one block, report results and un
 
 The owner reported that 0.8.0 works on Mac. Automated evidence and earlier native/service diagnostics remain in [the test log](../smoke-test.md); frequency counts never imply guaranteed online availability or measured RF reception.
 
-## Current agreed block: TONFELD 0.9.0
+## Completed implementation block: TONFELD 0.9.0
 
 1. Apply the approved typographic identity to the player, app, companion, icons and packaging. Use the TF mark for missing/broken station art. Preserve original profile, app ID, browser storage and integration compatibility.
 2. Make explicit Save/Saved controls and Saved stations consistent across cards, mini-player, compatible addresses, removal and restart. This is saved stations, not automatic listening history.
@@ -29,12 +29,15 @@ The owner reported that 0.8.0 works on Mac. Automated evidence and earlier nativ
 
 The owner explicitly confirmed that audit/sanitation/README/GitHub About is the final part of this block; discuss remaining development ideas afterwards.
 
+Owner acceptance: everything works; the station-art placeholder needs cosmetic alignment/proportion refinement, explicitly deferred without blocking release. Release reconciliation, builds and uploaded-asset verification are the final operational steps of this block. About remains prepared for manual owner insertion, Website empty.
+
 ## Deferred recording workspace
 
 Save As is sufficient now. **Do not add a recordings list/manager in 0.9.0.** A future separately agreed workspace may cover dictaphone recordings plus meetings/calls, with explicit sending to transcription and summarization. Discuss capture methods, permission/consent, processing destination, privacy and storage at that stage. Meeting capture, transcription and summarization are outside the current implementation.
 
 ## Later queue, to discuss after this block
 
+- **Station-art placeholder cosmetics:** center on both axes; compare the full TONFELD wordmark in the wide rectangle with a larger monogram sized like normal station artwork. Preserve the accepted typography and card dimensions. This is queued for the next agreed block, not part of 0.9.0 code changes.
 - Local vinyl visual deck based on [rauchg/vinyl](https://github.com/rauchg/vinyl), in its own collapsible panel. Reuse shared local playback; collapsing suspends rendering. Physical groove/stylus sound simulation and preprocessing are separately measured enhancements with bounded storage.
 - YouTube Music playlist selection and optional in-app playback. The current signed-in browser companion remains the working model.
 - Further macOS integration and other owner ideas. Their order is not fixed before the review.

@@ -4,11 +4,11 @@
 
 A compact retro music player for local collections, online radio and YouTube Music. Formerly **YTMamp**. Starts in LOCAL mode and keeps your music in its original folders.
 
-## Current build
+## Download
 
-**0.9.0 is the TONFELD release candidate**, on the [radio development branch](https://github.com/markoblogo/TONFELD/tree/codex/radio-recording-stage3-20261111). Download the [Apple Silicon app and matching companion](https://github.com/markoblogo/TONFELD/actions/runs/44110614752/artifacts/14340961777). [All three CI platforms passed](https://github.com/markoblogo/TONFELD/actions/runs/44110614752); see [the test log](docs/smoke-test.md) and [Mac acceptance pass](docs/test-0.9.0.md). This is not yet a new tagged public release. Older [published YTMamp releases](https://github.com/markoblogo/TONFELD/releases) do not include the full local-library/radio player.
+Download **[TONFELD 0.9.0](https://github.com/markoblogo/TONFELD/releases/tag/v0.9.0)**: Apple Silicon Mac DMG/ZIP, Windows x64 installer/ZIP, Linux x64 AppImage/DEB and the matching Chromium companion. Release assets include SHA256SUMS. Older YTMamp releases do not include the full local-library/radio player.
 
-The owner accepted 0.8.0 on macOS. The new candidate adds the approved typographic TONFELD/rotated-F identity, station-art fallback, synchronized saved stations, one tuning hiss and updated stream addresses. Native upgrade/listening acceptance precedes a public release. Mac previews are ad-hoc signed and not Apple-notarized.
+The owner accepted 0.9.0 on macOS. [All three candidate CI platforms passed](https://github.com/markoblogo/TONFELD/actions/runs/44110614752); see [the test log](docs/smoke-test.md). Mac builds are ad-hoc signed and not Apple-notarized. The missing-station-art placeholder has a known alignment/proportion improvement queued for a later block.
 
 ## Listen
 
@@ -36,7 +36,7 @@ For YT MUSIC recording, press desktop REC, then **START RECORDING** in the compa
 
 ## Install and pair
 
-1. Extract the candidate archive. On Mac, open its DMG and drag **TONFELD** to Applications, or extract the app ZIP. Quit the older player first. Existing music folders, metadata, favorites, saved cities, bridge token and settings remain in the original profile. See [upgrade compatibility](docs/branding/README.md).
+1. Download the release for your platform. On Mac, open its DMG and drag **TONFELD** to Applications, or extract the app ZIP. Quit the older player first. Existing music folders, metadata, favorites, saved cities, bridge token and settings remain in the original profile. See [upgrade compatibility](docs/branding/README.md).
 2. Extract the matching extension ZIP. In `chrome://extensions`, enable Developer mode and load its unpacked folder, or reload/update the existing companion. Extensions are installed per browser profile.
 3. In the TONFELD tray menu, choose **Copy bridge token**. Paste it into the companion, then Save and Connect.
 4. Open [YouTube Music](https://music.youtube.com) and interact with the page to allow browser audio. LOCAL and RADIO work without this browser setup.
