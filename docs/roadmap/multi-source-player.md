@@ -121,3 +121,22 @@ Intermediate evidence: the first live diagnostic decoded 28/33 Nantes streams an
 Owner addition: RADIO LIBRARY can select an existing saved city independently of current location, or return to automatic device mode. New directories come from visits or explicit reviewed additions requested here. Retain Nantes, Rennes and Menton, and add Kyiv (35 FM services). Manual selection survives refresh/restart and changes only the tuning queue until another station is chosen. Finish the combined candidate and test this behavior before the block review.
 
 Final test candidate: code `7aaef79`, CI 44095939679 and artifact 14334790172 passed all three platform gates. Saved-city switching and recording are ready for native owner testing. Live decoder observations: Nantes 31/33, Kyiv 14/35; Rennes retains 29 FM facts. Partial online coverage remains explicit. Next step is owner acceptance using docs/test-0.8.0.md, then block review. No release/tag/merge, audit sweep or vinyl implementation is included in this delivery.
+
+## Owner acceptance and next-block scope, 17 November 2026
+
+The owner reports that the 0.8.0 test version works and accepts the combined radio/recording block. This is owner feedback; no additional instrumented native test is implied.
+
+The next agreed radio/product pass contains:
+
+- Improve local online coverage, especially unresolved Kyiv counterparts and the remaining Nantes failures. Preserve the real local FM model, bounded on-demand directories, saved-city switching and device checks; do not promise that every referenced frequency has a working online edition.
+- Use explicit likes/saves and a Favorites view instead of automatic listening history. Favorite/Saved card actions, the radio-mode Like control and Favorites view already exist; make their naming, selected state, removal and synchronization consistent. Preserve favorites across restart and city changes.
+- Choose a new short brand with the visual character of classic hi-fi manufacturers such as Blaupunkt and Technics. Radiolalala has the desired emotional warmth but is long/playful/radio-specific; GrandAmp is liked mainly for brevity. The final name is undecided. A restrained wordmark and a separate small symbol should work on the player, app/extension icons, installer and missing-radio-art placeholders. Preserve existing user data through renaming.
+- Replace missing or failed radio artwork with the new brand symbol inside the existing placeholder.
+- Refine the existing tuning noise into one recognizable radio-search hiss, volume-scaled, optional and outside the recording path.
+- Perform the previously agreed audit/sanitation/documentation/About pass and prepare one tested release for review. Keep the player compact and panels collapsible.
+
+### Explicitly deferred recording workspace
+
+Do not add a recordings list/manager to the next block. Native Save As is sufficient for the present recording use cases. A future, separately scoped recording workspace may cover dictaphone recordings plus meetings/calls, with explicit sending to transcription and summarization. Discuss capture methods, permissions, processing destination and storage when that future block is started. No meeting capture, transcription integration or summarization implementation is authorized in the current pass.
+
+Vinyl and YouTube playlist/embedded-playback ideas remain in the later development queue.
