@@ -91,7 +91,7 @@ class RadioLibrary {
         const broadcasts = this.broadcasts();
         const mapped = broadcasts.filter((b) => Number.isFinite(b.frequency)).map((broadcast) => {
             const candidates = usable.filter((s) => s.countrycode === broadcast.countrycode && fmCatalog.matches(s, broadcast));
-            const score = (s) => (s.id === this.activeId ? 100 : 0) + (fmCatalog.regional(s, broadcast) ? 50 : 0) + (this.checked.has(s.id) ? 20 : 0) + (/MP3|AAC|OGG|OPUS/i.test(s.codec) ? 10 : 0);
+            const score = (s) => (s.id === this.activeId ? 100 : 0) + (fmCatalog.regional(s, broadcast) ? 50 : 0) + (s.url === broadcast.url ? 15 : 0) + (this.checked.has(s.id) ? 20 : 0) + (/MP3|AAC|OGG|OPUS/i.test(s.codec) ? 10 : 0);
             candidates.sort((a, b) => score(b) - score(a) || a.id.localeCompare(b.id));
             const station = candidates[0];
             if (!station) return null;
@@ -152,7 +152,7 @@ class RadioLibrary {
         this.placeArea = place.area; this.placeWarning = place.warning || '';
         for (const broadcast of this.broadcasts()) {
             if (!broadcast.url) continue;
-            const station = stationFrom({ name: broadcast.name, url: broadcast.url, countrycode: broadcast.countrycode, hls: /\.m3u8(?:\?|$)/i.test(broadcast.url) ? 1 : 0 });
+            const station = stationFrom({ name: broadcast.streamName || broadcast.name, url: broadcast.url, countrycode: broadcast.countrycode, hls: /\.m3u8(?:\?|$)/i.test(broadcast.url) ? 1 : 0 });
             if (station && !this.stations.has(station.id)) this.stations.set(station.id, station);
         }
         if (!changed && data.refresh !== true && (this.placeArea && !this.places.needsStreams(this.placeArea.id) || Date.now() - this.locatedAt < 900000)) return this.snapshot();

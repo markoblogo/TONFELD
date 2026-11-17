@@ -12,7 +12,7 @@ ipcMain.on('live-station-result',(_e,value)=>{const actual=library.stations.get(
 app.whenReady().then(async()=>{
  try{
   library=new RadioLibrary({directory});await library.chooseLocation({lat:47.22,lon:-1.55,label:'Nantes',countrycode:'FR'});
-  // Prove a new place with no bundled seed can be fetched and then loaded without another request.
+  // Refresh Rennes, fetched without a bundled seed in the first 0.8.0 diagnostic and retained at the owner’s request, then verify restart caching.
   const rennes={lat:48.11,lon:-1.68,label:'Rennes',countrycode:'FR',postalCode:'35000'};
   const place=await library.places.resolve(rennes);if(!place.area||place.area.stations.length<10)throw Error('Unseeded Rennes frequency lookup failed: '+place.warning);
   const cached=new RadioPlaces({directory,provider:{lookup:async()=>{throw Error('Unexpected cache miss');}}});const read=await cached.resolve(rennes);if(!read.cached)throw Error('New-place cache did not survive restart');

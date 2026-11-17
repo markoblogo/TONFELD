@@ -20,7 +20,7 @@ function fixture(t) {
 test('known local frequencies resolve to national streams even when their directory coordinates are elsewhere', async (t) => {
     const { library } = fixture(t);
     await library.chooseLocation({ lat: 47.22, lon: -1.55, label: 'Нант', countrycode: 'FR' });
-    for (const [name, mhz] of [['RFM',90.1],['FIP',95.7],['RTL',104.3],['Europe 1',104.7]]) assert.ok(library.local().some((s) => s.name === name && s.frequency === mhz));
+    for (const [name, mhz] of [['RFM',90.1],['FIP',95.7],['RTL',104.3],['Europe 1',104.7]]) assert.ok(library.local().some((s) => matches(s, areas[0].stations.find((b)=>b.name===name)) && s.frequency === mhz));
     assert.equal(library.local().some((s) => /Jazz/.test(s.name)), false);
     assert.ok(library.local().every((s) => s.frequencySource.startsWith('https:')));
     assert.equal(library.local().some((s) => s.name === 'Nantes online'), false);
@@ -30,7 +30,7 @@ test('moving Nantes to Menton replaces local stations and frequencies without in
     await library.chooseLocation({ lat: 47.22, lon: -1.55, label: 'Nantes', countrycode: 'FR' });
     const player = new RadioPlayer({ library }); t.after(() => player.close());
     const commands = []; player.on('audio', (c) => commands.push(c));
-    const fip = library.local().find((s) => s.name === 'FIP'); player.select(fip.id);
+    const fip = library.local().find((s) => s.name.toLowerCase() === 'fip'); player.select(fip.id);
     player.receive({ id: player.id, revision: player.revision, playing: true });
     const before = commands.length;
     await library.chooseLocation({ lat: 43.78, lon: 7.5, label: 'Menton', countrycode: 'FR' }); player.publish();

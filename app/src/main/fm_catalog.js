@@ -4,6 +4,7 @@ const reviewed = '2026-11-17';
 const mentonStations = require('./menton_stations.json');
 const areas = [
     { id: 'fr-nantes', label: 'Nantes', countrycode: 'FR', lat: 47.22, lon: -1.55, radiusKm: 25, stations: require('./nantes_stations.json') },
+    { id: 'fr-rennes', label: 'Rennes', countrycode: 'FR', lat: 48.11, lon: -1.68, radiusKm: 15, stations: require('./rennes_stations.json') },
     { id: 'fr-menton', label: 'Menton', countrycode: 'FR', lat: 43.78, lon: 7.5, radiusKm: 8, stations: mentonStations }
 ];
 function channelName(name) {

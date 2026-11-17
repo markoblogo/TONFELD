@@ -11,7 +11,7 @@ async function wait(fn,label){const until=Date.now()+7000;while(Date.now()<until
 app.on('browser-window-created',(_e,window)=>window.webContents.once('did-finish-load',()=>setTimeout(async()=>{
  const evaluate=(code)=>window.webContents.executeJavaScript(code,true);console.log('MIC_CHECK renderer-ready');
  try {
-  await evaluate(`window.fixtureContext=new AudioContext({sampleRate:48000});window.fixtureTone=fixtureContext.createOscillator();window.fixtureOutput=fixtureContext.createMediaStreamDestination();fixtureTone.connect(fixtureOutput);fixtureTone.start();fixtureContext.resume();navigator.mediaDevices.getUserMedia=async()=>fixtureOutput.stream;`);
+  await evaluate(`window.fixtureContext=new AudioContext({sampleRate:48000});window.fixtureTone=fixtureContext.createOscillator();window.fixtureOutput=fixtureContext.createMediaStreamDestination();fixtureTone.connect(fixtureOutput);fixtureTone.start();fixtureContext.resume();navigator.mediaDevices.getUserMedia=async()=>fixtureOutput.stream;undefined;`);
   console.log('MIC_CHECK request');await evaluate('document.getElementById("radio-record").click()');
   await wait(()=>evaluate('document.body.classList.contains("recording-active")'),'microphone starts');console.log('MIC_CHECK started');
   await wait(()=>fs.readdirSync(directory).some(n=>n.endsWith('.wav')&&fs.statSync(path.join(directory,n)).size>44),'PCM arrives');console.log('MIC_CHECK pcm');

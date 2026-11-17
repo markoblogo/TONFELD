@@ -54,25 +54,29 @@ class FranceFrequencyProvider {
         const links=stationLinks(await this.read(source,signal));
         if (!links.length) throw new Error('Frequency source did not return readable FM station records. Saved data is retained.');
         const stations=[]; const pending=[...links]; let failures=0;
-        const known=fmCatalog.areas.flatMap((a)=>a.stations);
+        const known=[...(location.seed?.stations||[]),...fmCatalog.areas.flatMap((a)=>a.stations)];
+        const localNames=new Set((location.seed?.stations||[]).map((s)=>s.name));
         const worker=async()=>{ while(pending.length && !signal.aborted) {
             const item=pending.shift();
             try {
                 const values=frequencies(await this.read(item.url,signal)); const best=values[0];
                 if (!best) { failures++; continue; }
-                let prior=known.find((s)=>fmCatalog.matches(item,s));
+                let prior=known.find((s)=>fmCatalog.matches(item,s)); let networkFallback=false;
                 if (!prior && normalize(item.name).endsWith(normalize(label))) {
                     const network=['NRJ','Chérie FM','Nostalgie','RTL2','Europe 2','Fun Radio'].find((n)=>normalize(item.name).startsWith(normalize(n)));
-                    if(network) prior=known.find((s)=>normalize(s.name)===normalize(network));
+                    if(network) { prior=known.find((s)=>normalize(s.name)===normalize(network)); networkFallback=true; }
                 }
-                const aliases=[...new Set([item.name,...(prior?.aliases||[])])].slice(0,20);
+                // A national name must not inherit another city's regional aliases or preferred stream.
+                const sameArea=prior && localNames.has(prior.name) && location.seed.stations.includes(prior);
+                const priorAliases=(prior?.aliases||[]).filter((name)=>sameArea || !fmCatalog.regional({name},prior) || normalize(name)===normalize(item.name));
+                const aliases=[...new Set([item.name,...(networkFallback ? [prior.name] : priorAliases),...(/^ici /i.test(item.name) ? [item.name.replace(/^ici /i,'France Bleu ')] : [])])].slice(0,20);
                 // A locality-qualified official service may use its network online if no exact regional stream exists.
                 const station={name:item.name,frequency:best.frequency,aliases,source:item.url,quality:best.quality};
-                if (prior?.url) station.url=prior.url;
+                if (prior?.url && (sameArea || !prior.streamName || !fmCatalog.regional({name:prior.streamName},prior) || normalize(prior.streamName)===normalize(item.name))) { station.url=prior.url; if(prior.streamName) station.streamName=prior.streamName; }
                 if (prior?.query) station.query=prior.query;
-                else station.query=prior?.name||item.name;
-                if (prior?.preferredAliases) station.preferredAliases=prior.preferredAliases;
-                if (/Nantes|Pays de la Loire|Atlantique|Côte d.Azur/i.test(item.name)) station.preferredAliases=[item.name,...(station.preferredAliases||[])];
+                else station.query=/^ici /i.test(item.name) ? item.name.replace(/^ici /i,'') : prior?.name||item.name;
+                if (networkFallback) station.preferredAliases=[item.name]; else if (sameArea && prior?.preferredAliases) station.preferredAliases=prior.preferredAliases;
+                if (/Nantes|Rennes|Pays de la Loire|Atlantique|Côte d.Azur/i.test(item.name)) station.preferredAliases=[item.name,...(station.preferredAliases||[])];
                 stations.push(station);
             } catch { failures++; }
         }};

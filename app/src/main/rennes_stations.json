@@ -1,0 +1,342 @@
+[
+  {
+    "name": "C'Lab",
+    "frequency": 88.4,
+    "aliases": [
+      "C'Lab"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios-detail/clab--rennes-35000",
+    "quality": 5,
+    "query": "C'Lab"
+  },
+  {
+    "name": "Skyrock",
+    "frequency": 88.9,
+    "aliases": [
+      "Skyrock"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios-detail/skyrock--rennes-35000",
+    "quality": 5,
+    "query": "Skyrock"
+  },
+  {
+    "name": "Rire et Chansons",
+    "frequency": 89.5,
+    "aliases": [
+      "Rire et Chansons",
+      "Rire & Chansons",
+      "Rire et Chansons France"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios-detail/rire-et-chansons--rennes-35000",
+    "quality": 5,
+    "query": "Rire"
+  },
+  {
+    "name": "France Info",
+    "frequency": 89.9,
+    "aliases": [
+      "France Info",
+      "Franceinfo"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios-detail/france-info--rennes-35000",
+    "quality": 5,
+    "url": "https://icecast.radiofrance.fr/franceinfo-hifi.aac",
+    "query": "France Info"
+  },
+  {
+    "name": "Radio Caroline",
+    "frequency": 90.8,
+    "aliases": [
+      "Radio Caroline"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios-detail/radio-caroline--rennes-35000",
+    "quality": 5,
+    "query": "Radio Caroline"
+  },
+  {
+    "name": "Radio FG",
+    "frequency": 91.2,
+    "aliases": [
+      "Radio FG"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios-detail/radio-fg--rennes-35000",
+    "quality": 5,
+    "query": "Radio FG"
+  },
+  {
+    "name": "Beau Soleil Programme Alouette",
+    "frequency": 91.6,
+    "aliases": [
+      "Beau Soleil Programme Alouette"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios-detail/beau-soleil-programme-alouette--rennes-35000",
+    "quality": 5,
+    "query": "Beau Soleil Programme Alouette"
+  },
+  {
+    "name": "Radio Classique",
+    "frequency": 92.3,
+    "aliases": [
+      "Radio Classique"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios-detail/radio-classique--rennes-35000",
+    "quality": 5,
+    "url": "https://radioclassique.ice.infomaniak.ch/radioclassique-high.mp3",
+    "query": "Radio Classique"
+  },
+  {
+    "name": "RTL2",
+    "frequency": 92.7,
+    "aliases": [
+      "RTL2",
+      "RTL2 Nantes",
+      "RTL 2"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios-detail/rtl2--rennes-35000",
+    "quality": 5,
+    "query": "RTL2",
+    "preferredAliases": [
+      "RTL2 Nantes"
+    ]
+  },
+  {
+    "name": "France Inter",
+    "frequency": 93.5,
+    "aliases": [
+      "France Inter"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios-detail/france-inter--rennes-35000",
+    "quality": 5,
+    "url": "https://icecast.radiofrance.fr/franceinter-hifi.aac",
+    "query": "France Inter"
+  },
+  {
+    "name": "Canal B",
+    "frequency": 94,
+    "aliases": [
+      "Canal B"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios-detail/canal-b--rennes-35000",
+    "quality": 5,
+    "query": "Canal B"
+  },
+  {
+    "name": "Fun Radio",
+    "frequency": 94.5,
+    "aliases": [
+      "Fun Radio",
+      "Fun Radio Atlantique",
+      "Fun Radio Nantes"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios-detail/fun-radio--rennes-35000",
+    "quality": 5,
+    "query": "Fun Radio",
+    "preferredAliases": [
+      "Fun Radio Atlantique",
+      "Fun Radio Nantes"
+    ]
+  },
+  {
+    "name": "M Radio",
+    "frequency": 94.9,
+    "aliases": [
+      "M Radio",
+      "MRadio",
+      "MFM"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios-detail/m-radio--rennes-35000",
+    "quality": 5,
+    "url": "https://mfm.ice.infomaniak.ch/mfm-128.mp3?aw_0_1st.playerId=mradio_web&i=26641",
+    "query": "M Radio"
+  },
+  {
+    "name": "RCF Alpha",
+    "frequency": 96.3,
+    "aliases": [
+      "RCF Alpha"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios-detail/rcf-alpha--rennes-35000",
+    "quality": 5,
+    "query": "RCF Alpha"
+  },
+  {
+    "name": "RFM",
+    "frequency": 96.9,
+    "aliases": [
+      "RFM",
+      "RFM France"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios-detail/rfm--rennes-35000",
+    "quality": 5,
+    "url": "https://rfm.lmn.fm/rfm.mp3",
+    "query": "RFM"
+  },
+  {
+    "name": "Nostalgie",
+    "frequency": 97.6,
+    "aliases": [
+      "Nostalgie",
+      "Nostalgie Nantes",
+      "Nostalgie France"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios-detail/nostalgie--rennes-35000",
+    "quality": 5,
+    "query": "Nostalgie",
+    "preferredAliases": [
+      "Nostalgie Nantes"
+    ]
+  },
+  {
+    "name": "France Culture",
+    "frequency": 98.3,
+    "aliases": [
+      "France Culture"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios-detail/france-culture--rennes-35000",
+    "quality": 5,
+    "url": "https://icecast.radiofrance.fr/franceculture-hifi.aac",
+    "query": "France Culture"
+  },
+  {
+    "name": "HIT WEST",
+    "frequency": 99.2,
+    "aliases": [
+      "HIT WEST",
+      "Hit West",
+      "HitWest"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios-detail/hit-west-0--rennes-35000",
+    "quality": 5,
+    "query": "Hit"
+  },
+  {
+    "name": "Radio Rennes",
+    "frequency": 100.8,
+    "aliases": [
+      "Radio Rennes"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios-detail/radio-rennes--rennes-35000",
+    "quality": 5,
+    "query": "Radio Rennes"
+  },
+  {
+    "name": "FIP",
+    "frequency": 101.2,
+    "aliases": [
+      "FIP",
+      "FIP France",
+      "FIP Radio",
+      "FIP Radio France"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios-detail/fip--rennes-35000",
+    "quality": 5,
+    "query": "FIP"
+  },
+  {
+    "name": "Europe 2 Ouest",
+    "frequency": 102,
+    "aliases": [
+      "Europe 2 Ouest"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios-detail/europe-2-ouest--rennes-35000",
+    "quality": 5,
+    "query": "Europe 2 Ouest"
+  },
+  {
+    "name": "BFM Business",
+    "frequency": 102.4,
+    "aliases": [
+      "BFM Business",
+      "BFM Business France"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios-detail/bfm-business--rennes-35000",
+    "quality": 5,
+    "query": "BFM Business"
+  },
+  {
+    "name": "ici Armorique",
+    "frequency": 103.1,
+    "aliases": [
+      "ici Armorique",
+      "France Bleu Armorique"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios-detail/ici-armorique--rennes-35000",
+    "quality": 5,
+    "query": "Armorique"
+  },
+  {
+    "name": "NRJ Rennes",
+    "frequency": 103.9,
+    "aliases": [
+      "NRJ Rennes",
+      "NRJ"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios-detail/nrj-rennes--rennes-35000",
+    "quality": 5,
+    "query": "NRJ",
+    "preferredAliases": [
+      "NRJ Rennes"
+    ]
+  },
+  {
+    "name": "RTL",
+    "frequency": 104.3,
+    "aliases": [
+      "RTL",
+      "RTL France"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios-detail/rtl--rennes-35000",
+    "quality": 5,
+    "query": "RTL"
+  },
+  {
+    "name": "Europe 1",
+    "frequency": 104.7,
+    "aliases": [
+      "Europe 1",
+      "Europe1",
+      "Europe 1 France"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios-detail/europe-1--rennes-35000",
+    "quality": 5,
+    "query": "Europe 1"
+  },
+  {
+    "name": "France Musique",
+    "frequency": 105.5,
+    "aliases": [
+      "France Musique"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios-detail/france-musique--rennes-35000",
+    "quality": 5,
+    "url": "https://icecast.radiofrance.fr/francemusique-hifi.aac",
+    "query": "France Musique"
+  },
+  {
+    "name": "RMC",
+    "frequency": 106,
+    "aliases": [
+      "RMC",
+      "RMC Info",
+      "RMC France"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios-detail/rmc--rennes-35000",
+    "quality": 5,
+    "url": "https://audio.bfmtv.com/rmcradio_128.mp3",
+    "query": "RMC"
+  },
+  {
+    "name": "Chérie FM Rennes",
+    "frequency": 106.8,
+    "aliases": [
+      "Chérie FM Rennes",
+      "Chérie FM"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios-detail/cherie-fm-rennes--rennes-35000",
+    "quality": 5,
+    "query": "Chérie FM",
+    "preferredAliases": [
+      "Chérie FM Rennes"
+    ]
+  }
+]
