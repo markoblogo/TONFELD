@@ -25,3 +25,7 @@ Examples likely to work but not yet listed as tested: Brave, Edge, Arc-style Chr
 ## Install note
 
 Extensions are installed per browser profile. If you use more than one browser or profile, load the unpacked `extension/` folder in each one.
+
+## 0.8.0 tab-recording preview
+
+The browser list above records existing playback/bridge testing, not acceptance of the new recorder. Tab recording additionally requires Chromium 116+ with `chrome.tabCapture`, `chrome.offscreen` and active-tab permission support. Update the unpacked companion from the same 0.8.0 build and accept its permission changes. Press REC in desktop YT MUSIC mode, then explicitly choose START RECORDING in the companion on the active music.youtube.com tab. A browser that blocks automatic popup opening may require clicking the pinned extension icon. Native Comet/Atlas/Chrome recording acceptance is still pending; no microphone or system-wide audio capture is used for YT MUSIC.
