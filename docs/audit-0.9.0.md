@@ -26,6 +26,12 @@
 
 ## Verification and remaining release work
 
-Local focused tests/lint and the full clean-install CI results will be recorded against the final candidate commit in smoke-test.md. CI runs npm ci, audit at high severity, checks/packaging on three platforms, generated Electron playback/recording/UI checks, live Nantes/Kyiv diagnostics and signed Apple Silicon package checks. Service diagnostics are assessed independently of the green unit/build gates.
+Final code commit `90e2d9032c91742f446ce156b8ca66dfed15ce48` passed [CI 44110614752](https://github.com/markoblogo/TONFELD/actions/runs/44110614752) on macOS, Windows and Ubuntu: clean install, identity/version checks, lint, 102 tests plus 13 repeated integration checks, dependency audit at high severity and packaging. Ubuntu's generated local/library/radio/microphone desktop checks passed, including TF assets, synchronized Save/Saved controls and compact scaling. macOS verified the app and extracted ZIP signatures, native location helper, microphone entitlement and packaged metadata. Exact artifacts/digests are in [smoke-test.md](smoke-test.md).
+
+The dependency audit reported **six moderate findings**, all in the development packaging chain through `minimatch`, `@electron/universal` and `electron-builder` (GHSA-g3hv-75wg-m249, glob-pattern denial of service). No high or critical findings were reported. These build dependencies are separate from the packaged production dependencies; this does not establish zero risk. The suggested forced fix changes the builder version incompatibly. A reviewed build-tool update remains a release follow-up; no blind forced downgrade was applied to the validated candidate.
+
+The live diagnostic decoded Nantes 33/33 and Kyiv 29/35 (one unresolved, five failed); Rennes refreshed 29 FM entries and retained them across cache restart. Kyiv had decoded 30/35 in the preceding run, demonstrating time-dependent availability. Service diagnostics are assessed independently of the green unit/build gates and do not establish audible program quality.
 
 Remaining external/interactive items: native upgrade/listening/permissions on the renamed Mac app; any unresolved stream coverage; owner-applied GitHub About description (agreed text in github-about.md; Website intentionally empty until a later landing page); staged PR reconciliation/public tag/download verification. The candidate is ad-hoc signed, not notarized. Do not call the public release complete until these outcomes are recorded explicitly.
+
+The next review uses [test-0.9.0.md](test-0.9.0.md). Stop after that bounded pass before adding vinyl, a landing page or meeting/transcription features.

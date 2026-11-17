@@ -140,3 +140,28 @@ All three CI platforms passed clean install, audit, lint, 100 tests (plus the se
 The earlier Kyiv result included two addresses for Radio ROKS on 103.6; the final queue keeps one slot per frequency and prefers mapped facts over loose supplied labels. A regression test covers the observed duplicate. Service availability fluctuated between runs; successful muted decoding is not a guarantee or audible listening test. No final native Mac installation, live location permission, physical microphone recording or real browser-tab capture is claimed. Follow [the owner test pass](test-0.8.0.md), update the companion and stop for block review before audit/release or vinyl work.
 
 17 November owner acceptance: the owner reports “everything works” in the 0.8.0 test version and moves the discussion to branding, missing-art placeholders, tuning hiss, explicit radio favorites and coverage improvements. The combined test block is accepted by the owner. No further instrumented native checks were run for this confirmation; remaining diagnostic coverage limits above are retained.
+
+## Final TONFELD 0.9.0 candidate, 17 November 2026
+
+Final code commit `90e2d9032c91742f446ce156b8ca66dfed15ce48`, [CI run 44110614752](https://github.com/markoblogo/TONFELD/actions/runs/44110614752). macOS, Windows and Ubuntu jobs all passed clean install, identity/version consistency, lint, 102 tests plus the repeated 13 integration checks, audit at high severity and packaging. The audit still reports six moderate build-tool-chain findings, reviewed in [audit-0.9.0.md](audit-0.9.0.md); a passing high-severity gate is not a zero-findings claim.
+
+Ubuntu Electron checks passed local playback, library metadata/search/albums, radio/recording and generated microphone capture. Added interactions verify header/fallback SVG image decoding, Save/Saved synchronization between mini-player and cards, removing the last saved card immediately and preserving compact controls. Restart tests preserve old profile/token bytes and saved variants including codec/bitrate suffixes. The downloaded radio-library screenshot was visually inspected: typographic TONFELD header, rotated-F placeholders, saved-station filter, city control and compact transport remain legible. Generated fixtures use temporary profiles, not the owner's music.
+
+macOS verified the app and extracted app ZIP with `codesign --verify --deep --strict`, the microphone entitlement/usage description, native location helper `--check` and ASAR metadata worker/parser/artwork. These are automated Apple Silicon package checks; this session did not install or open the final candidate on the owner's Mac.
+
+| Artifact | GitHub artifact ZIP SHA-256 |
+| --- | --- |
+| [TONFELD-0.9.0-macos-arm64, 14340961777](https://github.com/markoblogo/TONFELD/actions/runs/44110614752/artifacts/14340961777) | `4f803376a89f7b48ee9eda51ea84722b8d7a063a0276e056f640d1242986161f` |
+| [Ubuntu UI/service summary, 14340177488](https://github.com/markoblogo/TONFELD/actions/runs/44110614752/artifacts/14340177488) | `f802157e432c29ed40e45e33f86012a482cf05414c9c77ed8a5e6add1ff4622d` |
+
+The Mac artifact contains the DMG/app ZIP and matching companion 0.9.0 ZIP. Its digest is GitHub-reported; Mac bundle verification ran in CI. The small Ubuntu summary was separately downloaded and hash-verified locally before inspecting its test summary and stream JSONs.
+
+| Final service diagnostic | Observed result | Remaining gap |
+| --- | --- | --- |
+| Nantes | 33/33 FM online counterparts decoded | Audible listening on the owner's Mac remains part of acceptance |
+| Rennes | 29 FM entries refreshed and retained across cache restart | Not a complete stream/listening test |
+| Kyiv | 29/35 referenced FM counterparts decoded | Prosto Radio 102.5 unresolved; Champion 92.8, Pyatnytsya 101.1, My Ukraine 106.0, Europa Plus 107.0 and Avtoradio 107.4 failed |
+
+The preceding 0.9.0 run 44109195022 decoded 33/33 Nantes and 30/35 Kyiv; Pyatnytsya succeeded then. Coverage improved from the accepted 0.8.0 remote check (31/33 Nantes and 14/35 Kyiv), but addresses remain time-dependent. Muted remote decoding does not establish physical RF coverage or program quality.
+
+Follow [the 0.9.0 Mac pass](test-0.9.0.md), update the companion and stop for owner review. Native upgrade/profile reuse, microphone/location permissions, real browser-tab recording and audible hiss/listening have not been reaccepted for the renamed candidate. The previous 0.8.0 owner acceptance remains valid for that version. The new candidate is ad-hoc signed, not notarized; no public 0.9.0 tag/release has been published. GitHub About text is prepared for the owner to paste manually; Website/landing page is deferred.

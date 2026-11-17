@@ -6,9 +6,9 @@ A compact retro music player for local collections, online radio and YouTube Mus
 
 ## Current build
 
-**0.9.0 is the TONFELD release candidate**, on the [radio development branch](https://github.com/markoblogo/TONFELD/tree/codex/radio-recording-stage3-20261111). Candidate checks and download links are recorded in [the test log](docs/smoke-test.md). This is not yet a new tagged public release. Older [published YTMamp releases](https://github.com/markoblogo/TONFELD/releases) do not include the full local-library/radio player.
+**0.9.0 is the TONFELD release candidate**, on the [radio development branch](https://github.com/markoblogo/TONFELD/tree/codex/radio-recording-stage3-20261111). Download the [Apple Silicon app and matching companion](https://github.com/markoblogo/TONFELD/actions/runs/44110614752/artifacts/14340961777). [All three CI platforms passed](https://github.com/markoblogo/TONFELD/actions/runs/44110614752); see [the test log](docs/smoke-test.md) and [Mac acceptance pass](docs/test-0.9.0.md). This is not yet a new tagged public release. Older [published YTMamp releases](https://github.com/markoblogo/TONFELD/releases) do not include the full local-library/radio player.
 
-The owner accepted 0.8.0 on macOS. The new candidate adds the approved typographic TONFELD/rotated-F identity, station-art fallback, synchronized saved stations, one tuning hiss and updated stream addresses. Test the renamed app before replacing a verified installation. Mac previews are ad-hoc signed and not Apple-notarized.
+The owner accepted 0.8.0 on macOS. The new candidate adds the approved typographic TONFELD/rotated-F identity, station-art fallback, synchronized saved stations, one tuning hiss and updated stream addresses. Native upgrade/listening acceptance precedes a public release. Mac previews are ad-hoc signed and not Apple-notarized.
 
 ## Listen
 
@@ -46,6 +46,8 @@ Windows uses the installer/portable ZIP; Linux uses DEB or AppImage. Tray availa
 ## Coverage, privacy and storage
 
 Local FM facts and online availability are separate. Initial references contain Nantes 33, Rennes 29, Menton 19 owner-selected candidates (including cross-border services) and Kyiv 35 FM services. These counts are **not guarantees of playable streams or measured signal reception**. France is the initial automatic frequency provider; Kyiv is an explicitly added reviewed reference. See [sources and limits](docs/radio-frequency-sources.md).
+
+The final 17 November candidate diagnostic decoded **33/33 Nantes** and **29/35 Kyiv** streams remotely. Kyiv had five failed addresses and one unresolved online counterpart; the preceding run decoded 30/35. This is a timed availability check, not audible listening or a promise of permanent coverage.
 
 Device location is optional for the global online catalog. macOS uses Core Location and Apple's city lookup, not IP location or a Google API key. One-shot updates occur in RADIO on entry, wake/focus and a 15-minute timer; errors pause automatic retry. Coordinates are rounded locally. The private visited-place cache keeps at most 50 areas/1 MiB. Frequency facts refresh weekly on use; online addresses re-resolve daily or after failure. Outages retain useful saved data.
 
