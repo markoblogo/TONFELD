@@ -31,16 +31,65 @@ The owner explicitly confirmed that audit/sanitation/README/GitHub About is the 
 
 Owner acceptance: everything works; the station-art placeholder needs cosmetic alignment/proportion refinement, explicitly deferred without blocking release. **[v0.9.0 is published](https://github.com/markoblogo/TONFELD/releases/tag/v0.9.0)**; staged PR reconciliation, builds and uploaded-asset verification are complete. See [release verification](../releases/v0.9.0-verification.md). This block is closed. About remains prepared for manual owner insertion, Website empty.
 
-## Deferred recording workspace
+## Owner priorities after the 0.9.0 release
 
-Save As is sufficient now. **Do not add a recordings list/manager in 0.9.0.** A future separately agreed workspace may cover dictaphone recordings plus meetings/calls, with explicit sending to transcription and summarization. Discuss capture methods, permission/consent, processing destination, privacy and storage at that stage. Meeting capture, transcription and summarization are outside the current implementation.
+17 November 2026 follow-up. These decisions supersede the earlier suggested next-release order:
 
-## Later queue, to discuss after this block
+- Proceed with local vinyl and local playlist workflows.
+- Develop YT MUSIC around an internal browser session, independent of external Chrome and its companion in everyday use. The browser UI should stay out of the way during playback; explicit visible sign-in/account recovery remains necessary when required.
+- Convenient application updating is a priority, before expanding the embedded service surface significantly.
+- Add a retro television/monitor video mode: YouTube first, then Netflix and a reviewed list of other preset services when actual playback compatibility is established.
+- Show artist/title where radio metadata supplies them; otherwise keep the station identity as the fallback.
+- Deprioritize travel-radio expansion. Existing local FM and saved directories continue to work; do not expand countries/providers in the next blocks.
+- Defer hardware remotes and display integrations.
+- Plan a separate recording workspace combining dictaphone, calls/meetings, transcription and summarization.
+- Keep the agreed station-art cosmetic correction queued: center both axes and compare a full TONFELD wordmark with a larger monogram matched to normal artwork dimensions.
 
-- **Station-art placeholder cosmetics:** center on both axes; compare the full TONFELD wordmark in the wide rectangle with a larger monogram sized like normal station artwork. Preserve the accepted typography and card dimensions. This is queued for the next agreed block, not part of 0.9.0 code changes.
-- Local vinyl visual deck based on [rauchg/vinyl](https://github.com/rauchg/vinyl), in its own collapsible panel. Reuse shared local playback; collapsing suspends rendering. Physical groove/stylus sound simulation and preprocessing are separately measured enhancements with bounded storage.
-- YouTube Music playlist selection and optional in-app playback. The current signed-in browser companion remains the working model.
-- Further macOS integration and other owner ideas. Their order is not fixed before the review.
+No new feature implementation is started by this planning update. Agree each block's concrete scope and acceptance before coding; one test build and owner review closes each block.
+
+## Proposed release sequence
+
+Feature priorities above are owner decisions. The grouping/version labels below are a proposed implementation sequence, not promised dates or a commitment that an unverified service will be supported.
+
+| Block | Scope | Exit / review |
+| --- | --- | --- |
+| 0.10: local listening | Local playlists and editable queue; a collapsible local vinyl deck using the existing audio path; station-art cosmetics. Add radio artist/title if obtainable within a bounded metadata pass. | Playlists survive restart and unavailable external-drive files; normal transport and vinyl stay synchronized; collapsed visualization stops rendering; compact player remains usable. |
+| 0.11: updates | In-app update discovery, release notes, explicit download/install/restart and preservation of profiles/collections. Define platform-specific package verification and recovery. Review the documented build-tool audit findings as technical maintenance. | Test a real older-to-newer installation, cancellation/failure, retained data and a viable recovery path. The first update-capable version needs a one-time manual installation. |
+| 0.12: internal YT MUSIC | First validate real account sign-in, persistent session, playback and background behavior on the Mac. Then connect mini-player transport, track metadata, playlist selection and an explicitly controlled recording path to that session. | Everyday listening works without external Chrome/companion; restart retains the session, source switching stops the old source, and resources remain bounded. Report any sign-in requirement instead of promising an entirely invisible login. |
+| 0.13: retro TV / YouTube | Reuse the internal browser foundation for a visible collapsible/resizable retro monitor, YouTube viewing, navigation and fullscreen. Keep cosmetic CRT effects optional. | Real video, account flow, keyboard/fullscreen controls and mode switching work without leaving background audio playing unexpectedly. |
+| Following TV block: preset video services | Start with a separate feasibility check for Netflix and candidate services; only then implement verified presets. Validate protected video on the packaged Mac app, not merely page loading or a DRM test page. | A compatibility table records service, platform, sign-in, actual playback, limits and update requirements. Assign a release version after the compatibility result; do not promise Netflix from browser embedding alone. |
+
+### Vinyl scope
+
+The first deck is a visual integration with existing local playback, not a mandatory replacement of the audio engine. No preprocessing or copying the music collection. The physical groove/stylus simulation in rauchg/vinyl is a separately measured optional experiment: benchmark selected files on the owner's Mac, then decide latency, CPU/memory and bounded cache policy before implementation.
+
+### Internal browser and protected-service feasibility
+
+TONFELD already uses Electron/Chromium; prefer one managed embedded-browser foundation for YT MUSIC and TV, with isolated persistent service sessions and lazy loading. Do not start a browser session for every preset on app launch. Keep remote pages isolated from local files, recordings and privileged application APIs; release inactive resources.
+
+Google's OAuth policies restrict developer-controlled embedded authorization user agents. That is not by itself a verdict on the first-party YouTube Music website's sign-in flow: validate the actual intended website/account path and use a supported authorization route where needed. Opening a hidden page is not evidence of successful authenticated playback.
+
+Netflix lists supported consumer browsers, not a general guarantee for an Electron wrapper. Protected content introduces CDM/DRM, codec and potentially application-signing dependencies. Validate the installed package and actual subscribed-service playback before setting a delivery promise. Do not bypass service protections.
+
+Reference checks, 17 November 2026:
+- [Google OAuth policies](https://developers.google.com/identity/protocols/oauth2/policies)
+- [Netflix supported browsers](https://help.netflix.com/en/node/30081)
+- [Widevine overview](https://developers.google.com/widevine/drm/overview)
+
+## Separate future block: recordings, calls and text
+
+Today, dictaphone/radio/explicit YT tab recording and Save As already work. Do not introduce a recordings manager as incidental work in the next music or video releases.
+
+The future workspace joins microphone dictation, meeting/call capture, a recording library, transcription and summarization. Split it into useful passes: reliable capture and source selection; transcript generation; summaries and export. Choose supported call capture methods, explicit start/stop indicators, local/cloud processing, destinations and storage limits before implementation. External audio/text transmission must be an explicit user action. The release order and processing provider remain undecided.
+
+## Deferred or unconfirmed ideas
+
+- Travel-radio provider expansion and new country coverage: low priority.
+- Cardputer remotes, Divoom displays and other hardware integrations: later.
+- Landing page/Website: later; GitHub About remains owner-applied.
+- Physical vinyl sound simulation: optional later experiment.
+- Sleep timer, numerical radio presets, gapless albums and settings export remain suggestions to review, not accepted implementation scope.
+- Do not invent a further feature list until these blocks have been reviewed.
 
 ## Donor references
 
