@@ -1,6 +1,6 @@
-# YTMamp agent guide
+# TONFELD agent guide
 
-YTMamp combines an Electron desktop mini-player with a Manifest V3 Chromium extension for YouTube Music.
+TONFELD combines an Electron desktop mini-player with a Manifest V3 Chromium extension for YouTube Music.
 
 ## Start here
 
@@ -36,3 +36,7 @@ Before tagging, keep these versions equal:
 - `extension/manifest.json`
 
 A tag starts release builds for macOS, Windows, Linux, and the extension ZIP. Confirm the workflow and public release assets before calling a release complete.
+
+## Rename compatibility
+
+Keep the legacy application ID, profile, media scheme, bridge/API names and browser storage keys stable. The visible product is TONFELD. The approved TF monogram uses F rotated 180 degrees.

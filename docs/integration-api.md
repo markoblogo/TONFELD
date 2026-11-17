@@ -1,6 +1,8 @@
 # Local Integration API (v1)
 
-YTMamp exposes a local HTTP API for external integrations (obsidian tools, scripts, widgets).
+TONFELD exposes a local HTTP API for external integrations (obsidian tools, scripts, widgets).
+
+The active RADIO source publishes station title/region and a finite live state (`durationSec: 0`, `positionSec: 0`). Existing play/pause and next/previous actions route to radio while RADIO is selected; next/previous use only the local FM station queue. Recording, station URLs and location changes are not exposed through the HTTP API.
 
 - Host: `127.0.0.1` by default (local-only)
 - Default port: `18880`
@@ -322,7 +324,7 @@ curl -X OPTIONS "http://<PC_IP>:18880/api/cast/cmd" \
 
 ### Cardputer integration flow (MVP)
 
-1. Start YTMamp with a non-loopback `INTEGRATION_HOST` and a strong `INTEGRATION_TOKEN`; configure the same PC address and token on Cardputer.
+1. Start TONFELD with a non-loopback `INTEGRATION_HOST` and a strong `INTEGRATION_TOKEN`; configure the same PC address and token on Cardputer.
 2. Poll `GET /api/cast/status` on interval (for example every 2–3s) and render `track`.
 3. On hardware buttons, send `POST /api/cast/cmd` with JSON action:
    - Next: `{"action":"next"}`
@@ -332,7 +334,7 @@ curl -X OPTIONS "http://<PC_IP>:18880/api/cast/cmd" \
 
 ## Last.fm scrobbling (S2-02)
 
-YTMamp can emit Last.fm now-playing + scrobble events for local playback.
+TONFELD can emit Last.fm now-playing + scrobble events for local playback.
 
 Configuration (desktop env vars):
 

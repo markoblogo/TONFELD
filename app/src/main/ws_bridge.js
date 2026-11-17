@@ -3,6 +3,7 @@ const { WebSocketServer } = require('ws');
 const OPEN = 1;
 const KNOWN_MESSAGE_TYPES = new Set([
     'auth',
+    'ytm-record',
     'ping',
     'cmd',
     'event',
@@ -55,6 +56,11 @@ function sanitizeTrackMessage(message) {
 function validateMessage(message) {
     if (!message || typeof message !== 'object') return false;
     if (message.v !== 1 || !KNOWN_MESSAGE_TYPES.has(message.type)) return false;
+
+    if (message.type === 'ytm-record') {
+        if (!/^[a-f0-9]{32}$/.test(message.session || '') || !['ready', 'chunk', 'ended', 'error'].includes(message.action)) return false;
+        return message.action !== 'chunk' || Number.isSafeInteger(message.sequence) && message.sequence >= 0 && typeof message.data === 'string' && message.data.length > 0 && message.data.length <= 87384 && message.data.length % 4 === 0 && /^[A-Za-z0-9+/]+={0,2}$/.test(message.data);
+    }
 
     if (message.type === 'auth') {
         return isString(message.token, 512);
@@ -126,6 +132,7 @@ function createBridgeServer(options) {
         expectedAuthToken = '',
         authTimeoutMs = 5000,
         onConnection = () => { },
+        onDisconnect = () => { },
         onAuth = () => { },
         onMessage = () => { },
         onStatus = () => { },
@@ -153,7 +160,7 @@ function createBridgeServer(options) {
     function broadcast(message) {
         let sent = 0;
         clients.forEach((client) => {
-            if (send(client, message)) sent++;
+            if ((!authEnabled || client.__ytmampAuthed) && send(client, message)) sent++;
         });
         return sent;
     }
@@ -163,8 +170,9 @@ function createBridgeServer(options) {
             clearTimeout(ws.__ytmampAuthTimer);
             ws.__ytmampAuthTimer = null;
         }
-        clients.delete(ws);
+        const wasConnected = clients.delete(ws);
         if (activeClient === ws) activeClient = null;
+        if (wasConnected) onDisconnect(ws);
     }
 
     function activateClient(ws, req) {
@@ -221,7 +229,7 @@ function createBridgeServer(options) {
     function start() {
         if (server) return server;
 
-        server = new WebSocketServerImpl({ port, host });
+        server = new WebSocketServerImpl({ port, host, maxPayload: 128 * 1024 });
 
         server.on('listening', () => {
             restartDelayMs = 1000;
@@ -238,7 +246,12 @@ function createBridgeServer(options) {
                 const message = parseMessage(data);
                 if (!message) return;
                 if (!ws.__ytmampAuthed && authEnabled) {
-                    if (message.type === 'auth') {
+                    if (message.type === 'ytm-record') {
+        if (!/^[a-f0-9]{32}$/.test(message.session || '') || !['ready', 'chunk', 'ended', 'error'].includes(message.action)) return false;
+        return message.action !== 'chunk' || Number.isSafeInteger(message.sequence) && message.sequence >= 0 && typeof message.data === 'string' && message.data.length > 0 && message.data.length <= 87384 && message.data.length % 4 === 0 && /^[A-Za-z0-9+/]+={0,2}$/.test(message.data);
+    }
+
+    if (message.type === 'auth') {
                         if (isString(message.token, 512) && message.token === trimmedExpectedToken) {
                             send(ws, { type: 'auth-ok', v: 1 });
                             activateClient(ws, req);

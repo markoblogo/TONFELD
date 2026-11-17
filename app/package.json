@@ -1,16 +1,16 @@
 {
   "name": "ytmamp",
-  "version": "0.6.1",
-  "description": "Retro mini-player for YouTube Music with a Chromium extension bridge.",
+  "version": "0.9.0",
+  "description": "TONFELD: compact retro music player for local collections, online radio and YouTube Music.",
   "author": {
     "name": "markoblogo",
     "email": "markoblogo@users.noreply.github.com"
   },
   "license": "MIT",
-  "homepage": "https://github.com/markoblogo/YTMamp#readme",
+  "homepage": "https://github.com/markoblogo/TONFELD#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/markoblogo/YTMamp.git"
+    "url": "git+https://github.com/markoblogo/TONFELD.git"
   },
   "main": "src/main/main.js",
   "scripts": {
@@ -26,8 +26,11 @@
     "test:smoke": "node --test test/integration_api_smoke.test.js",
     "test:desktop": "electron scripts/smoke-local-playback.js",
     "test:library:desktop": "electron scripts/smoke-library.js",
+    "test:radio:desktop": "electron scripts/smoke-radio.js",
     "check": "npm run lint && npm test",
-    "pack": "npm run clean && electron-builder --dir --publish never"
+    "pack": "npm run clean && electron-builder --dir --publish never",
+    "prepack": "node scripts/build-mac-location.js",
+    "predist:mac": "node scripts/build-mac-location.js"
   },
   "dependencies": {
     "music-metadata": "12.4.0",
@@ -39,12 +42,22 @@
   },
   "build": {
     "appId": "com.antonbiletskiy.ytmamp",
-    "productName": "YTMamp",
+    "productName": "TONFELD",
     "directories": {
       "output": "dist",
       "buildResources": "assets"
     },
     "mac": {
+      "extraResources": [
+        {
+          "from": "native/bin/ytmamp-location",
+          "to": "native/ytmamp-location"
+        }
+      ],
+      "extendInfo": {
+        "NSLocationUsageDescription": "Find nearby radio stations for the local FM dial when you choose Use device location.",
+        "NSMicrophoneUsageDescription": "Record your voice as a dictaphone when you press REC in LOCAL mode."
+      },
       "identity": "-",
       "target": [
         "dmg",
@@ -52,7 +65,9 @@
       ],
       "category": "public.app-category.music",
       "icon": "assets/icon.png",
-      "artifactName": "YTMamp-${version}-mac.${ext}"
+      "artifactName": "TONFELD-${version}-mac.${ext}",
+      "entitlements": "native/macos/Entitlements.plist",
+      "entitlementsInherit": "native/macos/Entitlements.plist"
     },
     "win": {
       "target": [
@@ -70,7 +85,7 @@
         }
       ],
       "icon": "assets/icon.png",
-      "artifactName": "YTMamp-${version}-win.${ext}"
+      "artifactName": "TONFELD-${version}-win.${ext}"
     },
     "nsis": {
       "oneClick": false,
@@ -97,10 +112,10 @@
       "category": "Audio",
       "maintainer": "markoblogo <markoblogo@users.noreply.github.com>",
       "icon": "assets/icon.png",
-      "artifactName": "YTMamp-${version}-linux.${ext}"
+      "artifactName": "TONFELD-${version}-linux.${ext}"
     },
     "dmg": {
-      "title": "Install YTMamp",
+      "title": "Install TONFELD",
       "icon": "assets/icon.png",
       "contents": [
         {

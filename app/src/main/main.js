@@ -1,8 +1,16 @@
-const { app, BrowserWindow, clipboard, ipcMain, Tray, Menu, nativeImage, screen, dialog, protocol } = require('electron');
+const { app, BrowserWindow, clipboard, ipcMain, Tray, Menu, nativeImage, screen, dialog, protocol, shell, powerMonitor } = require('electron');
+const { createYtmLauncher } = require('./ytm_launcher');
+const { locateMac } = require('./device_location');
 const { pathToFileURL } = require('node:url');
 const { LocalCollection } = require('./local_collection');
 const { createLocalMediaHandler } = require('./local_media');
 const { LocalPlayer } = require('./local_player');
+const { RadioLibrary } = require('./radio_library');
+const { RadioPlayer } = require('./radio_player');
+const { RadioRecorder } = require('./radio_recorder');
+const { RecordingSession } = require('./recording_session');
+const { createRadioMediaHandler } = require('./radio_network');
+require('./brand_identity').configureBrandIdentity(app);
 
 protocol.registerSchemesAsPrivileged([{ scheme: 'ytmamp-media', privileges: {
     standard: true, secure: true, stream: true, supportFetchAPI: true, corsEnabled: true
@@ -47,6 +55,19 @@ let hiddenByUser = false;
 let collection;
 let collectionReady;
 let choosingFolder = false;
+let radioLibrary;
+let radioPlayer;
+let radioRecorder;
+let recordingSession;
+let microphonePermissionUntil = 0;
+let lastRecordingStatus = 0;
+let captureClient = null;
+let radioSaving = false;
+let radioQuitAccepted = false;
+let radioQuitPrompt = false;
+let radioActionBusy = false;
+let radioLocationPermissionUntil = 0;
+const launchYtm = createYtmLauncher({ openExternal: (url) => shell.openExternal(url) });
 const localPlayer = new LocalPlayer();
 const pluginRuntimeStatusQueue = [];
 const pluginRuntimeUiQueue = [];
@@ -588,7 +609,7 @@ function setupIntegrationServer() {
                 res.writeHead(204, {
                     ...integrationBaseHeaders,
                     'access-control-allow-methods': 'GET, OPTIONS',
-                    'access-control-allow-headers': 'Authorization, X-YTMAMP-Token, Content-Type',
+                    'access-control-allow-headers': 'Authorization, X-TONFELD-Token, Content-Type',
                     'access-control-max-age': '300',
                     ...preflightHeaders
                 });
@@ -717,7 +738,8 @@ let settings = {
     localFolder: '',
     localTrackId: '',
     localVolume: 0.5,
-    playerScale: 100
+    playerScale: 100,
+    radioVolume: 0.5
 };
 
 function loadSettings() {
@@ -767,8 +789,8 @@ function applyLinuxAutostart() {
             '[Desktop Entry]',
             'Type=Application',
             'Version=1.0',
-            'Name=YTMamp',
-            'Comment=Start YTMamp at login',
+            'Name=TONFELD',
+            'Comment=Start TONFELD at login',
             `Exec=${quoteDesktopExec(app.getPath('exe'))}`,
             'Terminal=false',
             'X-GNOME-Autostart-enabled=true',
@@ -1002,6 +1024,12 @@ function createWindow() {
 
     applyPlayerLayout();
     mainWindow.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
+    mainWindow.webContents.session.setPermissionRequestHandler((contents, permission, callback, details) => {
+        const trusted = contents === mainWindow.webContents && details.isMainFrame && details.requestingUrl === pathToFileURL(path.join(__dirname, '../renderer/index.html')).href;
+        callback(trusted && (permission === 'geolocation' && Date.now() < radioLocationPermissionUntil || permission === 'media' && activeSource === 'local' && Date.now() < microphonePermissionUntil && details.mediaTypes?.length === 1 && details.mediaTypes[0] === 'audio'));
+    });
+    mainWindow.webContents.session.setPermissionCheckHandler((contents, permission, _origin, details) =>
+        contents === mainWindow.webContents && (permission === 'geolocation' && Date.now() < radioLocationPermissionUntil || permission === 'media' && details?.mediaType === 'audio' && activeSource === 'local' && Date.now() < microphonePermissionUntil));
     mainWindow.webContents.on('will-navigate', (event) => event.preventDefault());
     mainWindow.webContents.on('context-menu', () => {
         Menu.buildFromTemplate([{ label: 'Player size', submenu: playerSizeItems() }]).popup({ window: mainWindow });
@@ -1011,6 +1039,8 @@ function createWindow() {
     mainWindow.webContents.on('did-finish-load', () => {
         mainWindow.webContents.send('source-change', activeSource);
         mainWindow.webContents.send('local-catalog', localPlayer.catalog());
+        radioPlayer?.publish();
+        radioRecorder?.publish();
         if (folderScan) sendFolderNotice('Reading music folders and tags...', true);
         if (activeSource === 'local') {
             // Restoring a window never starts audio by itself.
@@ -1057,7 +1087,7 @@ function createWindow() {
 function updateTrayMenu() {
     if (!tray) return;
     const contextMenu = Menu.buildFromTemplate([
-        { label: 'YTMamp', enabled: false },
+        { label: 'TONFELD', enabled: false },
         { type: 'separator' },
         { label: 'Show/Hide', click: () => toggleWindow() },
         { label: 'Player size', submenu: playerSizeItems() },
@@ -1065,7 +1095,8 @@ function updateTrayMenu() {
         { label: 'Refresh music library', click: () => changeCollection() },
         { label: 'Playback source', submenu: [
             { label: 'Local files', type: 'radio', checked: activeSource === 'local', click: () => setPlaybackSource('local') },
-            { label: 'YouTube Music', type: 'radio', checked: activeSource === 'ytm', click: () => setPlaybackSource('ytm') }
+            { label: 'YouTube Music', type: 'radio', checked: activeSource === 'ytm', click: () => setPlaybackSource('ytm') },
+            { label: 'Radio', type: 'radio', checked: activeSource === 'radio', click: () => setPlaybackSource('radio') }
         ] },
         {
             label: 'Copy bridge token',
@@ -1104,7 +1135,7 @@ function updateTrayMenu() {
 }
 
 function createTray() {
-    const iconPath = path.join(__dirname, '../../assets/icon.png');
+    const iconPath = path.join(__dirname, '../../assets/' + (process.platform === 'darwin' ? 'trayTemplate.png' : 'icon.png'));
     let icon = nativeImage.createFromPath(iconPath);
 
     // On macOS, we can use template images for automatic theme support (light/dark menubar)
@@ -1114,7 +1145,7 @@ function createTray() {
 
     tray = new Tray(icon);
 
-    tray.setToolTip('YTMamp');
+    tray.setToolTip('TONFELD');
     updateTrayMenu();
 
     tray.on('click', () => {
@@ -1155,6 +1186,12 @@ function setupWebSocket() {
             if (status !== 'listening') ytmStatus = status;
             if (activeSource === 'ytm') appStatus = ytmStatus;
         },
+        onDisconnect: (client) => {
+            if (client === captureClient && recordingSession?.source === 'ytm' && (recordingSession.request || radioRecorder.recording)) {
+                recordingSession.cancel('Browser disconnected; recording stopped.');
+                saveRadioRecording().catch(() => radioRecorder.publish('Unsaved recording. Press SAVE.'));
+            }
+        },
         onConnection: (ws, req) => {
             const clientIp = req.socket.remoteAddress;
             console.log(`[WS] Client connected from ${clientIp}`);
@@ -1168,7 +1205,9 @@ function setupWebSocket() {
             }
         },
         onMessage: (message, ws) => {
-            if (message.type === 'ping') {
+            if (message.type === 'ytm-record') {
+                handleYtmRecording(message, ws);
+            } else if (message.type === 'ping') {
                 ws.send(JSON.stringify({ type: 'pong', v: 1 }));
             } else if (message.type === 'cmd' && message.cmd === 'showWindow') {
                 if (mainWindow) {
@@ -1222,28 +1261,40 @@ function setupWebSocket() {
 
 function sendPlayerCommand(command) {
     if (activeSource === 'local') return localPlayer.command(command);
+    if (activeSource === 'radio') return radioPlayer.command(command);
     return !!(bridge && bridge.relayCommand(command));
 }
 
 function setPlaybackSource(source) {
-    if (!['local', 'ytm'].includes(source) || source === activeSource) return;
+    if (!['local', 'ytm', 'radio'].includes(source) || source === activeSource) return;
+    if (recordingSession?.request || radioRecorder?.recording) { recordingSession.cancel(); saveRadioRecording().catch(() => radioRecorder.publish('Unsaved recording. Press SAVE to keep it.')); }
+    microphonePermissionUntil = 0;
     if (activeSource === 'local') localPlayer.pause();
-    else if (ytmSnapshot.state?.playing && bridge) {
+    else if (activeSource === 'radio') {
+        radioPlayer.pause();
+    } else if (ytmSnapshot.state?.playing && bridge) {
         bridge.relayCommand({ v: 1, type: 'cmd', cmd: 'pause', id: `source-${Date.now()}` });
     }
     activeSource = source;
-    appStatus = source === 'local' ? 'LOCAL' : ytmStatus;
+    appStatus = source === 'local' ? 'LOCAL' : source === 'radio' ? 'RADIO' : ytmStatus;
     if (mainWindow) {
         mainWindow.webContents.send('source-change', source);
         mainWindow.webContents.send('status-change', appStatus);
         mainWindow.webContents.send('wave-update', { type: 'waveFallback', reason: 'Source changed' });
     }
     if (source === 'local') localPlayer.publish();
+    else if (source === 'radio') radioPlayer.publish();
     else {
         publishPlayerEvent('track', ytmSnapshot.track ? sanitizeTrackMessage(ytmSnapshot.track) : null, { dedupeMs: 0 });
         publishState(ytmSnapshot.state || { playing: false });
+        openYtmIfNeeded();
     }
     updateTrayMenu();
+}
+
+function openYtmIfNeeded(force = false) {
+    const connected = /connected/i.test(ytmStatus) && !!ytmSnapshot.track;
+    launchYtm({ connected, force }).catch((error) => mainWindow?.webContents.send('source-notice', error.message));
 }
 
 function sendFolderNotice(message, busy = false) {
@@ -1310,12 +1361,25 @@ async function chooseMusicFolder() {
 
 function setupLocalPlayback() {
     collection = new LocalCollection({ directory: app.getPath('userData') });
+    radioLibrary = new RadioLibrary({ directory: app.getPath('userData') });
+    radioPlayer = new RadioPlayer({ library: radioLibrary, volume: Number.isFinite(settings.radioVolume) ? Math.max(0, Math.min(1, settings.radioVolume)) : 0.5 });
+    radioRecorder = new RadioRecorder({ directory: app.getPath('userData') });
+    radioPlayer.on('audio', (command) => mainWindow?.webContents.send('radio-audio-command', command));
+    radioPlayer.on('selection', (value) => mainWindow?.webContents.send('radio-selection', value));
+    radioPlayer.on('track', (track) => { if (activeSource === 'radio') publishPlayerEvent('track', track, { dedupeMs: 0 }); });
+    radioPlayer.on('state', (state) => { if (activeSource === 'radio') publishState(state); });
+    radioPlayer.on('volume', (volume) => { settings.radioVolume = volume; saveSettings(); });
+    recordingSession = new RecordingSession(radioRecorder);
+    recordingSession.on('status', (state) => mainWindow?.webContents.send('radio-recording', state));
+    recordingSession.on('control', (state) => { if (captureClient?.readyState === 1) captureClient.send(JSON.stringify({ v: 1, type: 'capture-control', ...state })); });
     localPlayer.volume = Number.isFinite(settings.localVolume) ? Math.max(0, Math.min(1, settings.localVolume)) : 0.5;
-    protocol.handle('ytmamp-media', createLocalMediaHandler((id, kind) => {
+    const localMedia = createLocalMediaHandler((id, kind) => {
         if (kind === 'art') return collection.artwork(id);
         const item = localPlayer.library.tracks.find((track) => track.id === id && track.available !== false);
         return item ? { ...item, root: item.root || localPlayer.library.root } : null;
-    }));
+    });
+    const radioMedia = createRadioMediaHandler((id) => radioLibrary.stations.get(id));
+    protocol.handle('ytmamp-media', (request) => /^ytmamp-media:\/\/radio(?:-art|-check)?\//.test(request.url) ? radioMedia(request) : localMedia(request));
     localPlayer.on('audio', (command) => mainWindow?.webContents.send('local-audio-command', command));
     localPlayer.on('catalog', (catalog) => mainWindow?.webContents.send('local-catalog', catalog));
     localPlayer.on('selection', (selection) => {
@@ -1337,7 +1401,124 @@ function isPlayerSender(event) {
         event.senderFrame?.url === pathToFileURL(path.join(__dirname, '../renderer/index.html')).href;
 }
 
+async function saveRadioRecording() {
+    if (radioSaving || !radioRecorder.pending) return;
+    radioSaving = true;
+    try {
+        const pending = radioRecorder.pending;
+        const date = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+        const result = await dialog.showSaveDialog(mainWindow, { title: 'Save recording', defaultPath: pending.name + ' ' + date + '.wav', filters: [{ name: 'WAV audio', extensions: ['wav'] }], properties: ['showOverwriteConfirmation'] });
+        if (!result.canceled && result.filePath) await radioRecorder.save(result.filePath);
+        else radioRecorder.publish('Recording kept. Press SAVE to keep it or discard it from the recording controls.');
+    } finally { radioSaving = false; }
+}
+
+function recordingState() {
+    return { ...radioRecorder.status(), source: recordingSession.source, session: recordingSession.session, waiting: !!recordingSession.request };
+}
+async function recordingAction(event, action, data = {}) {
+    if (!isPlayerSender(event) || !data || typeof data !== 'object') return { error: 'Invalid recording request.' };
+    try {
+        if (action === 'snapshot') return recordingState();
+        if (action === 'prepare') {
+            if (activeSource !== 'local') throw new Error('Select LOCAL to record the microphone.');
+            recordingSession.prepare('local', 'Microphone'); microphonePermissionUntil = Date.now() + 120000;
+        } else if (action === 'start') {
+            if (activeSource === 'local') {
+                recordingSession.begin('local', data.session); microphonePermissionUntil = 0;
+            } else if (activeSource === 'radio') {
+                if (!radioPlayer.state.playing) throw new Error('Start radio playback before recording.');
+                const id = recordingSession.prepare('radio', radioPlayer.current?.name); recordingSession.begin('radio', id);
+            } else {
+                if (!bridge?.activeClient || !ytmSnapshot.track) throw new Error('Connect the browser companion and start YouTube Music first.');
+                const session = recordingSession.prepare('ytm', ytmSnapshot.track.title || 'YouTube Music');
+                captureClient = bridge.activeClient;
+                captureClient.send(JSON.stringify({ v: 1, type: 'capture-request', session }));
+            }
+        } else if (action === 'pause') recordingSession.pause();
+        else if (action === 'stop') { recordingSession.cancel(); microphonePermissionUntil = 0; await saveRadioRecording(); }
+        else if (action === 'cancel') { if (data.session && data.session !== recordingSession.session) return recordingState(); recordingSession.cancel(); microphonePermissionUntil = 0; }
+        else if (action === 'save') await saveRadioRecording();
+        else if (action === 'discard' && !radioSaving) { recordingSession.cancel(); radioRecorder.discard(); }
+        else throw new Error('Invalid recording action.');
+        return recordingState();
+    } catch (error) { return { error: String(error.message || 'Recording failed.').slice(0,200) }; }
+}
+function acceptRecordingChunk(source, session, data) {
+    if (!recordingSession.chunk(source, session, data)) return;
+    if (Date.now() - lastRecordingStatus >= 1000) { lastRecordingStatus = Date.now(); radioRecorder.publish(); }
+}
+function handleYtmRecording(message, client) {
+    if (activeSource !== 'ytm' || recordingSession.source !== 'ytm' || message.session !== recordingSession.session) return;
+    try {
+        if (message.action === 'ready' && recordingSession.request && client === captureClient) {
+            captureClient = client; captureClient.__recordSequence = -1;
+            recordingSession.begin('ytm', message.session);
+        } else if (message.action === 'chunk' && client === captureClient && message.sequence > client.__recordSequence) {
+            client.__recordSequence = message.sequence;
+            const bytes = Buffer.from(message.data, 'base64');
+            acceptRecordingChunk('ytm', message.session, bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength));
+        } else if (['ended','error'].includes(message.action) && (client === captureClient || recordingSession.request)) {
+            recordingSession.cancel(message.action === 'error' ? 'Browser capture failed. Open the extension on YouTube Music and retry.' : 'Browser capture ended.');
+            saveRadioRecording().catch(() => radioRecorder.publish('Unsaved recording. Press SAVE.'));
+        }
+    } catch (error) { recordingSession.cancel(error.message); }
+}
+
+async function radioAction(event, action, data = {}) {
+    if (!isPlayerSender(event) || typeof action !== 'string' || !data || typeof data !== 'object') return { error: 'Invalid radio request.' };
+    try {
+        if (action === 'snapshot') return radioLibrary.snapshot();
+        if (action === 'place') {
+            if (radioActionBusy) return {error:'Location lookup is already running.'};
+            radioActionBusy=true;
+            try { const result=await radioLibrary.choosePlace(data.id);radioPlayer.publish();return result; } finally { radioActionBusy=false; }
+        }
+        if (action === 'search') return await radioLibrary.search(data);
+        if (action === 'stream-check') {
+            if (activeSource !== 'radio' || typeof data.ok !== 'boolean' || !radioLibrary.stations.has(data.id)) return { error: 'Invalid station check.' };
+            if (data.ok) radioLibrary.markSuccessful(data.id); else radioLibrary.markFailed(data.id);
+            return { ok: true, alternate: data.ok ? null : radioLibrary.alternatives(data.id).map((station) => radioLibrary.public(station))[0] || null };
+        }
+        if (action === 'device-location') {
+            if (process.platform !== 'darwin') { radioLocationPermissionUntil = Date.now() + 20000; return { browser: true }; }
+            if (radioActionBusy) return { error: 'Finding the device location. Please wait.' };
+            radioActionBusy = true;
+            try {
+                const location = await locateMac({ appPath: app.getAppPath(), packaged: app.isPackaged });
+                const result = await radioLibrary.chooseLocation({ ...location, refresh: data.refresh === true }); radioPlayer.publish(); return result;
+            } finally { radioActionBusy = false; }
+        }
+        if (action === 'location') {
+            if (radioActionBusy) return { error: 'Location lookup is already running.' };
+            radioActionBusy = true;
+            try { const result = await radioLibrary.chooseLocation(data); radioPlayer.publish(); return result; } finally { radioActionBusy = false; }
+        }
+        if (action === 'custom') return { id: radioLibrary.addCustom(data) };
+        if (action === 'favorite') { const favorite=radioLibrary.toggleFavorite(data.id); radioPlayer.publish(); return { ok: true, favorite }; }
+        if (action === 'frequency') { radioLibrary.setFrequency(data.id, data.value); radioPlayer.publish(); return { ok: true }; }
+        if (action === 'play' || action === 'tune') {
+            if (activeSource !== 'radio') return { error: 'Select RADIO first.' };
+            if (data.retry === true) radioLibrary.retryStation(data.id);
+            if (action === 'tune' && !radioLibrary.local().some((station) => station.id === data.id)) return { error: 'Not a local FM station.' };
+            if (!radioPlayer.select(data.id, { tuning: action === 'tune' })) return { error: 'This station has no supported direct stream. Choose another station.' };
+            if (action === 'play') radioLibrary.browser.click(radioPlayer.current.uuid);
+            return { ok: true };
+        }
+        if (action === 'record') return recordingAction(event, data.action, data);
+        return { error: 'Unknown radio request.' };
+    } catch (error) { return { error: String(error.message || 'Radio request failed.').slice(0, 200) }; }
+}
+
 function setupIpc() {
+    ipcMain.on('open-ytm', (event) => { if (isPlayerSender(event)) openYtmIfNeeded(true); });
+    ipcMain.handle('radio-action', radioAction);
+    ipcMain.handle('record-action', recordingAction);
+    ipcMain.on('radio-audio-report', (event, report) => { if (isPlayerSender(event) && activeSource === 'radio') radioPlayer.receive(report); });
+    ipcMain.on('radio-record-chunk', (event, data) => {
+        if (!isPlayerSender(event) || !data || data.source !== activeSource) return;
+        acceptRecordingChunk(data.source, data.session, data.data);
+    });
     ipcMain.on('send-command', (event, command) => {
         if (!isPlayerSender(event) || !validateMessage(command)) {
             console.warn('[Main] Dropping invalid renderer command');
@@ -1395,6 +1576,7 @@ app.whenReady().then(() => {
     createTray();
     updateApplicationMenu();
     setupIpc();
+    powerMonitor?.on('resume', () => { if (activeSource === 'radio') mainWindow?.webContents.send('radio-location-refresh'); });
     configurePlayerCastBridge({
         getPlayerSnapshot: () => ({
             track: playerState.track,
@@ -1424,8 +1606,21 @@ app.on('window-all-closed', function () {
     if (process.platform !== 'darwin') app.quit();
 });
 
-app.on('before-quit', () => {
+app.on('before-quit', (event) => {
+    if (!radioQuitAccepted && (radioRecorder?.recording || radioRecorder?.pending)) {
+        event.preventDefault();
+        if (!radioQuitPrompt) {
+            radioQuitPrompt = true;
+            recordingSession.cancel();
+            saveRadioRecording().then(() => {
+                if (!radioRecorder.pending) { radioQuitAccepted = true; app.quit(); }
+                else { isQuitting = false; showPlayerWindow(); }
+            }).catch(() => { isQuitting = false; showPlayerWindow(); }).finally(() => { radioQuitPrompt = false; });
+        }
+        return;
+    }
     isQuitting = true;
+    radioPlayer?.close();
     if (folderScan) folderScan.abort();
     collection?.close();
     if (lastfmScrobbler) {

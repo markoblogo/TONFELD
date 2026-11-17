@@ -4,18 +4,56 @@ on:
   push:
     tags:
       - "v*"
+    branches:
+      - main
+    paths:
+      - .github/release-request.json
 
 permissions:
   contents: write
 
+concurrency:
+  group: tonfeld-release-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
+  plan:
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.version.outputs.tag }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: Resolve explicit release request
+        id: version
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+          const app = JSON.parse(fs.readFileSync('app/package.json', 'utf8'));
+          const tag = process.env.GITHUB_REF_TYPE === 'tag'
+            ? process.env.GITHUB_REF_NAME
+            : JSON.parse(fs.readFileSync('.github/release-request.json', 'utf8')).tag;
+          if (!/^v\d+\.\d+\.\d+$/.test(tag) || tag !== 'v' + app.version) throw Error('Release request/version mismatch');
+          if (!fs.existsSync('docs/releases/' + tag + '.md')) throw Error('Missing reviewed release notes');
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, 'tag=' + tag + '\n');
+          NODE
+
   build:
+    needs: plan
+    env:
+      RELEASE_TAG: ${{ needs.plan.outputs.tag }}
     strategy:
       fail-fast: false
       matrix:
         include:
           - os: macos-latest
             script: dist:mac
+            args: --arm64
           - os: windows-latest
             script: dist:win
           - os: ubuntu-latest
@@ -36,6 +74,20 @@ jobs:
         working-directory: app
         run: npm ci
 
+      - name: Verify release identity and versions
+        env:
+          GITHUB_REF_TYPE: tag
+          GITHUB_REF_NAME: ${{ env.RELEASE_TAG }}
+        run: node app/scripts/check-release-version.js
+
+      - name: Audit dependencies
+        working-directory: app
+        run: npm audit --audit-level=high
+
+      - name: Check app
+        working-directory: app
+        run: npm run check
+
       - name: Install Linux packaging deps
         if: runner.os == 'Linux'
         run: |
@@ -44,7 +96,21 @@ jobs:
 
       - name: Build release assets
         working-directory: app
-        run: npm run ${{ matrix.script }}
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+        run: npm run ${{ matrix.script }} -- ${{ matrix.args }}
+
+      - name: Verify Mac signature and helper
+        if: runner.os == 'macOS'
+        shell: bash
+        run: |
+          app_bundle=$(find app/dist -maxdepth 2 -name TONFELD.app -type d -print -quit)
+          test -n "$app_bundle"
+          codesign --verify --deep --strict "$app_bundle"
+          "$app_bundle/Contents/Resources/native/ytmamp-location" --check
+          mkdir "$RUNNER_TEMP/tonfeld-release-verify"
+          ditto -x -k "app/dist/TONFELD-${RELEASE_TAG#v}-mac.zip" "$RUNNER_TEMP/tonfeld-release-verify"
+          codesign --verify --deep --strict "$RUNNER_TEMP/tonfeld-release-verify/TONFELD.app"
 
       - name: Collect release assets
         shell: bash
@@ -64,33 +130,57 @@ jobs:
           if-no-files-found: error
 
   extension:
+    needs: plan
     runs-on: ubuntu-latest
+    env:
+      RELEASE_TAG: ${{ needs.plan.outputs.tag }}
     steps:
       - uses: actions/checkout@v7
       - name: Package extension
         shell: bash
         run: |
-          version="${GITHUB_REF_NAME#v}"
+          version="${RELEASE_TAG#v}"
           cd extension
-          zip -r "../YTMamp-${version}-extension.zip" .
+          zip -r "../TONFELD-${version}-extension.zip" .
       - uses: actions/upload-artifact@v7
         with:
           name: release-extension
-          path: YTMamp-*-extension.zip
+          path: TONFELD-*-extension.zip
           if-no-files-found: error
 
   publish:
-    needs: [build, extension]
+    needs: [plan, build, extension]
     runs-on: ubuntu-latest
+    env:
+      RELEASE_TAG: ${{ needs.plan.outputs.tag }}
     steps:
+      - uses: actions/checkout@v7
       - uses: actions/download-artifact@v8
         with:
           pattern: release-*
           path: release-assets
           merge-multiple: true
-      - name: Create release and publish assets
+      - name: Create checksums
+        working-directory: release-assets
+        run: sha256sum * > SHA256SUMS
+
+      - name: Stage release, verify downloads, then publish
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" --verify-tag --title "$GITHUB_REF_NAME" --generate-notes
-          gh release upload "$GITHUB_REF_NAME" release-assets/* --repo "$GITHUB_REPOSITORY"
+          if gh api "repos/$GITHUB_REPOSITORY/git/ref/tags/$RELEASE_TAG" > /dev/null 2>&1; then
+            tag_commit=$(gh api "repos/$GITHUB_REPOSITORY/commits/$RELEASE_TAG" --jq .sha)
+            test "$tag_commit" = "$GITHUB_SHA"
+          fi
+          if gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
+            test "$(gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --json isDraft --jq .isDraft)" = true
+          else
+            gh release create "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" --draft --title "TONFELD $RELEASE_TAG" --notes-file "docs/releases/$RELEASE_TAG.md"
+          fi
+          gh release upload "$RELEASE_TAG" release-assets/* --repo "$GITHUB_REPOSITORY" --clobber
+          gh release download "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --dir downloaded-release
+          cd downloaded-release
+          sha256sum --check SHA256SUMS
+          test "$(find . -maxdepth 1 -type f | wc -l)" -eq 8
+          cd ..
+          gh release edit "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --draft=false --latest

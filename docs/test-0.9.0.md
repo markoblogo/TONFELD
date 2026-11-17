@@ -1,0 +1,13 @@
+# TONFELD 0.9.0 Mac acceptance
+
+Download the [final Apple Silicon candidate](https://github.com/markoblogo/TONFELD/actions/runs/44110614752/artifacts/14340961777). It contains the Mac DMG/app ZIP and matching 0.9.0 companion ZIP. Quit YTMamp before installing TONFELD. The different app name may leave the old app beside it; launch only TONFELD while testing. Keep the previous app available until this pass is accepted. The preview is ad-hoc signed, not Apple-notarized.
+
+1. **Upgrade and identity.** Open TONFELD and confirm the new icon/header/menu-bar symbol. Existing music folders, albums, saved stations, FM cities, player size and companion pairing should remain. Do not reset or delete the original YTMamp profile. Reopen the app once to check persistence.
+2. **Local music and layout.** Play an existing album, search, collapse LIBRARY and hide/restore the player while it keeps playing. Check the preferred scale and the other sizes if used.
+3. **Saved stations and artwork.** In RADIO, save from a card and confirm the mini-player shows Saved for that station. Unsave from the mini-player and confirm the card updates. Open Saved stations; removing its last item should clear the view immediately. A station without artwork, or with an unavailable image, should show the clean TF symbol.
+4. **FM and hiss.** In Nantes, use Device location, drag the dial and try Next/Prev. Listen for one short tuning hiss, following the player volume. Disable Tuning noise and repeat. Select Menton, Rennes and Kyiv from existing directories, then return to Device location. Changing city should preserve current playback until a new station is selected. Failed streams should be skipped without an endless search.
+5. **Recording and source changes.** Save a short RADIO WAV and confirm the tuning hiss is absent. In LOCAL, permit microphone capture after REC, speak, pause/resume and STOP/save. Update/reload the matching companion before YT MUSIC testing; start a track, press REC and explicitly START RECORDING in the companion. Play the saved WAVs. Switching sources must end the old capture and offer to save.
+
+Final remote decoding: Nantes 33/33; Kyiv 29/35. Kyiv failures were Radio Champion 92.8, Radio Pyatnytsya 101.1, My Ukraine 106.0, Europa Plus 107.0 and Avtoradio 107.4; Prosto Radio 102.5 remained unresolved. Pyatnytsya decoded in the preceding run. A failed stream is not proof that its FM service is off air.
+
+For a failure, report the source/city/station, frequency if relevant, action and visible message. The automated checks in [smoke-test.md](smoke-test.md) are separate from native permissions and audible listening. After owner review, reconcile the staged PRs and finish the public release; do not start the next feature block during this pass.

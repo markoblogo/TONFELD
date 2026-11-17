@@ -1,0 +1,467 @@
+[
+  {
+    "name": "Radio Nova",
+    "frequency": 87.8,
+    "aliases": [
+      "Radio Nova",
+      "Nova"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/radio-nova",
+    "url": "http://novazz.ice.infomaniak.ch/novazz-128.mp3",
+    "streamName": "Radio Nova",
+    "streamCheckedAt": "2026-11-17T13:10:44.611Z"
+  },
+  {
+    "name": "Rire et Chansons",
+    "frequency": 88.4,
+    "aliases": [
+      "Rire et Chansons",
+      "Rire & Chansons",
+      "Rire et Chansons France",
+      "Rire & Chansons France",
+      "Rire & Chansons (France)"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/rire-et-chansons",
+    "query": "Rire",
+    "url": "https://streaming.nrjaudio.fm/oug7girb92oc",
+    "streamSource": "https://www.fluxradios.com/Radios-France/France-NRJ-Group/Rire-et-Chansons-France",
+    "streamName": "Rire et Chansons"
+  },
+  {
+    "name": "M Radio",
+    "frequency": 88.8,
+    "aliases": [
+      "M Radio",
+      "MRadio",
+      "MFM"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/m-radio",
+    "url": "http://mfm.ice.infomaniak.ch/mfm-128.mp3",
+    "streamName": "M Radio",
+    "streamCheckedAt": "2026-11-17T13:10:44.611Z"
+  },
+  {
+    "name": "Alouette",
+    "frequency": 89.5,
+    "aliases": [
+      "Alouette"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/alouette",
+    "url": "http://alouette.ice.infomaniak.ch/alouette-high.mp3",
+    "streamName": "Alouette",
+    "streamCheckedAt": "2026-11-17T13:10:44.611Z"
+  },
+  {
+    "name": "RFM",
+    "frequency": 90.1,
+    "aliases": [
+      "RFM",
+      "RFM France"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/rfm",
+    "url": "http://stream.rfm.fr/rfm.mp3",
+    "streamName": "RFM",
+    "streamCheckedAt": "2026-11-17T13:10:44.611Z"
+  },
+  {
+    "name": "France Inter",
+    "frequency": 90.6,
+    "aliases": [
+      "France Inter"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/france-inter",
+    "url": "http://icecast.radiofrance.fr/franceinter-hifi.aac",
+    "streamName": "france inter",
+    "streamCheckedAt": "2026-11-17T13:10:44.611Z"
+  },
+  {
+    "name": "Jet FM",
+    "frequency": 91.2,
+    "aliases": [
+      "Jet FM",
+      "JetFM"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/jet-fm",
+    "query": "Jet",
+    "url": "https://diffusion.lafrap.fr/jetfm.mp3",
+    "streamSource": "https://www.jetfm.fr/stream-jet/",
+    "streamName": "Jet FM"
+  },
+  {
+    "name": "Prun’",
+    "frequency": 92,
+    "aliases": [
+      "Prun’",
+      "Prun'",
+      "Prun"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/prun",
+    "query": "Prun",
+    "url": "https://www.prun.net/stream/",
+    "streamName": "Prun'",
+    "streamCheckedAt": "2026-11-17T13:10:44.611Z"
+  },
+  {
+    "name": "Radio Orient",
+    "frequency": 92.4,
+    "aliases": [
+      "Radio Orient"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/radio-orient",
+    "url": "https://stream.rcs.revma.com/7hnrkawf4p8uv.mp3",
+    "streamName": "Radio Orient",
+    "streamCheckedAt": "2026-11-17T13:10:44.611Z"
+  },
+  {
+    "name": "SUN",
+    "frequency": 93,
+    "aliases": [
+      "SUN",
+      "SUN Le Son Unique",
+      "SUN Nantes",
+      "Le Son Unique"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/sun",
+    "preferredAliases": [
+      "SUN Nantes"
+    ],
+    "url": "https://diffusion.lafrap.fr/sunhd.mp3",
+    "streamName": "SUN",
+    "streamCheckedAt": "2026-11-17T13:10:44.611Z"
+  },
+  {
+    "name": "NTI",
+    "frequency": 93.4,
+    "aliases": [
+      "NTI",
+      "Radio NTI",
+      "NTI 93.4"
+    ],
+    "source": "https://www.radionti.com/",
+    "url": "http://streaming.radionti.com/nti-hd.mp3",
+    "streamName": "Radio NTI",
+    "streamCheckedAt": "2026-11-17T13:10:44.611Z"
+  },
+  {
+    "name": "France Culture",
+    "frequency": 94.2,
+    "aliases": [
+      "France Culture"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/france-culture",
+    "url": "http://icecast.radiofrance.fr/franceculture-hifi.aac",
+    "streamName": "France Culture",
+    "streamCheckedAt": "2026-11-17T13:10:44.611Z"
+  },
+  {
+    "name": "Europe 2",
+    "frequency": 94.7,
+    "aliases": [
+      "Europe 2",
+      "Europe2",
+      "Europe 2 Pays de la Loire",
+      "Europe 2 Nantes",
+      "Europe 2 Pays de la Loire Nantes"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/europe-2-pays-de-la-loire",
+    "preferredAliases": [
+      "Europe 2 Pays de la Loire",
+      "Europe 2 Nantes",
+      "Europe 2 Pays de la Loire Nantes"
+    ],
+    "query": "Europe 2",
+    "url": "http://europe2.lmn.fm/europe2.mp3",
+    "streamName": "Europe 2",
+    "streamCheckedAt": "2026-11-17T13:10:44.611Z"
+  },
+  {
+    "name": "FIP",
+    "frequency": 95.7,
+    "aliases": [
+      "FIP",
+      "FIP France",
+      "FIP Radio",
+      "FIP Radio France"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/fip",
+    "url": "https://icecast.radiofrance.fr/fip-hifi.aac?id=radiofrance%20%20%20format:%20aac,%20bitrate:%20192",
+    "streamName": "Fip",
+    "streamCheckedAt": "2026-11-17T13:10:44.611Z"
+  },
+  {
+    "name": "Nostalgie",
+    "frequency": 96.8,
+    "aliases": [
+      "Nostalgie",
+      "Nostalgie Nantes",
+      "Nostalgie France"
+    ],
+    "source": "https://www.nostalgie.fr/frequences",
+    "preferredAliases": [
+      "Nostalgie Nantes"
+    ],
+    "url": "https://streaming.nrjaudio.fm/ouamzvw2dqao",
+    "streamName": "Nostalgie Nantes",
+    "streamCheckedAt": "2026-11-17T13:10:44.611Z"
+  },
+  {
+    "name": "RTL2",
+    "frequency": 97.7,
+    "aliases": [
+      "RTL2",
+      "RTL2 Nantes",
+      "RTL 2"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/rtl2-nantes",
+    "preferredAliases": [
+      "RTL2 Nantes"
+    ],
+    "url": "http://icecast.rtl2.fr/rtl2-1-44-128?listen=webCwsBCggNCQgLDQUGBAcGBg",
+    "streamName": "RTL2",
+    "streamCheckedAt": "2026-11-17T13:10:44.611Z"
+  },
+  {
+    "name": "Alternantes FM",
+    "frequency": 98.1,
+    "aliases": [
+      "Alternantes FM",
+      "Alternantes",
+      "AlterNantes"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/alternantes-fm",
+    "preferredAliases": [
+      "Alternantes",
+      "AlterNantes"
+    ],
+    "query": "Alternantes",
+    "url": "http://diffusion.lafrap.fr/alternantes.mp3",
+    "streamName": "AlterNantes",
+    "streamCheckedAt": "2026-11-17T13:10:44.611Z"
+  },
+  {
+    "name": "France Info",
+    "frequency": 98.9,
+    "aliases": [
+      "France Info",
+      "Franceinfo"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/france-info",
+    "url": "http://direct.franceinfo.fr/live/franceinfo-midfi.mp3",
+    "streamName": "France Info",
+    "streamCheckedAt": "2026-11-17T13:10:44.611Z"
+  },
+  {
+    "name": "RCA",
+    "frequency": 99.5,
+    "aliases": [
+      "RCA",
+      "Radio Cote d'Amour",
+      "RCA La Radio",
+      "RCA Radio Cote d’Amour",
+      "RCA La Radio de Loire Atlantique",
+      "RCA Nantes",
+      "RCA - Nantes",
+      "RCA La Radio",
+      "RCA La Radio Nantes",
+      "RCA Nantes 99.5"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/rca",
+    "preferredAliases": [
+      "RCA Nantes",
+      "RCA - Nantes",
+      "RCA La Radio Nantes",
+      "RCA Nantes 99.5"
+    ]
+  },
+  {
+    "name": "RMC",
+    "frequency": 99.9,
+    "aliases": [
+      "RMC",
+      "RMC Info",
+      "RMC France"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/rmc",
+    "url": "https://audio.bfmtv.com/rmcradio_128.mp3",
+    "streamName": "RMC",
+    "streamCheckedAt": "2026-11-17T13:10:44.611Z"
+  },
+  {
+    "name": "Hit West",
+    "frequency": 100.9,
+    "aliases": [
+      "Hit West",
+      "HitWest"
+    ],
+    "source": "https://hitwest.ouest-france.fr/comment-ecouter-hit-west",
+    "query": "Hit",
+    "url": "https://stream.rcs.revma.com/qp4tnghnfm3vv",
+    "streamSource": "https://www.liveradio.ie/stations/hit-west",
+    "streamName": "Hit West"
+  },
+  {
+    "name": "Euradio",
+    "frequency": 101.3,
+    "aliases": [
+      "Euradio",
+      "Euradio Nantes",
+      "Euradionantes"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/euradio",
+    "preferredAliases": [
+      "Euradio Nantes",
+      "Euradionantes"
+    ],
+    "url": "https://euradio.fr/stream/",
+    "streamSource": "https://euradio.fr/",
+    "streamName": "Euradio"
+  },
+  {
+    "name": "ici Loire Océan",
+    "frequency": 101.8,
+    "aliases": [
+      "ici Loire Océan",
+      "Ici Loire Ocean",
+      "France Bleu Loire Ocean"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/ici-loire-ocean",
+    "url": "http://direct.francebleu.fr/live/fbloireocean-midfi.mp3",
+    "streamName": "Ici Loire Océan",
+    "streamCheckedAt": "2026-11-17T13:10:44.611Z"
+  },
+  {
+    "name": "NRJ",
+    "frequency": 102.4,
+    "aliases": [
+      "NRJ",
+      "NRJ Nantes",
+      "NRJ France"
+    ],
+    "source": "https://www.nrj.fr/frequences",
+    "preferredAliases": [
+      "NRJ Nantes"
+    ],
+    "url": "https://streaming.nrjaudio.fm/ou76apf3s5gi",
+    "streamName": "NRJ Nantes",
+    "streamCheckedAt": "2026-11-17T13:10:44.611Z"
+  },
+  {
+    "name": "Skyrock",
+    "frequency": 102.9,
+    "aliases": [
+      "Skyrock"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/skyrock",
+    "url": "https://icecast.skyrock.net/s/natio_mp3_128k",
+    "streamName": "Skyrock",
+    "streamCheckedAt": "2026-11-17T13:10:44.611Z"
+  },
+  {
+    "name": "Fun Radio",
+    "frequency": 103.4,
+    "aliases": [
+      "Fun Radio",
+      "Fun Radio Atlantique",
+      "Fun Radio Nantes"
+    ],
+    "source": "https://www.funradio.fr/frequences",
+    "preferredAliases": [
+      "Fun Radio Atlantique",
+      "Fun Radio Nantes"
+    ],
+    "url": "https://icecast.funradio.fr/fun-1-44-128",
+    "streamName": "Fun Radio",
+    "streamCheckedAt": "2026-11-17T13:10:44.611Z"
+  },
+  {
+    "name": "Radio Fidélité",
+    "frequency": 103.8,
+    "aliases": [
+      "Radio Fidélité",
+      "Fidelite",
+      "Fidelite Nantes"
+    ],
+    "source": "https://radio-fidelite.fr/ecouter/",
+    "preferredAliases": [
+      "Fidelite Nantes"
+    ],
+    "url": "http://diffusion.lafrap.fr/fidelite.mp3",
+    "streamName": "Radio Fidélité",
+    "streamCheckedAt": "2026-11-17T13:10:44.611Z"
+  },
+  {
+    "name": "RTL",
+    "frequency": 104.3,
+    "aliases": [
+      "RTL",
+      "RTL France"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/rtl",
+    "url": "http://icecast.rtl.fr/rtl-1-44-128",
+    "streamName": "RTL france",
+    "streamCheckedAt": "2026-11-17T13:10:44.611Z"
+  },
+  {
+    "name": "Europe 1",
+    "frequency": 104.7,
+    "aliases": [
+      "Europe 1",
+      "Europe1",
+      "Europe 1 France"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/europe-1",
+    "url": "https://europe1.lmn.fm/europe1.mp3",
+    "streamName": "Europe 1",
+    "streamCheckedAt": "2026-11-17T13:10:44.611Z"
+  },
+  {
+    "name": "France Musique",
+    "frequency": 105.5,
+    "aliases": [
+      "France Musique"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/france-musique",
+    "url": "http://direct.francemusique.fr/live/francemusique-midfi.mp3",
+    "streamName": "France Musique",
+    "streamCheckedAt": "2026-11-17T13:10:44.611Z"
+  },
+  {
+    "name": "Chérie FM",
+    "frequency": 106.2,
+    "aliases": [
+      "Chérie FM",
+      "Cherie FM Nantes",
+      "Cherie FM France"
+    ],
+    "source": "https://www.cheriefm.fr/frequences",
+    "preferredAliases": [
+      "Cherie FM Nantes"
+    ],
+    "url": "https://streaming.nrjaudio.fm/ouhsczapu6pb",
+    "streamName": "Chérie FM Nantes",
+    "streamCheckedAt": "2026-11-17T13:10:44.611Z"
+  },
+  {
+    "name": "Radio Classique",
+    "frequency": 106.7,
+    "aliases": [
+      "Radio Classique"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/radio-classique",
+    "url": "https://radioclassique.ice.infomaniak.ch/radioclassique-high.mp3",
+    "streamName": "Radio Classique",
+    "streamCheckedAt": "2026-11-17T13:10:44.611Z"
+  },
+  {
+    "name": "BFM Business",
+    "frequency": 107.2,
+    "aliases": [
+      "BFM Business",
+      "BFM Business France"
+    ],
+    "source": "https://www.arcom.fr/radio-et-audio-numerique/radio-fm-dab/radios/bfm-business",
+    "url": "http://audio.bfmtv.com/bfmbusiness_128.mp3?aw_0_1st.playerId=BFMBusiness_audio_web&aggregator=BFMBusiness_audio_web",
+    "streamName": "BFM Business",
+    "streamCheckedAt": "2026-11-17T13:10:44.611Z"
+  }
+]

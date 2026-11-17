@@ -1,6 +1,6 @@
-# YTMamp local bridge protocol
+# TONFELD local bridge protocol
 
-YTMamp uses an authenticated WebSocket bridge between the Electron app and its Chromium extension.
+TONFELD uses an authenticated WebSocket bridge between the Electron app and its Chromium extension.
 
 - Endpoint: `ws://127.0.0.1:18765`
 - Message version: `v: 1`
@@ -8,7 +8,7 @@ YTMamp uses an authenticated WebSocket bridge between the Electron app and its C
 
 ## Pair the extension
 
-1. Launch YTMamp.
+1. Launch TONFELD.
 2. Open its menu bar or tray menu and choose **Copy bridge token**.
 3. Paste the token into the extension popup, then select **Save** and **Connect**.
 
@@ -29,3 +29,13 @@ Popup-to-app commands are `showWindow` and `hideWindow`.
 The extension reports `Client connected`, `Need YTM Tab`, `OFFLINE`, or `WAITING`. When no YouTube Music tab is connected, the renderer clears stale track state.
 
 The app validates protocol version, message types, commands, numeric ranges, and waveform payload size. Track titles and artists are trimmed and limited to 300 characters before renderer IPC.
+
+TONFELD includes RADIO, introduced in the accepted 0.8.0 player. Radio commands are handled in the desktop app, never forwarded to the YouTube companion. Play/pause starts/stops the selected online stream, Prev/Next select only the local FM queue, and Like toggles a station favorite. Seek/shuffle/repeat have no radio operation. Microphone/radio recording and location use sender-checked desktop IPC. Explicit browser-tab recording uses the authenticated extension bridge described below.
+
+## Tab recording
+
+The desktop sends `capture-request` with a random 32-hex session ID after a YT MUSIC REC click. The companion requires an explicit action on the active music.youtube.com tab before capture. `ytm-record` messages have `v:1`, the session ID and action `ready`, `chunk`, `ended` or `error`. Chunks contain a nonnegative monotonic integer sequence and base64 stereo 48 kHz Float32 PCM, at most 64 KiB decoded; the desktop pins them to the accepted socket/session/source and applies its disk/real-time writer limits. General WebSocket frames are capped at 128 KiB.
+
+Desktop `capture-control` messages report active/paused state; stop, source change and disconnect end capture. These messages are internal to the paired companion, not public integration API controls. Production authentication, loopback binding and renderer isolation remain enabled.
+
+Saved FM-city selection stays on trusted desktop IPC (`radio-action: place`, saved ID or empty ID for device mode); it is not exposed through the integration HTTP API. Only bundled or visited directory IDs are accepted. Device updates retain an explicit manual city, and returning to device mode uses the last actual device fix. Next/Prev SEEK tries alternate addresses and then advances past unavailable local channels, bounded to one traversal; pause cancels pending tuning. Offline reports do not blacklist or sweep stations.

@@ -1,6 +1,6 @@
 # Security policy
 
-Only the latest YTMamp release receives security updates.
+Only the latest TONFELD release receives security updates.
 
 ## Network model
 
