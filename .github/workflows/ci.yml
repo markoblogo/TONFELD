@@ -55,6 +55,12 @@ jobs:
         working-directory: app
         run: node scripts/check-radio-directory.js
 
+      - name: Inspect frequency source integration
+        if: matrix.os == 'ubuntu-latest'
+        continue-on-error: true
+        working-directory: app
+        run: node scripts/inspect-radio-source.js
+
       - name: Build Apple Silicon preview
         if: matrix.os == 'macos-latest'
         working-directory: app
