@@ -28,7 +28,7 @@ function checkedUrl(value) {
     if (net.isIP(ip) && !publicAddress(ip)) throw new Error('Private network addresses are not supported.');
     return url;
 }
-async function openRemote(value, { signal, userAgent = 'YTMamp/0.8.0', redirects = 5 } = {}) {
+async function openRemote(value, { signal, userAgent = 'TONFELD/0.9.0', redirects = 5 } = {}) {
     const url = checkedUrl(value);
     signal?.throwIfAborted();
     const host = url.hostname.replace(/^\[|\]$/g, '');

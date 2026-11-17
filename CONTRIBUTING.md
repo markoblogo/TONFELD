@@ -1,10 +1,10 @@
-# Contributing to YTMamp
+# Contributing to TONFELD
 
 ## Set up
 
 ```bash
-git clone https://github.com/markoblogo/YTMamp.git
-cd YTMamp/app
+git clone https://github.com/markoblogo/TONFELD.git
+cd TONFELD/app
 npm ci
 npm run check
 npm start

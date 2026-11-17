@@ -1,6 +1,6 @@
-# YTMamp local bridge protocol
+# TONFELD local bridge protocol
 
-YTMamp uses an authenticated WebSocket bridge between the Electron app and its Chromium extension.
+TONFELD uses an authenticated WebSocket bridge between the Electron app and its Chromium extension.
 
 - Endpoint: `ws://127.0.0.1:18765`
 - Message version: `v: 1`
@@ -8,7 +8,7 @@ YTMamp uses an authenticated WebSocket bridge between the Electron app and its C
 
 ## Pair the extension
 
-1. Launch YTMamp.
+1. Launch TONFELD.
 2. Open its menu bar or tray menu and choose **Copy bridge token**.
 3. Paste the token into the extension popup, then select **Save** and **Connect**.
 

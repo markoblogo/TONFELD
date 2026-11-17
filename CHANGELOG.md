@@ -1,3 +1,16 @@
+# TONFELD changelog
+
+## 0.9.0 release candidate
+
+- Rename the visible player and companion to TONFELD with the approved typographic TF identity; preserve existing profiles, app ID and integration compatibility.
+- Use TF artwork for missing/broken station covers and a dedicated monochrome tray icon.
+- Synchronize station Save/Saved controls, mini-player saving and Saved stations; retain saving across compatible stream alternatives.
+- Replace faint tuning crackle with one volume-scaled search hiss outside the recording path.
+- Refresh reviewed Nantes/Kyiv online counterparts and retain on-demand saved-city directories.
+- Audit implementation/release checks, remove unused probes and reconcile current documentation.
+
+Historical YTMamp releases:
+
 # Changelog
 
 All notable changes to this project will be documented in this file.

@@ -1,16 +1,16 @@
 {
   "name": "ytmamp",
-  "version": "0.8.0",
-  "description": "Retro mini-player for YouTube Music with a Chromium extension bridge.",
+  "version": "0.9.0",
+  "description": "TONFELD: compact retro music player for local collections, online radio and YouTube Music.",
   "author": {
     "name": "markoblogo",
     "email": "markoblogo@users.noreply.github.com"
   },
   "license": "MIT",
-  "homepage": "https://github.com/markoblogo/YTMamp#readme",
+  "homepage": "https://github.com/markoblogo/TONFELD#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/markoblogo/YTMamp.git"
+    "url": "git+https://github.com/markoblogo/TONFELD.git"
   },
   "main": "src/main/main.js",
   "scripts": {
@@ -42,7 +42,7 @@
   },
   "build": {
     "appId": "com.antonbiletskiy.ytmamp",
-    "productName": "YTMamp",
+    "productName": "TONFELD",
     "directories": {
       "output": "dist",
       "buildResources": "assets"
@@ -65,7 +65,7 @@
       ],
       "category": "public.app-category.music",
       "icon": "assets/icon.png",
-      "artifactName": "YTMamp-${version}-mac.${ext}",
+      "artifactName": "TONFELD-${version}-mac.${ext}",
       "entitlements": "native/macos/Entitlements.plist",
       "entitlementsInherit": "native/macos/Entitlements.plist"
     },
@@ -85,7 +85,7 @@
         }
       ],
       "icon": "assets/icon.png",
-      "artifactName": "YTMamp-${version}-win.${ext}"
+      "artifactName": "TONFELD-${version}-win.${ext}"
     },
     "nsis": {
       "oneClick": false,
@@ -112,10 +112,10 @@
       "category": "Audio",
       "maintainer": "markoblogo <markoblogo@users.noreply.github.com>",
       "icon": "assets/icon.png",
-      "artifactName": "YTMamp-${version}-linux.${ext}"
+      "artifactName": "TONFELD-${version}-linux.${ext}"
     },
     "dmg": {
-      "title": "Install YTMamp",
+      "title": "Install TONFELD",
       "icon": "assets/icon.png",
       "contents": [
         {

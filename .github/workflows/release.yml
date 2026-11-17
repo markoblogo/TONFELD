@@ -36,6 +36,17 @@ jobs:
         working-directory: app
         run: npm ci
 
+      - name: Verify release identity and versions
+        run: node app/scripts/check-release-version.js
+
+      - name: Audit dependencies
+        working-directory: app
+        run: npm audit --audit-level=high
+
+      - name: Check app
+        working-directory: app
+        run: npm run check
+
       - name: Install Linux packaging deps
         if: runner.os == 'Linux'
         run: |
@@ -44,7 +55,18 @@ jobs:
 
       - name: Build release assets
         working-directory: app
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
         run: npm run ${{ matrix.script }}
+
+      - name: Verify Mac signature and helper
+        if: runner.os == 'macOS'
+        shell: bash
+        run: |
+          app_bundle=$(find app/dist -maxdepth 2 -name TONFELD.app -type d -print -quit)
+          test -n "$app_bundle"
+          codesign --verify --deep --strict "$app_bundle"
+          "$app_bundle/Contents/Resources/native/ytmamp-location" --check
 
       - name: Collect release assets
         shell: bash
@@ -72,11 +94,11 @@ jobs:
         run: |
           version="${GITHUB_REF_NAME#v}"
           cd extension
-          zip -r "../YTMamp-${version}-extension.zip" .
+          zip -r "../TONFELD-${version}-extension.zip" .
       - uses: actions/upload-artifact@v7
         with:
           name: release-extension
-          path: YTMamp-*-extension.zip
+          path: TONFELD-*-extension.zip
           if-no-files-found: error
 
   publish:
@@ -88,6 +110,10 @@ jobs:
           pattern: release-*
           path: release-assets
           merge-multiple: true
+      - name: Create checksums
+        working-directory: release-assets
+        run: sha256sum * > SHA256SUMS
+
       - name: Create release and publish assets
         env:
           GH_TOKEN: ${{ github.token }}

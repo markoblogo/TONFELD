@@ -1,126 +1,76 @@
-# YTMamp
+<picture><source media="(prefers-color-scheme: dark)" srcset="app/src/renderer/assets/tonfeld-wordmark.svg"><img alt="TONFELD" src="docs/branding/tonfeld-wordmark.svg" width="360"></picture>
 
-[![CI](https://github.com/markoblogo/YTMamp/actions/workflows/ci.yml/badge.svg)](https://github.com/markoblogo/YTMamp/actions/workflows/ci.yml)
-[![Release](https://img.shields.io/github/v/release/markoblogo/YTMamp?display_name=tag&sort=semver)](https://github.com/markoblogo/YTMamp/releases/latest)
-[![License](https://img.shields.io/github/license/markoblogo/YTMamp)](LICENSE)
+[![CI](https://github.com/markoblogo/TONFELD/actions/workflows/ci.yml/badge.svg)](https://github.com/markoblogo/TONFELD/actions/workflows/ci.yml) [![License](https://img.shields.io/github/license/markoblogo/TONFELD)](LICENSE)
 
-A compact retro desktop music player. The development preview starts as a local folder player and adds internet radio; switch to YouTube Music to control your signed-in browser tab through the Chromium companion.
+A compact retro music player for local collections, online radio and YouTube Music. Formerly **YTMamp**. Starts in LOCAL mode and keeps your music in its original folders.
 
-The local library and radio features are in a staged development branch. The published v0.4.1 downloads remain the YouTube Music remote described in their release notes.
+## Current build
 
-[![YTMamp demo video](https://img.youtube.com/vi/fHRDm8e2n-U/maxresdefault.jpg)](https://youtu.be/fHRDm8e2n-U)
+**0.9.0 is the TONFELD release candidate**, on the [radio development branch](https://github.com/markoblogo/TONFELD/tree/codex/radio-recording-stage3-20261111). Candidate checks and download links are recorded in [the test log](docs/smoke-test.md). This is not yet a new tagged public release. Older [published YTMamp releases](https://github.com/markoblogo/TONFELD/releases) do not include the full local-library/radio player.
 
-> [!NOTE]
-> YTMamp is an independent open-source project and is not affiliated with Google or YouTube.
+The owner accepted 0.8.0 on macOS. The new candidate adds the approved typographic TONFELD/rotated-F identity, station-art fallback, synchronized saved stations, one tuning hiss and updated stream addresses. Test the renamed app before replacing a verified installation. Mac previews are ad-hoc signed and not Apple-notarized.
 
-## What it does
+## Listen
 
-- Add several music folders and their subfolders without copying audio. **ADD** opens the folder picker; **LIBRARY** shows tracks, albums and search. Local playback works without a browser or internet connection.
-- Select **RADIO** in the same source switch. The directory loads automatically; **LIBRARY** opens station cards, name/genre/language search, sorting, favorites and custom streams. Duplicate stream variants are combined, direct MP3/AAC/OGG streams are preferred, and HLS-only entries are omitted because this preview cannot play them. A failed address is excluded for five minutes; playback tries another cached compatible address for the same station, and **Retry stream** clears that cooldown.
-- In RADIO the progress strip becomes a retro FM dial. Prev/Next perform a short SEEK sweep with optional static, then tune the next/previous local frequency. Manual tuning remains available. macOS asks for the device location using Core Location; no city, country or region entry is required. Location is only for the local FM dial. Online stations work without it. Supplied frequency/coordinate data remains incomplete and is not a reception map.
-- Selecting **YT MUSIC** opens YouTube Music in the default browser if no connected session is known. Repeated switches have a 30-second cooldown; a connected session is not reopened. **OPEN** retries opening. The browser companion must still be installed and paired in that browser profile; opening the site alone does not pair it. Without a connected companion, the app cannot inspect arbitrary browser tabs and may open an additional tab.
-- **REC**, **II** and **STOP** record the microphone in LOCAL, the current stream in RADIO, or an explicitly approved browser tab in YT MUSIC. Microphone permission is requested only after REC. For YT MUSIC, update/pair the matching companion, invoke it on the active YouTube Music tab and press **START RECORDING** when prompted. Listening continues; changing source ends recording. STOP opens the native Save As dialog for stereo 48 kHz/16-bit WAV. Cancel keeps the recording available for Save As or Discard. Pausing a recording excludes that interval while the station keeps playing.
-- Collapse the library with **COLLAPSE** or the **LIBRARY** toggle; reopening keeps its search and album selection without interrupting playback.
-- Choose **Player size** from a right click, the tray menu or **View**: 75%, 100%, 125% or 150%. The size is saved; 75% gives a 270 × 87 mini-player. Cmd/Ctrl `-`, `=` and `0` also change/reset size.
-- Use **_** to hide the player and keep music playing. Restore it from the menu-bar/tray icon or the Dock. **X** quits the app and stops playback. Explicit hiding also suppresses YouTube auto-show until you bring the player back.
-- Read embedded titles, artists, albums, track/disc numbers, genres and cover art. Search ignores letter case and accents, and can be limited to one folder. **Play album** follows disc/track order within that album.
-- Restore the library and selected track paused. MP3, WAV, FLAC, M4A, AAC, OGG and OPUS files are recognized; decoder support depends on Electron. Missing tags fall back to filenames and folder names.
-- Play, pause, skip, seek, change volume, like, shuffle, and repeat.
-- Show track metadata and a live oscilloscope in a 360 × 116 always-on-top window.
-- Integrate with system tray controls, media keys, startup settings, Last.fm, OBS, and a versioned local API.
-- Run on macOS, Windows, and Linux with a Manifest V3 companion for Chromium browsers.
+- **LOCAL:** ADD one or several music folders, including external drives. LIBRARY offers tracks, albums, embedded/folder cover art and search across tags and filenames. Supported file extensions include MP3, WAV, FLAC, M4A, AAC, OGG and OPUS; decoding depends on Electron. No whole-computer scan or audio copying.
+- **RADIO:** search the global station catalog by name, genre and language; sort by popularity, name, genre, language, country or region. Save stations from a card or the mini-player and return through **Saved stations**. Compatible stream alternatives share their saved state. Missing or failed station artwork shows the TF symbol.
+- **Local FM:** the frequency strip, Next and Prev reproduce terrestrial local stations using online counterparts. SEEK tries compatible addresses and skips unavailable channels. Drag the dial for manual tuning. One optional, volume-scaled search hiss is separate from the recording signal.
+- **FM city:** select Device location or an existing saved directory in RADIO / LIBRARY. Nantes, Rennes, Menton and Kyiv are supplied; visited French cities load on demand. Manual selection survives GPS updates and restart. Changing the directory keeps the current stream playing until another station is selected.
+- **YT MUSIC:** control your signed-in YouTube Music browser tab through the matching Chromium companion. If disconnected, selecting YT MUSIC opens the site in the default browser; OPEN retries. The companion must still be installed and paired in that browser profile.
 
-## Download
+The compact player is **360 × 116**. LIBRARY expands/collapses without interrupting playback. View/right-click/tray menus and Cmd/Ctrl `-`, `=` and `0` select 75%, 100%, 125% or 150% size. **_** hides the player while audio continues; restore it from the Dock/menu bar/tray. **X** quits and stops playback.
 
-Download the latest files from [GitHub Releases](https://github.com/markoblogo/YTMamp/releases/latest):
+## Record
 
-| Platform | File |
+**REC**, recording pause and **STOP** work separately from listening:
+
+| Mode | Recorded source |
 | --- | --- |
-| macOS | `YTMamp-*-mac.dmg` or `.zip` |
-| Windows | `YTMamp-*-win.exe` or `.zip` |
-| Linux | `YTMamp-*-linux.AppImage` or `.deb` |
-| Chromium extension | `YTMamp-*-extension.zip` (v0.4.0+) |
+| LOCAL | Microphone / dictaphone, permission requested after REC |
+| RADIO | Current station stream |
+| YT MUSIC | Explicitly approved active YouTube Music tab |
 
-Published release builds are currently unsigned and not notarized. Development Mac previews use ad-hoc signatures with archive verification; they are not Apple-notarized. Your operating system may ask you to confirm the first launch.
+STOP opens native **Save As** for stereo 48 kHz / 16-bit WAV. Recording pause removes that interval. Source changes/quit end capture and offer to save. Cancel keeps the pending file for Save As or Discard; interrupted WAVs are repaired on restart. There is no recordings manager, meeting capture, transcription or summarization in this version.
 
-### Development preview: local library and radio
+For YT MUSIC recording, press desktop REC, then **START RECORDING** in the companion on the active YouTube Music tab. Browsers that block automatic popup opening require clicking the extension icon. Update the app and companion together. See [browser support](docs/browser-support.md).
 
-The next radio preview in development is **0.8.0** on the [`codex/radio-recording-stage3-20261111` branch](https://github.com/markoblogo/YTMamp/tree/codex/radio-recording-stage3-20261111). Its work is organized in three dependent draft pull requests: [local playback](https://github.com/markoblogo/YTMamp/pull/14), [music library](https://github.com/markoblogo/YTMamp/pull/15), and [radio](https://github.com/markoblogo/YTMamp/pull/16). These features are not yet part of the published release or the default branch.
+## Install and pair
 
-- [Download the 0.8.0 Apple Silicon test artifact](https://github.com/markoblogo/YTMamp/actions/runs/44095939679/artifacts/14334790172). GitHub sign-in is required; Actions artifacts expire. The outer ZIP contains the Mac app package and matching browser companion.
-- [CI for this test candidate](https://github.com/markoblogo/YTMamp/actions/runs/44095939679) passed on macOS, Windows and Ubuntu, including generated-audio tests for the radio catalog, tuning controls and WAV capture. Its Mac package is ad-hoc signed and has not been notarized by Apple.
-- The owner installed 0.7.2 and confirmed that most online station cards play. Local FM remained empty. The 0.8.0 local-frequency/location and recording changes still need interactive Mac acceptance; generated-audio checks do not establish real stream or recording quality.
-- Local FM follows device location and reproduces terrestrial stations via online counterparts. France has on-demand per-city frequency lookup and a private visited-place cache, at most 50 areas/1 MiB. Frequency facts refresh after seven days of use; stream addresses re-resolve after 24 hours or failure. Outages retain the last useful data. The initial references include 33 Nantes channels, 29 Rennes channels retained after the first automatic lookup, and the owner's 19 Menton candidates, with cross-border stations retained. Kyiv adds an explicitly requested 35-service FM reference, outside the French automatic provider. In RADIO LIBRARY, **FM city** switches between saved directories and **Device location**. Manual selection survives GPS updates and restart; new choices come from visited places or explicitly added reviewed references, not a full city catalog. Source availability/coverage remains partial; other countries currently retain the global catalog and saved/supplied frequency fallback. [Sources and limits](docs/radio-frequency-sources.md).
+1. Extract the candidate archive. On Mac, open its DMG and drag **TONFELD** to Applications, or extract the app ZIP. Quit the older player first. Existing music folders, metadata, favorites, saved cities, bridge token and settings remain in the original profile. See [upgrade compatibility](docs/branding/README.md).
+2. Extract the matching extension ZIP. In `chrome://extensions`, enable Developer mode and load its unpacked folder, or reload/update the existing companion. Extensions are installed per browser profile.
+3. In the TONFELD tray menu, choose **Copy bridge token**. Paste it into the companion, then Save and Connect.
+4. Open [YouTube Music](https://music.youtube.com) and interact with the page to allow browser audio. LOCAL and RADIO work without this browser setup.
 
-The remote live check decoded 31 of 33 Nantes streams. Kyiv online coverage is partial: 14 of its 35 referenced frequency slots decoded in that run. These are muted availability checks, not native listening acceptance. Follow the [owner test pass](docs/test-0.8.0.md), including updating the matching browser companion.
+Windows uses the installer/portable ZIP; Linux uses DEB or AppImage. Tray availability depends on the desktop. Automated platform checks and native listening acceptance are recorded separately in [the test log](docs/smoke-test.md).
 
-See the [test record](docs/smoke-test.md) and [development plan](docs/roadmap/multi-source-player.md) for the current evidence and remaining work.
+## Coverage, privacy and storage
 
-## Set up in five steps
+Local FM facts and online availability are separate. Initial references contain Nantes 33, Rennes 29, Menton 19 owner-selected candidates (including cross-border services) and Kyiv 35 FM services. These counts are **not guarantees of playable streams or measured signal reception**. France is the initial automatic frequency provider; Kyiv is an explicitly added reviewed reference. See [sources and limits](docs/radio-frequency-sources.md).
 
-1. Install and launch the desktop app. In the development preview, choose **ADD** and select your music folders for local listening. It remains available from the menu bar or system tray.
-2. For YouTube Music, extract the extension ZIP. Open `chrome://extensions`, enable **Developer mode**, choose **Load unpacked**, and select the extracted folder.
-3. In the YTMamp tray menu choose **Copy bridge token**. Paste it into the extension popup and select **Save** and **Connect**.
-4. Open [YouTube Music](https://music.youtube.com) and click once in the page so the browser can start audio capture for the waveform.
-5. Pin the extension for quick access. Install it separately in every browser profile you use.
+Device location is optional for the global online catalog. macOS uses Core Location and Apple's city lookup, not IP location or a Google API key. One-shot updates occur in RADIO on entry, wake/focus and a 15-minute timer; errors pause automatic retry. Coordinates are rounded locally. The private visited-place cache keeps at most 50 areas/1 MiB. Frequency facts refresh weekly on use; online addresses re-resolve daily or after failure. Outages retain useful saved data.
 
-Tested browser families and known limitations are listed in [browser support](docs/browser-support.md).
+The catalog uses Radio Browser; stations supply audio and artwork and see your IP address. French frequency lookup reads bounded public city-specific Arcom facts. Cards are progressively checked with muted decoder previews: three at a time, six seconds/128 KiB each. Successes are reused for 15 minutes; failed addresses cool down for five minutes. HLS-only streams remain unsupported. A successful check is recent availability, not a guarantee.
 
-## Platform notes
+Music is never copied. WAV recording uses about 11 MiB/minute, streams to disk, stops at 512 MiB and retains a 256 MiB free-space reserve. Save As can target an external drive. Selected local folders are bounded and scanned without following symlinks. The metadata/artwork cache is bounded.
 
-- **macOS:** open the DMG and drag YTMamp to Applications. Launch it from Applications, not the mounted image.
-- **Windows:** use the installer or extract the portable ZIP.
-- **Linux:** install the DEB, or mark the AppImage executable with `chmod +x`. Tray support depends on the desktop environment.
+The browser companion stores its pairing preferences/token through browser storage, which may sync with the browser account. Tab-recorded audio is sent only to the paired local desktop writer. No transcription service is contacted. Last.fm is disabled unless configured.
 
-If the extension reports a missing receiver after an update, refresh the YouTube Music tab. If the waveform is empty, click once inside that tab. If pairing fails, confirm the desktop app is running and copy the current token again.
-
-## Privacy and network access
-
-The desktop bridge and HTTP API listen on the local machine by default. The extension runs only on `music.youtube.com` and stores its bridge token in the browser profile. Last.fm is disabled unless credentials are configured.
-
-Radio contacts the public Radio Browser directory for searches and a click counter on explicit station playback; audio and logos come from station servers, which see your IP address. Selecting RADIO requests device location for the local FM dial. On macOS a small bundled Core Location helper requests OS permission and asks Apple's geocoder for the city/country; no Google API key or IP geolocation is used. While RADIO is selected, one-shot location checks repeat on wake/focus (with a cooldown) and every 15 minutes. They stop after a location error until explicit retry or restart. Coordinates are not continuously tracked; LOCAL and YT MUSIC do not initiate these periodic radio location checks. The app receives rounded coordinates and saves them locally. If permission is denied or services are unavailable, the online catalog remains usable and there is a location retry control. A previously denied macOS permission was reported as a timeout during testing; check YTMamp under **System Settings > Privacy & Security > Location Services** before retrying. Local FM is a 60 km proximity list of supplied coordinates/frequencies, not a real reception map. It may be empty or incomplete.
-
-Station cards are checked progressively by briefly decoding muted previews on this device (at most three at once, 128 KiB and six seconds each). Successful checks are reused for 15 minutes; failed addresses are temporarily hidden for five minutes and favorites are retained. This is a recent availability check, not a guarantee that a station will stay online. Search pages contain 24 directory records; MORE STATIONS continues browsing.
-
-WAV recording uses about 11 MiB per minute, streams to a private temporary file and never buffers a whole recording in RAM. A session stops at 512 MiB or when less than 256 MiB is free; Save As can target an external drive. Canceled saves retain the temporary recording until it is saved or discarded. Switching away from RADIO stops recording and prompts to save. Quitting also prompts if a recording is unsaved. After an interrupted session the pending WAV is recovered in RADIO / LIBRARY. This preview has no MP3 encoder.
-
-LAN integrations are opt-in. Setting `INTEGRATION_HOST` to a non-loopback address requires `INTEGRATION_TOKEN`; browser controllers also require an explicit `CAST_ORIGIN_ALLOWLIST`. See the [integration API](docs/integration-api.md) and [bridge protocol](docs/protocol.md).
+HTTP/WebSocket services bind to loopback by default. LAN API exposure requires authentication and explicit browser-origin allowlists. Compatibility headers, IDs and internal protocol names retain their YTMamp spelling. See [bridge protocol](docs/protocol.md), [integration API](docs/integration-api.md), [security policy](SECURITY.md) and [architecture/audit](docs/audit-0.9.0.md).
 
 ## Develop
 
-Requires Node.js 22.12 or newer; CI uses Node.js 24.
+Node.js 22.12+; CI uses Node.js 24.
 
-```bash
-git clone https://github.com/markoblogo/YTMamp.git
-cd YTMamp/app
+```sh
+git clone https://github.com/markoblogo/TONFELD.git
+cd TONFELD/app
 npm ci
 npm run check
 npm audit --audit-level=high
 npm run pack
+npm start
 ```
 
-`npm start` launches the desktop app. Platform installers are built with `npm run dist:mac`, `npm run dist:win`, or `npm run dist:linux`.
+Electron desktop checks use generated audio and isolated profiles. macOS packaging builds the native location helper with Xcode command-line tools. The committed vector/raster brand assets require no font at runtime; `app/scripts/generate-brand.swift` regenerates them on macOS.
 
-CI checks lint, tests, dependency audit, and an unpacked app package on macOS, Windows, and Ubuntu. Interactive desktop/browser checks remain separate in the [release smoke plan](docs/smoke-test.md).
-
-`npm run test:desktop` runs an isolated, muted Electron playback smoke with generated audio. The [multi-source implementation plan](docs/roadmap/multi-source-player.md) defines stage boundaries and candidate donor projects. Whole-computer music discovery is excluded; only explicitly selected music folders are used.
-
-`npm run test:library:desktop` exercises folder addition, real tags and image decoding, album queues, search and external-drive recovery. The library supports up to 20 selected roots and 10,000 unique tracks, with an additional 5,000-track/50,000-entry scan limit per root. Its metadata manifest is capped at 16 MiB and artwork cache at 32 MiB (2 MiB per picture). These limits protect small disks; original audio stays in place. **Refresh** picks up changed music and reconnected drives. Removing a folder from the library keeps its files intact. Tag editing is not included.
-
-## Integrations
-
-- [Local HTTP API](docs/integration-api.md): status, current track, event stream, OBS overlay, and remote controls.
-- [Local WebSocket protocol](docs/protocol.md): authenticated desktop-to-extension bridge.
-- [Pocket-OS Cardputer](https://github.com/markoblogo/Pocket-OS-Cardputer-ABV): device-side remote client and validation.
-- Last.fm scrobbling: opt-in environment configuration documented in the integration API.
-
-Contributions are welcome; read [CONTRIBUTING.md](CONTRIBUTING.md). YTMamp is available under the [MIT License](LICENSE).
-
-<!-- ABVX:ECOSYSTEM:BEGIN -->
-## ABVX ecosystem
-
-- [AGENTS.md_generator](https://agentsmd.abvx.xyz/) — Keeps repository guidance and machine-readable context current. Current release: `v0.5.1`.
-- [abvx-agent-skills](https://abvx.xyz/work/abvx-agent-skills) — Uses shared, reviewable agent capabilities during maintenance. Current release: `v0.16.1`.
-
-_This block is generated from the reviewed ABVX ecosystem registry._
-<!-- ABVX:ECOSYSTEM:END -->
+See [contributing](CONTRIBUTING.md), [current roadmap](docs/roadmap/multi-source-player.md), [release notes](CHANGELOG.md) and [license](LICENSE). TONFELD is independent and is not affiliated with Google, YouTube, or the vintage electronics brands that informed its visual direction.

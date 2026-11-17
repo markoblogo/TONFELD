@@ -69,7 +69,7 @@ class RadioLibrary {
     }
     save() {
         const mapped = this.broadcasts();
-        const important = (s) => this.favorites.has(s.id) || this.tuning.has(s.id) || s.custom || this.activeId === s.id || mapped.some((b) => s.countrycode === b.countrycode && fmCatalog.matches(s, b));
+        const important = (s) => this.isFavorite(s.id) || this.tuning.has(s.id) || s.custom || this.activeId === s.id || mapped.some((b) => s.countrycode === b.countrycode && fmCatalog.matches(s, b));
         const keep = [...this.stations.values()].reverse().sort((a, b) => Number(important(b)) - Number(important(a))).slice(0, 2000);
         const temp = this.file + '.tmp';
         const keptIds = new Set(keep.map((s) => s.id));
@@ -82,7 +82,8 @@ class RadioLibrary {
     markFailed(id) { if (this.stations.has(id)) { this.places.invalidateStreams(); this.checked.delete(id); this.failed.set(id, Date.now() + 300000); this.save(); } }
     markSuccessful(id) { if (!this.stations.has(id)) return; const prior = this.checked.get(id); if (this.failed.delete(id) || !prior || prior.address !== this.addressKey(id) || Date.now() - prior.at > 60000) { this.checked.set(id, { id, at: Date.now(), address: this.addressKey(id) }); this.save(); } }
     retryStation(id) { const station = this.stations.get(id); if (!station) return; for (const candidate of this.stations.values()) if (stationKey(candidate) === stationKey(station)) this.failed.delete(candidate.id); this.save(); }
-    public(station) { const { url, favicon, ...rest } = station; const check = this.checked.get(station.id); return { ...rest, checkedAt: check?.address === this.addressKey(station.id) ? check.at : 0, playable: this.usable(station), cover: favicon ? 'ytmamp-media://radio-art/' + station.id : '', favorite: this.favorites.has(station.id) }; }
+    isFavorite(id) { const station=this.stations.get(id);return !!station && [...this.favorites].some(saved=>{const s=this.stations.get(saved);return s && stationKey(s)===stationKey(station);}); }
+    public(station) { const { url, favicon, ...rest } = station; const check = this.checked.get(station.id); return { ...rest, checkedAt: check?.address === this.addressKey(station.id) ? check.at : 0, playable: this.usable(station), cover: favicon ? 'ytmamp-media://radio-art/' + station.id : '', favorite: this.isFavorite(station.id) }; }
     alternatives(id) { const selected = this.stations.get(id); const broadcast = selected && this.broadcasts().find((b) => b.countrycode === selected.countrycode && fmCatalog.matches(selected, b)); return selected ? [...this.stations.values()].filter((s) => this.usable(s) && (stationKey(s) === stationKey(selected) || broadcast && s.countrycode === broadcast.countrycode && fmCatalog.matches(s, broadcast))) : []; }
     areas() { const cached = this.location && (this.placeArea || this.places.cached(this.location)); return cached ? [cached] : this.location ? fmCatalog.areas.filter((area) => area.countrycode === this.location.countrycode && distanceKm(this.location, area) <= area.radiusKm) : []; }
     broadcasts() {
@@ -115,13 +116,13 @@ class RadioLibrary {
         for(const station of [...mapped,...supplied])if(!dial.has(station.frequency))dial.set(station.frequency,station);
         return [...dial.values()].sort((a, b) => a.frequency - b.frequency || a.name.localeCompare(b.name));
     }
-    snapshot() { return { stations: distinctStations([...this.stations.values()].filter((s) => this.usable(s) && (this.favorites.has(s.id) || s.custom))).map((s) => this.public(s)), local: this.local(), location: this.location, selectedPlaceId:this.selectedPlaceId, places:this.places.available().map(({id,label,countrycode,stations})=>({id,label,countrycode,count:stations.length})), fmCoverage: { partial: true, mapped: this.broadcasts().length, source: this.placeArea?.source || '', warning: this.placeWarning, attribution: this.placeArea?.attribution || '' } }; }
+    snapshot() { return { stations: distinctStations([...this.stations.values()].filter((s) => this.usable(s) && (this.isFavorite(s.id) || s.custom))).map((s) => this.public(s)), local: this.local(), location: this.location, selectedPlaceId:this.selectedPlaceId, places:this.places.available().map(({id,label,countrycode,stations})=>({id,label,countrycode,count:stations.length})), fmCoverage: { partial: true, mapped: this.broadcasts().length, source: this.placeArea?.source || '', warning: this.placeWarning, attribution: this.placeArea?.attribution || '' } }; }
     async search(query = {}) {
         this.searchController?.abort(); this.searchController = new AbortController();
         const controller = this.searchController;
         const offset = Math.max(0, Math.min(1000, Number(query.offset) || 0));
         const cachedPage = () => {
-            const stations = filterStations(distinctStations([...this.stations.values()].filter((s) => this.usable(s) && (query.view !== 'favorites' || this.favorites.has(s.id)))), query);
+            const stations = filterStations(distinctStations([...this.stations.values()].filter((s) => this.usable(s) && (query.view !== 'favorites' || this.isFavorite(s.id)))), query);
             return { stations: stations.slice(offset, offset + 24).map((s) => this.public(s)), cached: true, more: stations.length > offset + 24 };
         };
         if (query.view === 'favorites') return cachedPage();
@@ -139,7 +140,13 @@ class RadioLibrary {
             return { ...cachedPage(), warning: 'Radio directory is temporarily unavailable. Showing saved stations. Press Search to retry.' };
         }
     }
-    toggleFavorite(id) { if (!this.stations.has(id)) return; if (this.favorites.has(id)) this.favorites.delete(id); else if (this.favorites.size < 500) this.favorites.add(id); this.save(); }
+    toggleFavorite(id) {
+        const station=this.stations.get(id);if(!station)throw new Error('Station is unavailable.');
+        const saved=[...this.favorites].filter(key=>{const s=this.stations.get(key);return s && stationKey(s)===stationKey(station);});
+        if(saved.length)for(const key of saved)this.favorites.delete(key);
+        else {if(this.favorites.size>=500)throw new Error('Favorites list is full.');this.favorites.add(id);}
+        this.save();return !saved.length;
+    }
     addCustom(data) { if (this.favorites.size >= 500) throw new Error('Favorites list is full.'); const station = stationFrom({ name: data.name, url: data.url, custom: true }); if (!station || !clean(data.name)) throw new Error('Enter a station name and a public HTTP(S) stream URL.'); this.stations.set(station.id, station); this.favorites.add(station.id); this.save(); return station.id; }
     setFrequency(id, value) {
         if (!this.location || !this.stations.has(id)) throw new Error('Choose your location first.');

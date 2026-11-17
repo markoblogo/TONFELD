@@ -49,6 +49,13 @@ test('decoded stream checks expire, survive restart and are invalidated when an 
     assert.equal(library.public(library.stations.get(station.id)).checkedAt, 0);
     assert.equal(library.favorites.size, 0);
 });
+test('saving a station follows compatible stream variants and removing from either variant clears the saved view',async(t)=>{
+ const a=raw('FIP (AAC)','https://example.org/save-a',{codec:'AAC'}),b=raw('Fip','https://example.org/save-b',{codec:'MP3'});
+ const {library,directory}=fixture(t,{search:async()=>[a,b]});await library.search();
+ const first=stationFrom(a),second=stationFrom(b);assert.equal(library.toggleFavorite(first.id),true);library.markFailed(first.id);
+ const saved=await library.search({view:'favorites'});assert.equal(saved.stations.length,1);assert.equal(saved.stations[0].id,second.id);assert.equal(saved.stations[0].favorite,true);
+ const restored=new RadioLibrary({directory});assert.equal(restored.isFavorite(second.id),true);assert.equal(restored.toggleFavorite(second.id),false);assert.equal(restored.favorites.size,0);assert.equal((await restored.search({view:'favorites'})).stations.length,0);
+});
 test('favorite pages retain saved stations and allow browsing beyond the first checked batch', async (t) => {
     const { library } = fixture(t);
     for (let i = 0; i < 30; i++) { const station = stationFrom(raw('Station ' + i, 'https://example.org/' + i)); library.stations.set(station.id, station); library.favorites.add(station.id); }

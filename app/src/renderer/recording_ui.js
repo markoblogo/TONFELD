@@ -42,7 +42,7 @@
             capture.port.postMessage(true);
         } catch (error) {
             closeMicrophone(); await call('cancel', {session:prepared.session}).catch(() => {});
-            throw new Error(error.name === 'NotAllowedError' ? 'Microphone access denied. Allow YTMamp in macOS Privacy & Security / Microphone and retry.' : error.message);
+            throw new Error(error.name === 'NotAllowedError' ? 'Microphone access denied. Allow TONFELD in macOS Privacy & Security / Microphone and retry.' : error.message);
         }
     }
     $('radio-record').addEventListener('click', async () => {

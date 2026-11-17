@@ -10,6 +10,7 @@ const { RadioPlayer } = require('./radio_player');
 const { RadioRecorder } = require('./radio_recorder');
 const { RecordingSession } = require('./recording_session');
 const { createRadioMediaHandler } = require('./radio_network');
+require('./brand_identity').configureBrandIdentity(app);
 
 protocol.registerSchemesAsPrivileged([{ scheme: 'ytmamp-media', privileges: {
     standard: true, secure: true, stream: true, supportFetchAPI: true, corsEnabled: true
@@ -608,7 +609,7 @@ function setupIntegrationServer() {
                 res.writeHead(204, {
                     ...integrationBaseHeaders,
                     'access-control-allow-methods': 'GET, OPTIONS',
-                    'access-control-allow-headers': 'Authorization, X-YTMAMP-Token, Content-Type',
+                    'access-control-allow-headers': 'Authorization, X-TONFELD-Token, Content-Type',
                     'access-control-max-age': '300',
                     ...preflightHeaders
                 });
@@ -788,8 +789,8 @@ function applyLinuxAutostart() {
             '[Desktop Entry]',
             'Type=Application',
             'Version=1.0',
-            'Name=YTMamp',
-            'Comment=Start YTMamp at login',
+            'Name=TONFELD',
+            'Comment=Start TONFELD at login',
             `Exec=${quoteDesktopExec(app.getPath('exe'))}`,
             'Terminal=false',
             'X-GNOME-Autostart-enabled=true',
@@ -1086,7 +1087,7 @@ function createWindow() {
 function updateTrayMenu() {
     if (!tray) return;
     const contextMenu = Menu.buildFromTemplate([
-        { label: 'YTMamp', enabled: false },
+        { label: 'TONFELD', enabled: false },
         { type: 'separator' },
         { label: 'Show/Hide', click: () => toggleWindow() },
         { label: 'Player size', submenu: playerSizeItems() },
@@ -1134,7 +1135,7 @@ function updateTrayMenu() {
 }
 
 function createTray() {
-    const iconPath = path.join(__dirname, '../../assets/icon.png');
+    const iconPath = path.join(__dirname, '../../assets/' + (process.platform === 'darwin' ? 'trayTemplate.png' : 'icon.png'));
     let icon = nativeImage.createFromPath(iconPath);
 
     // On macOS, we can use template images for automatic theme support (light/dark menubar)
@@ -1144,7 +1145,7 @@ function createTray() {
 
     tray = new Tray(icon);
 
-    tray.setToolTip('YTMamp');
+    tray.setToolTip('TONFELD');
     updateTrayMenu();
 
     tray.on('click', () => {
@@ -1494,7 +1495,7 @@ async function radioAction(event, action, data = {}) {
             try { const result = await radioLibrary.chooseLocation(data); radioPlayer.publish(); return result; } finally { radioActionBusy = false; }
         }
         if (action === 'custom') return { id: radioLibrary.addCustom(data) };
-        if (action === 'favorite') { radioLibrary.toggleFavorite(data.id); radioPlayer.publish(); return { ok: true }; }
+        if (action === 'favorite') { const favorite=radioLibrary.toggleFavorite(data.id); radioPlayer.publish(); return { ok: true, favorite }; }
         if (action === 'frequency') { radioLibrary.setFrequency(data.id, data.value); radioPlayer.publish(); return { ok: true }; }
         if (action === 'play' || action === 'tune') {
             if (activeSource !== 'radio') return { error: 'Select RADIO first.' };

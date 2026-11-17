@@ -38,6 +38,9 @@ jobs:
         working-directory: app
         run: npm ci
 
+      - name: Verify candidate identity and versions
+        run: node app/scripts/check-release-version.js
+
       - name: Audit dependencies
         working-directory: app
         run: npm audit --audit-level=high
@@ -74,34 +77,34 @@ jobs:
       - name: Verify Apple Silicon signatures and ZIP
         if: matrix.os == 'macos-latest'
         run: |
-          codesign --verify --deep --strict --verbose=2 app/dist/mac-arm64/YTMamp.app
-          codesign -d --entitlements - --xml app/dist/mac-arm64/YTMamp.app > "$RUNNER_TEMP/ytmamp-entitlements.plist"
+          codesign --verify --deep --strict --verbose=2 app/dist/mac-arm64/TONFELD.app
+          codesign -d --entitlements - --xml app/dist/mac-arm64/TONFELD.app > "$RUNNER_TEMP/ytmamp-entitlements.plist"
           /usr/libexec/PlistBuddy -c 'Print com.apple.security.device.audio-input' "$RUNNER_TEMP/ytmamp-entitlements.plist"
-          /usr/libexec/PlistBuddy -c 'Print NSMicrophoneUsageDescription' app/dist/mac-arm64/YTMamp.app/Contents/Info.plist
-          app/dist/mac-arm64/YTMamp.app/Contents/Resources/native/ytmamp-location --check
-          ditto -x -k app/dist/YTMamp-0.8.0-mac.zip "$RUNNER_TEMP/ytmamp-preview-verify"
-          codesign --verify --deep --strict --verbose=2 "$RUNNER_TEMP/ytmamp-preview-verify/YTMamp.app"
+          /usr/libexec/PlistBuddy -c 'Print NSMicrophoneUsageDescription' app/dist/mac-arm64/TONFELD.app/Contents/Info.plist
+          app/dist/mac-arm64/TONFELD.app/Contents/Resources/native/ytmamp-location --check
+          ditto -x -k app/dist/TONFELD-0.9.0-mac.zip "$RUNNER_TEMP/ytmamp-preview-verify"
+          codesign --verify --deep --strict --verbose=2 "$RUNNER_TEMP/ytmamp-preview-verify/TONFELD.app"
 
       - name: Test metadata in signed Apple Silicon package
         if: matrix.os == 'macos-latest'
         working-directory: app
         env:
           ELECTRON_RUN_AS_NODE: '1'
-        run: ./dist/mac-arm64/YTMamp.app/Contents/MacOS/YTMamp scripts/smoke-packaged-metadata.js "$PWD/dist/mac-arm64/YTMamp.app"
+        run: ./dist/mac-arm64/TONFELD.app/Contents/MacOS/TONFELD scripts/smoke-packaged-metadata.js "$PWD/dist/mac-arm64/TONFELD.app"
 
       - name: Bundle matching browser companion
         if: matrix.os == 'macos-latest'
-        run: zip -r app/dist/YTMamp-0.8.0-extension.zip extension
+        run: zip -r app/dist/TONFELD-0.9.0-extension.zip extension
 
       - name: Upload Apple Silicon preview
         if: matrix.os == 'macos-latest'
         uses: actions/upload-artifact@v7
         with:
-          name: YTMamp-0.8.0-macos-arm64
+          name: TONFELD-0.9.0-macos-arm64
           path: |
-            app/dist/YTMamp-0.8.0-mac.dmg
-            app/dist/YTMamp-0.8.0-mac.zip
-            app/dist/YTMamp-0.8.0-extension.zip
+            app/dist/TONFELD-0.9.0-mac.dmg
+            app/dist/TONFELD-0.9.0-mac.zip
+            app/dist/TONFELD-0.9.0-extension.zip
           if-no-files-found: error
 
       - name: Local playback desktop smoke
@@ -139,6 +142,7 @@ jobs:
         continue-on-error: true
         working-directory: app
         run: |
+          node scripts/check-euradio-source.js
           xvfb-run -a ./node_modules/.bin/electron --no-sandbox scripts/smoke-radio-live.js
           YTMAMP_LIVE_CITY=kyiv xvfb-run -a ./node_modules/.bin/electron --no-sandbox scripts/smoke-radio-live.js
 
@@ -154,6 +158,7 @@ jobs:
             app/library-smoke.png
             app/library-albums-smoke.png
             app/radio-smoke.png
+            app/radio-library-smoke.png
             app/kyiv-radio-check.json
             app/nantes-radio-check.json
             app/rennes-directory-check.json

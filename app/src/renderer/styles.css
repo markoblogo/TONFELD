@@ -1,5 +1,5 @@
 @font-face {
-    font-family: 'YTMamp';
+    font-family: 'TONFELD';
     src: local('Courier New'), local('Courier'), monospace;
 }
 
@@ -12,7 +12,7 @@ body {
     padding: 0;
     background-color: #000;
     color: #00ff00;
-    font-family: 'YTMamp', monospace;
+    font-family: 'TONFELD', monospace;
     overflow: hidden;
     user-select: none;
     font-size: 11px;
@@ -565,3 +565,9 @@ button:active {
 #recording-notice { position: absolute; bottom: 0; left: 6px; z-index: 101; pointer-events: none; line-height: 8px; font-size: 7px; color: #e9b890; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 346px; height: 8px; }
 body.recording-active #like-btn, body.recording-active #shuffle-btn, body.recording-active #repeat-btn { display: none; }
 #radio-record-controls [hidden] { display: none; }
+
+#brand-wordmark { width: 56px; height: 9px; flex-shrink: 0; object-fit: contain; }
+.radio-brand-placeholder { display:grid;place-items:center; }
+.radio-brand-placeholder img { width:58px;height:40px;object-fit:contain;border:0;background:none; }
+.radio-card-actions button[aria-pressed="true"] { color:#eed89b;border-color:#a38b4e; }
+#like-btn[aria-pressed="true"] { color:#eed89b; }

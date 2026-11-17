@@ -4,9 +4,10 @@
     const notice = (message) => { $('radio-notice').textContent = message; };
     const call = async (action, data) => { const result = await api.radio(action, data); if (result?.error) throw new Error(result.error); return result; };
     const verifier = new window.RadioStationVerifier({ report: (id, ok) => call('stream-check', { id, ok }) });
-    let frequencyCoverage = {};
+    let frequencyCoverage = {};let selectedFavorite=false;
     let lastLocationAttempt = 0; let automaticLocationPaused = false;
     let ranks = new Map();
+    const favoriteOverrides=new Map();
     function sortRows() {
         const sort = $('radio-sort').value;
         if (view === 'local') rows.sort((a, b) => (a.frequency || Infinity) - (b.frequency || Infinity) || a.name.localeCompare(b.name));
@@ -23,6 +24,7 @@
         const dial = $('radio-dial'); dial.setAttribute('aria-valuetext', item ? item.name + ', ' + item.frequency + ' MHz' : 'Local FM stations');
     }
     function span(text, className) { const element = document.createElement('span'); element.textContent = text; element.className = className; return element; }
+    function brandPlaceholder() { const box=span('', 'album-placeholder radio-brand-placeholder');const image=document.createElement('img');image.src='assets/tonfeld-mark.svg';image.alt='';image.width=58;image.height=40;box.append(image);return box; }
     function render() {
         const fragment = document.createDocumentFragment();
         for (const station of rows) {
@@ -31,14 +33,14 @@
             play.setAttribute('aria-current', String(station.id === selected));
             if (/^ytmamp-media:\/\/radio-art\/[a-f0-9]{64}$/.test(station.cover || '')) {
                 const image = document.createElement('img'); image.src = station.cover; image.alt = ''; image.width = 84; image.height = 84; image.loading = 'lazy'; image.decoding = 'async';
-                image.addEventListener('error', () => image.replaceWith(span('RADIO', 'album-placeholder')), { once: true }); play.append(image);
-            } else play.append(span('RADIO', 'album-placeholder'));
+                image.addEventListener('error', () => image.replaceWith(brandPlaceholder()), { once: true }); play.append(image);
+            } else play.append(brandPlaceholder());
             play.append(span(station.name, 'album-name'), span([station.countrycode, station.region, station.language].filter(Boolean).join(' / '), 'album-artist'), span(station.genre || station.codec || 'Online radio', 'album-count'));
             if (view === 'local') play.append(span(station.frequency ? station.frequency + ' MHz' : 'Online / FM frequency not supplied', 'radio-mhz'));
             play.title = [station.name, station.genre, station.language, station.region].join('\n');
             play.addEventListener('click', () => call('play', { id: station.id }).catch((e) => notice(e.message)));
-            const favorite = document.createElement('button'); favorite.textContent = station.favorite ? 'Saved' : 'Favorite'; favorite.setAttribute('aria-pressed', String(station.favorite)); favorite.setAttribute('aria-label', 'Favorite ' + station.name);
-            favorite.addEventListener('click', () => call('favorite', { id: station.id }).then(() => { station.favorite = !station.favorite; render(); }).catch((e) => notice(e.message)));
+            const favorite = document.createElement('button'); favorite.textContent = station.favorite ? 'Saved' : 'Save'; favorite.setAttribute('aria-pressed', String(station.favorite)); favorite.setAttribute('aria-label', (station.favorite ? 'Remove saved station ' : 'Save station ') + station.name);
+            favorite.addEventListener('click', async () => { favorite.disabled=true;try { const result=await call('favorite',{id:station.id});favoriteOverrides.set(station.id,result.favorite);station.favorite=result.favorite;if(view==='favorites')rows=rows.filter(s=>s.favorite);render(); }catch(e){notice(e.message);favorite.disabled=false;} });
             const fm = document.createElement('button'); fm.textContent = 'Set local FM'; fm.disabled = !location;
             fm.addEventListener('click', () => {
                 if (pendingFrequency) pendingFrequency.remove();
@@ -70,11 +72,13 @@
             render(); notice('Checking station streams…');
             const checks = await verifier.verify(result.stations.slice(0, 24), (station) => {
                 if (ticket !== serial) return;
+                if(favoriteOverrides.has(station.id))station.favorite=favoriteOverrides.get(station.id);
+                if(view==='favorites' && !station.favorite)return;
                 rows = [...new Map([...rows, station].map((s) => [s.id, s])).values()]; sortRows(); render();
                 notice(rows.length + ' stations ready / checking more…');
             });
             if (ticket !== serial) return;
-            notice(result.warning || rows.length + ' stations / streams checked' + (checks.hidden ? ' / ' + checks.hidden + ' unavailable hidden' : '') + (checks.canceled ? ' / check your connection and retry' : '') + (!rows.length ? '. Try MORE STATIONS or a broader search.' : ''));
+            notice(result.warning || rows.length + ' stations / streams checked' + (checks.hidden ? ' / ' + checks.hidden + ' unavailable hidden' : '') + (checks.canceled ? ' / check your connection and retry' : '') + (!rows.length ? (view==='favorites' ? '. Use Save on a station or in the player; unavailable saved streams can be retried later.' : '. Try MORE STATIONS or a broader search.') : ''));
         } catch (error) { if (ticket === serial) notice(error.message); }
         finally { if (ticket === serial) { busy = false; $('radio-more').disabled = false; } }
     }
@@ -141,9 +145,22 @@
         const station = [...local].sort((a, b) => Math.abs(a.frequency - frequency) - Math.abs(b.frequency - frequency))[0];
         if (station) call('tune', { id: station.id }).catch((e) => notice(e.message));
     });
-    api.onRadioSelection((data) => { const moved = data.location && (!location || location.lat !== data.location.lat || location.lon !== data.location.lon || location.countrycode !== data.location.countrycode); selected = data.id; local = data.local || []; location = data.location; if (source === 'radio') { updateDial(); if (moved && view === 'local') search(); $('like-btn').setAttribute('aria-pressed', String(data.favorite)); for (const button of $('radio-grid').querySelectorAll('[data-id]')) button.setAttribute('aria-current', String(button.dataset.id === selected)); } });
+    api.onRadioSelection((data) => {
+        const moved=data.location && (!location || location.lat!==data.location.lat || location.lon!==data.location.lon || location.countrycode!==data.location.countrycode);
+        selected=data.id;selectedFavorite=!!data.favorite;local=data.local||[];location=data.location;
+        const saved=new Set(data.savedIds||[]);
+        for(const row of rows){row.favorite=saved.has(row.id);favoriteOverrides.set(row.id,row.favorite);}
+        favoriteOverrides.set(selected,!!data.favorite);
+        if(view==='favorites')rows=rows.filter(row=>row.favorite);
+        if(source==='radio'){
+            updateDial();if(moved && view==='local')search();
+            $('like-btn').setAttribute('aria-pressed',String(data.favorite));$('like-btn').textContent=data.favorite?'Saved':'Save';
+            $('like-btn').title=data.favorite?'Remove station from saved stations':'Save station';
+            $('like-btn').setAttribute('aria-label',$('like-btn').title);render();
+        }
+    });
     api.onSourceChange((value) => {
-        source = value; document.body.classList.toggle('radio-mode', value === 'radio');
+        source = value; if(value==='radio'){$('like-btn').textContent=selectedFavorite?'Saved':'Save';$('like-btn').title=selectedFavorite?'Remove station from saved stations':'Save station';$('like-btn').setAttribute('aria-label',$('like-btn').title);} if(value!=='radio'){$('like-btn').textContent='Like';$('like-btn').title='Like';$('like-btn').setAttribute('aria-label','Like');$('like-btn').setAttribute('aria-pressed','false');} document.body.classList.toggle('radio-mode', value === 'radio');
         $('radio-tuner').hidden = value !== 'radio'; $('progress-container').hidden = value === 'radio'; $('timer-container').hidden = value === 'radio';
         $('shuffle-btn').hidden = value === 'radio'; $('repeat-btn').hidden = value === 'radio';
         $('prev-btn').title = value === 'radio' ? 'Previous local FM station' : 'Previous track'; $('next-btn').title = value === 'radio' ? 'Next local FM station' : 'Next track';

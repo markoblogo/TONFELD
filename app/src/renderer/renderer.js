@@ -161,7 +161,7 @@ function draw() {
 
         // NO WAVE indicator
         ctx.fillStyle = 'rgba(255, 0, 0, 0.5)';
-        ctx.font = '8px YTMamp';
+        ctx.font = '8px TONFELD';
         ctx.fillText('NO WAVE', 5, 10);
     } else if (lastWaveData) {
         const sliceWidth = canvas.width / lastWaveData.length;
@@ -195,7 +195,7 @@ window.electronAPI.onVolStatus((status) => {
 
 window.electronAPI.onTrackUpdate((track) => {
     if (!track) {
-        document.getElementById('title').innerText = playbackSource === 'radio' ? 'Radio' : playbackSource === 'ytm' ? 'YouTube Music' : 'YTMamp';
+        document.getElementById('title').innerText = playbackSource === 'radio' ? 'Radio' : playbackSource === 'ytm' ? 'YouTube Music' : 'TONFELD';
         document.getElementById('artist').innerText = playbackSource === 'radio' ? 'Open LIBRARY to choose a station' : playbackSource === 'ytm' ? 'Connect companion in your browser' : 'Choose a music folder';
         return;
     }

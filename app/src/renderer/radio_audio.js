@@ -23,15 +23,25 @@
         })();
         return ready;
     }
-    function stopNoise() { if (noise) { try { noise.stop(); } catch { /* already stopped */ } noise = null; } }
+    function stopNoise() { if(noise){const current=noise;noise=null;try{current.source.stop();}catch{/* already stopped */}current.source.disconnect();current.level.disconnect();} }
     function tuningNoise(seconds) {
         stopNoise(); if (!context || context.state !== 'running') return;
         const buffer = context.createBuffer(1, Math.round(context.sampleRate * seconds), context.sampleRate);
         const data = buffer.getChannelData(0);
-        for (let i = 0; i < data.length; i++) data[i] = (Math.random() * 2 - 1) * (Math.random() > 0.998 ? 0.7 : 0.16) * (1 - i / data.length);
-        noise = context.createBufferSource(); noise.buffer = buffer;
-        const level = context.createGain(); level.gain.value = volume * 0.2;
-        noise.connect(level); level.connect(context.destination); noise.start(); noise.stop(context.currentTime + seconds);
+        let seed=0x54464d,low=0,slow=0;
+        for(let i=0;i<data.length;i++){
+            seed=(Math.imul(seed,1664525)+1013904223)>>>0;
+            low+=0.42*((seed/4294967296)*2-1-low);slow+=0.035*(low-slow);
+            const envelope=Math.min(1,i/(context.sampleRate*0.012),(data.length-1-i)/(context.sampleRate*0.03));
+            data[i]=(low-slow)*0.65*Math.max(0,envelope);
+        }
+        const source=context.createBufferSource();source.buffer=buffer;
+        const level=context.createGain();level.gain.value=volume*0.22;
+        noise={source,level};
+        // Monitoring branch only: search hiss must never reach the recording worklet.
+        source.connect(level);level.connect(context.destination);
+        source.onended=()=>{source.disconnect();level.disconnect();if(noise?.source===source)noise=null;};
+        source.start();source.stop(context.currentTime+seconds);
     }
     function sweep(from, to, milliseconds, startedRevision) {
         if (!Number.isFinite(from) || !Number.isFinite(to)) return Promise.resolve();
@@ -52,7 +62,7 @@
     api.onSourceChange((value) => { source = value; if (value !== 'radio') { stop(); capture?.port.postMessage(false); context?.suspend().catch(() => {}); } });
     api.onRadioAudioCommand(async (command) => {
         if (command.action === 'pause') { revision = command.revision; stop(); return; }
-        if (command.action === 'volume') { volume = command.volume; if (gain) gain.gain.value = volume; return; }
+        if (command.action === 'volume') { volume = command.volume; if (gain) gain.gain.value = volume;if(noise)noise.level.gain.value=volume*0.22; return; }
         if (command.action !== 'load' || source !== 'radio') return;
         stop(); id = command.id; revision = command.revision; volume = command.volume;
         const started = revision;

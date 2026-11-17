@@ -22,7 +22,10 @@
     ],
     "query": "Radio M",
     "source": "https://radiomap.eu/ua/kyiv",
-    "reviewedAt": "2026-11-17"
+    "reviewedAt": "2026-11-17",
+    "url": "http://live.radiom.ua:1070/stream",
+    "streamName": "Радіо М",
+    "streamSource": "https://yp.casterclub.com/station-detail.php?id=3251"
   },
   {
     "name": "Класик Радіо",
@@ -34,7 +37,10 @@
     ],
     "query": "Класик",
     "source": "https://radiomap.eu/ua/kyiv",
-    "reviewedAt": "2026-11-17"
+    "reviewedAt": "2026-11-17",
+    "url": "https://online.classicradio.ua/ClassicRadio_HD",
+    "streamName": "Класик Радіо",
+    "streamSource": "https://tech.opencartbot.com/instructions/ua-online-radio-playlist"
   },
   {
     "name": "Радіо Чемпіон",
@@ -46,7 +52,10 @@
     ],
     "query": "Champion",
     "source": "https://radiomap.eu/ua/kyiv",
-    "reviewedAt": "2026-11-17"
+    "reviewedAt": "2026-11-17",
+    "url": "https://streaming.radio.co/sdb273484e/listen",
+    "streamName": "Радіо Чемпіон",
+    "streamSource": "https://www.proradio.org.ua/news/2024sept.php"
   },
   {
     "name": "Magic Radio",
@@ -70,7 +79,10 @@
     ],
     "query": "Maximum",
     "source": "https://radiomap.eu/ua/kyiv",
-    "reviewedAt": "2026-11-17"
+    "reviewedAt": "2026-11-17",
+    "url": "https://lux.radio.tvstitch.com/kyiv/max_adv_sd",
+    "streamName": "Радіо Максимум",
+    "streamSource": "https://tech.opencartbot.com/instructions/ua-online-radio-playlist"
   },
   {
     "name": "Армія FM",
@@ -83,7 +95,10 @@
     ],
     "query": "Армія",
     "source": "https://radiomap.eu/ua/kyiv",
-    "reviewedAt": "2026-11-17"
+    "reviewedAt": "2026-11-17",
+    "url": "https://icecast.armyfm.com.ua:8443/ArmyFM",
+    "streamName": "Армія FM",
+    "streamSource": "https://tech.opencartbot.com/instructions/ua-online-radio-playlist"
   },
   {
     "name": "Мелодія FM",
@@ -109,7 +124,10 @@
     ],
     "query": "Best FM",
     "source": "https://radiomap.eu/ua/kyiv",
-    "reviewedAt": "2026-11-17"
+    "reviewedAt": "2026-11-17",
+    "url": "https://radio.bestfm.ua/bestfm",
+    "streamName": "Best FM",
+    "streamSource": "https://tech.opencartbot.com/instructions/ua-online-radio-playlist"
   },
   {
     "name": "Радіо NV",
@@ -151,7 +169,10 @@
     ],
     "query": "DJFM",
     "source": "https://radiomap.eu/ua/kyiv",
-    "reviewedAt": "2026-11-17"
+    "reviewedAt": "2026-11-17",
+    "url": "https://cast.brg.ua/djfm_main_public_mp3_hq",
+    "streamName": "DJFM",
+    "streamSource": "https://tech.opencartbot.com/instructions/ua-online-radio-playlist"
   },
   {
     "name": "Радіо Промінь",
@@ -164,7 +185,10 @@
     ],
     "query": "Промінь",
     "source": "https://radiomap.eu/ua/kyiv",
-    "reviewedAt": "2026-11-17"
+    "reviewedAt": "2026-11-17",
+    "url": "https://radio.ukr.radio/ur2-aacplus-l",
+    "streamName": "Радіо Промінь",
+    "streamSource": "https://tech.opencartbot.com/instructions/ua-online-radio-playlist"
   },
   {
     "name": "Радіо Культура",
@@ -177,7 +201,10 @@
     ],
     "query": "Культура",
     "source": "https://radiomap.eu/ua/kyiv",
-    "reviewedAt": "2026-11-17"
+    "reviewedAt": "2026-11-17",
+    "url": "https://radio.ukr.radio/ur3-mp3",
+    "streamName": "Радіо Культура",
+    "streamSource": "https://tech.opencartbot.com/instructions/ua-online-radio-playlist"
   },
   {
     "name": "Київ FM",
@@ -190,7 +217,10 @@
     ],
     "query": "Київ",
     "source": "https://radiomap.eu/ua/kyiv",
-    "reviewedAt": "2026-11-17"
+    "reviewedAt": "2026-11-17",
+    "url": "https://cdn.vsnw.net:8943/kyiv_fm_128k",
+    "streamName": "Київ FM",
+    "streamSource": "https://tech.opencartbot.com/instructions/ua-online-radio-playlist"
   },
   {
     "name": "Радіо Байрактар",
@@ -217,7 +247,10 @@
     ],
     "query": "Nostalgie",
     "source": "https://radiomap.eu/ua/kyiv",
-    "reviewedAt": "2026-11-17"
+    "reviewedAt": "2026-11-17",
+    "url": "https://lux.radio.tvstitch.com/kyiv/nst_adv_sd",
+    "streamName": "Nostalgie Ukraine",
+    "streamSource": "https://tech.opencartbot.com/instructions/ua-online-radio-playlist"
   },
   {
     "name": "Громадське радіо",
@@ -243,7 +276,10 @@
     ],
     "query": "Kraina",
     "source": "https://radiomap.eu/ua/kyiv",
-    "reviewedAt": "2026-11-17"
+    "reviewedAt": "2026-11-17",
+    "url": "https://live2.radioec.com.ua/kiev128s.mp3",
+    "streamName": "Країна ФМ",
+    "streamSource": "https://tech.opencartbot.com/instructions/ua-online-radio-playlist"
   },
   {
     "name": "Радіо Марія",
@@ -269,7 +305,10 @@
     ],
     "query": "Пятниця",
     "source": "https://radiomap.eu/ua/kyiv",
-    "reviewedAt": "2026-11-17"
+    "reviewedAt": "2026-11-17",
+    "url": "https://cast.mediaonline.net.ua/radiopyatnica320",
+    "streamName": "Радіо П’ятниця",
+    "streamSource": "https://tech.opencartbot.com/instructions/ua-online-radio-playlist"
   },
   {
     "name": "Radio Relax",
@@ -296,7 +335,10 @@
     ],
     "query": "Шлягер",
     "source": "https://radiomap.eu/ua/kyiv",
-    "reviewedAt": "2026-11-17"
+    "reviewedAt": "2026-11-17",
+    "url": "https://cast.brg.ua/shanson_main_public_mp3_hq",
+    "streamName": "Шлягер FM",
+    "streamSource": "https://tech.opencartbot.com/instructions/ua-online-radio-playlist"
   },
   {
     "name": "Просто Раді.О",
@@ -348,7 +390,10 @@
     ],
     "query": "Power FM",
     "source": "https://radiomap.eu/ua/kyiv",
-    "reviewedAt": "2026-11-17"
+    "reviewedAt": "2026-11-17",
+    "url": "https://cast.brg.ua/powerfm_main_public_mp3_hq",
+    "streamName": "Power FM",
+    "streamSource": "https://tech.opencartbot.com/instructions/ua-online-radio-playlist"
   },
   {
     "name": "Radio Jazz",
@@ -389,7 +434,10 @@
     ],
     "query": "Перець",
     "source": "https://radiomap.eu/ua/kyiv",
-    "reviewedAt": "2026-11-17"
+    "reviewedAt": "2026-11-17",
+    "url": "https://radio.perec.fm/radio-stilnoe",
+    "streamName": "Перець FM",
+    "streamSource": "https://tech.opencartbot.com/instructions/ua-online-radio-playlist"
   },
   {
     "name": "Радіо Ми Україна",
@@ -428,7 +476,10 @@
     ],
     "query": "Europa Plus",
     "source": "https://radiomap.eu/ua/kyiv",
-    "reviewedAt": "2026-11-17"
+    "reviewedAt": "2026-11-17",
+    "url": "https://s5.radioforge.com:7908/live",
+    "streamName": "Європа Плюс Київ",
+    "streamSource": "https://tech.opencartbot.com/instructions/ua-online-radio-playlist"
   },
   {
     "name": "Авторадіо Україна",
@@ -441,7 +492,10 @@
     ],
     "query": "Avtoradio",
     "source": "https://radiomap.eu/ua/kyiv",
-    "reviewedAt": "2026-11-17"
+    "reviewedAt": "2026-11-17",
+    "url": "https://cast.mediaonline.net.ua/avtoradio320",
+    "streamName": "Авторадіо Україна",
+    "streamSource": "https://tech.opencartbot.com/instructions/ua-online-radio-playlist"
   },
   {
     "name": "Наше Радіо",

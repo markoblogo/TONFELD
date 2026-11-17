@@ -8,7 +8,7 @@ class RadioPlayer extends EventEmitter {
     track() { return this.current ? { title: this.current.name, artist: [this.current.region, this.current.countrycode, this.current.genre].filter(Boolean).join(' / ').slice(0, 300), source: 'radio', mediaId: this.id, durationSec: 0, volume: this.volume } : null; }
     publish() {
         this.emit('track', this.track()); this.emit('state', { ...this.state });
-        this.emit('selection', { id: this.id, local: this.library.local(), location: this.library.location, favorite: this.library.favorites.has(this.id) });
+        this.emit('selection', { id: this.id, local: this.library.local(), location: this.library.location, favorite: this.library.isFavorite(this.id), savedIds:[...this.library.stations.keys()].filter(id=>this.library.isFavorite(id)) });
     }
     select(id, { tuning = false, scan = null } = {}) {
         if (!this.library.stations.has(id)) return false;

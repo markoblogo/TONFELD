@@ -1,6 +1,6 @@
 # Browser support
 
-YTMamp uses a Chromium extension to bridge YouTube Music with the desktop app.
+TONFELD uses a Chromium extension to bridge YouTube Music with the desktop app.
 
 ## Tested browsers
 

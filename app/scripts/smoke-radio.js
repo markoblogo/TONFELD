@@ -62,6 +62,16 @@ async function run(window) {
     await waitFor(() => evaluate('document.getElementById("radio-notice").textContent.includes("1 unavailable hidden")'), 'broken stream is checked and hidden');
     assert.equal(report?.playing === true, false, 'muted catalog checks must not start the main player');
     assert.equal(await evaluate('document.getElementById("radio-grid").textContent.includes("Broken station")'), false);
+    await waitFor(()=>evaluate('document.querySelector("#radio-grid .radio-brand-placeholder img")?.naturalWidth>0'),'missing station art uses TF');
+    assert.equal(await evaluate('document.querySelector("#brand-wordmark")?.naturalWidth>0'),true,'TONFELD wordmark loads');
+    await evaluate('document.querySelector("#radio-grid .radio-card-actions button").click()');
+    await evaluate('document.getElementById("radio-favorites").click()');
+    await waitFor(()=>evaluate('document.querySelectorAll("#radio-grid .album-card").length===1'),'saved view contains the chosen station');
+    await evaluate('document.querySelector("#radio-grid .radio-card-actions button").click()');
+    await waitFor(()=>evaluate('document.querySelectorAll("#radio-grid .album-card").length===0'),'unsaving removes the card immediately');
+    await evaluate('document.getElementById("radio-all").click()');
+    await waitFor(()=>evaluate('document.querySelectorAll("#radio-grid .album-card").length===4'),'all stations restored');
+
     await evaluate('document.getElementById("radio-sort").value = "name"; document.getElementById("radio-sort").dispatchEvent(new Event("change"))');
     await waitFor(() => evaluate('document.querySelector("#radio-grid .album-name")?.textContent === "Internet Only"'), 'name sorting survives progressive checks');
     assert.equal(await evaluate('document.getElementById("radio-country") === null && document.getElementById("radio-city") === null'), true);
@@ -72,6 +82,10 @@ async function run(window) {
     await evaluate('document.querySelector("#radio-grid .album-card").click()');
     await waitFor(() => report?.playing, 'radio audio');
     await waitFor(() => evaluate('window.canRecordRadio() && [...window.readRadioWave()].some(v => v !== 128)'), 'radio analyzer');
+    await evaluate('document.getElementById("like-btn").click()');
+    await waitFor(()=>evaluate('document.getElementById("like-btn").getAttribute("aria-pressed")==="true" && [...document.querySelectorAll("#radio-grid .radio-card")].some(c=>c.querySelector("[aria-current=true]") && c.querySelector(".radio-card-actions button").getAttribute("aria-pressed")==="true")'),'mini-player Save synchronizes the station card');
+    await evaluate('document.getElementById("like-btn").click()');
+    await waitFor(()=>evaluate('document.getElementById("like-btn").getAttribute("aria-pressed")==="false"'),'mini-player unsave');
     const id = report.id;
     await evaluate('document.getElementById("next-btn").click()');
     await waitFor(() => report?.playing && report.id !== id, 'next local station');
@@ -101,6 +115,7 @@ async function run(window) {
     const recorded = fs.readFileSync(output);
     assert.equal(recorded.readUInt32LE(40), recorded.length - 44); assert.equal(recorded.readUInt32LE(24), 48000);
     assert.ok(recorded.subarray(44).some((v) => v !== 0), 'saved WAV has audible PCM samples');
+    fs.writeFileSync(path.join(__dirname, '../radio-library-smoke.png'),(await window.webContents.capturePage()).toPNG());
     await evaluate('document.getElementById("radio-collapse").click()');
     assert.equal(await evaluate('document.getElementById("radio-library").hidden'), true);
     await evaluate('document.getElementById("hide-btn").click()');

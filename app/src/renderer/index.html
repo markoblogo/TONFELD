@@ -4,14 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: ytmamp-media:; media-src ytmamp-media:; connect-src 'none'; object-src 'none'; base-uri 'none'">
-    <title>YTMamp</title>
+    <title>TONFELD</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
     <div id="container">
         <div id="top-region">
-            <span>YTMAMP</span>
+            <img id="brand-wordmark" src="assets/tonfeld-wordmark.svg" alt="TONFELD" width="56" height="9">
             <select id="source-select" aria-label="Playback source">
                 <option value="local">LOCAL</option>
                 <option value="ytm">YT MUSIC</option>
@@ -24,7 +24,7 @@
                 <div id="vol-status">VOL: --</div>
                 <div id="status-led" title="Offline"></div>
                 <button id="hide-btn" title="Hide player and keep playing. Restore from the menu bar or Dock." aria-label="Hide player and keep playing">_</button>
-                <button id="close-btn" title="Quit YTMamp and stop playback" aria-label="Quit YTMamp">X</button>
+                <button id="close-btn" title="Quit TONFELD and stop playback" aria-label="Quit TONFELD">X</button>
             </div>
         </div>
 
@@ -35,7 +35,7 @@
             </div>
             <div id="right-panel">
                 <div id="info-container">
-                    <div id="title">YTMamp</div>
+                    <div id="title">TONFELD</div>
                     <div id="artist">Choose a music folder</div>
                 </div>
                 <div id="timer-container">
@@ -123,7 +123,7 @@
         </div>
         <div class="radio-toolbar" id="radio-location-toolbar"><label for="radio-place">FM city</label><select id="radio-place"><option value="">Device location</option></select><button id="radio-locate" type="button">Refresh location</button><span id="radio-location-label" role="status">Choose a saved city or use device location.</span></div>
         <div class="radio-toolbar">
-            <button id="radio-all" aria-pressed="true">All stations</button><button id="radio-favorites" aria-pressed="false">Favorites</button><button id="radio-local" aria-pressed="false">Local stations</button>
+            <button id="radio-all" aria-pressed="true">All stations</button><button id="radio-favorites" aria-pressed="false">Saved stations</button><button id="radio-local" aria-pressed="false">Local stations</button>
             <button id="radio-retry">Retry stream</button>
             <label><input type="checkbox" id="radio-noise" checked> Tuning noise</label>
             <span id="radio-record-status" role="status"></span>

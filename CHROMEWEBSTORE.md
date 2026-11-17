@@ -1,10 +1,10 @@
-# YTMamp companion distribution notes
+# TONFELD companion distribution notes
 
 Last updated: 2026-11-17. Version 0.8.0 is an unpacked test companion, not a submitted Chrome Web Store release.
 
 ## Listing
 
-Name: YTMamp. Short description: Companion bridge for the YTMamp desktop mini-player. Category: Productivity. Language: English.
+Name: TONFELD. Short description: Companion bridge for the TONFELD desktop mini-player. Category: Productivity. Language: English.
 
 Single purpose: control and display the user's YouTube Music playback in the paired desktop player, with explicitly requested recording of that tab.
 
@@ -31,7 +31,7 @@ Pairing token and user preferences use `chrome.storage.sync`, which can be synch
 
 ## Assets and publication readiness
 
-Existing manifest icon files are retained. Store screenshots, publisher contact details, a hosted privacy-policy URL and final store disclosures still require review before any store submission. Support: https://github.com/markoblogo/YTMamp/issues. No store submission is authorized by this test build.
+Existing manifest icon files are retained. Store screenshots, publisher contact details, a hosted privacy-policy URL and final store disclosures still require review before any store submission. Support: https://github.com/markoblogo/TONFELD/issues. No store submission is authorized by this test build.
 
 ## Version history
 

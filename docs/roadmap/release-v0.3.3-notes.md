@@ -14,9 +14,9 @@
 - Discord Rich Presence и глобальные media/hotkeys/profiles/tray actions переносимы в следующий цикл (вне скоупа текущего релиза).
 
 ## Ссылки
-- Release assets: https://github.com/markoblogo/YTMamp/releases/tag/v0.3.3
-- Docs: https://github.com/markoblogo/YTMamp/blob/main/docs/integration-api.md
-- Changelog: https://github.com/markoblogo/YTMamp/blob/main/CHANGELOG.md
+- Release assets: https://github.com/markoblogo/TONFELD/releases/tag/v0.3.3
+- Docs: https://github.com/markoblogo/TONFELD/blob/main/docs/integration-api.md
+- Changelog: https://github.com/markoblogo/TONFELD/blob/main/CHANGELOG.md
 
 ## Как скачать
 - macOS: `YTMamp-0.3.3-mac.dmg`, `YTMamp-0.3.3-mac.zip`

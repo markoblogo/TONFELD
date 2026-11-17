@@ -52,7 +52,7 @@ function updateUI() {
             led.className = '';
             statusDisplay.innerText = 'OFFLINE';
             hintMain.innerText = 'App not running';
-            hintSub.innerText = 'Start YTMamp';
+            hintSub.innerText = 'Start TONFELD';
             btnShow.disabled = true;
             btnConnect.style.display = 'block';
             btnDisconnect.style.display = 'none';

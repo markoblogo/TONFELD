@@ -17,3 +17,8 @@ app/radio-smoke.png
 app/native/bin/
 app/nantes-radio-check.json
 app/rennes-directory-check.json
+
+app/kyiv-radio-check.json
+app/recording-smoke-trace.log
+app/branding-smoke.png
+app/radio-library-smoke.png
