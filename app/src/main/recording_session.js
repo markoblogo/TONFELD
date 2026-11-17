@@ -16,7 +16,7 @@ class RecordingSession extends EventEmitter {
         this.source = source; this.session = crypto.randomBytes(16).toString('hex');
         this.request = { source, name, until: Date.now() + (source === 'ytm' ? 90000 : 120000) };
         this.timer = setTimeout(() => this.cancel('Recording request expired. Press REC to retry.'), source === 'ytm' ? 90000 : 120000); this.timer.unref?.();
-        this.recorder.publish(source === 'ytm' ? 'Open the YTMamp browser extension on YouTube Music and press START RECORDING.' : 'Allow microphone access to start the dictaphone.');
+        this.recorder.publish(source === 'ytm' ? 'Open the TONFELD browser extension on YouTube Music and press START RECORDING.' : 'Allow microphone access to start the dictaphone.');
         return this.session;
     }
     begin(source, session) {

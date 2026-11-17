@@ -19,4 +19,4 @@ function matches(station, broadcast) {
     return broadcast.aliases.some((name) => channelName(name) === channelName(station.name));
 }
 function regional(station, broadcast) { return (broadcast.preferredAliases || []).some((name) => channelName(name) === channelName(station.name)); }
-module.exports = { areas, reviewed, matches, regional };
+module.exports = { areas, reviewed, matches, regional, channelName };

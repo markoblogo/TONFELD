@@ -79,11 +79,11 @@ function armHeartbeat() {
         try {
             socket.send(JSON.stringify({ type: 'ping', v: 1 }));
             heartbeatTimeout = setTimeout(() => {
-                console.error('[YTMamp] Heartbeat timeout: closing socket');
+                console.error('[TONFELD] Heartbeat timeout: closing socket');
                 socket.close();
             }, WS_HEARTBEAT_TIMEOUT_MS);
         } catch (err) {
-            console.error('[YTMamp] Failed to send heartbeat:', err);
+            console.error('[TONFELD] Failed to send heartbeat:', err);
         }
     }, WS_HEARTBEAT_MS);
 }
@@ -239,7 +239,7 @@ function setupWebSocket(isRetry = false) {
 
         socket.onerror = (err) => {
             isConnecting = false;
-            console.error('[YTMamp] Socket error:', err && err.message ? err.message : err);
+            console.error('[TONFELD] Socket error:', err && err.message ? err.message : err);
             if (autoConnect && !manualDisconnect) {
                 scheduleReconnect();
             }

@@ -1,5 +1,5 @@
 /**
- * YTMamp Adapter - Robust DOM control
+ * TONFELD Adapter - Robust DOM control
  */
 
 const YTM_SELECTORS = {
@@ -40,11 +40,11 @@ const YTM_ADAPTER = {
     async control(type, cmdId) {
         const root = findPlayerBar();
         if (!root) {
-            console.error(`[YTMamp] [ID:${cmdId}] Failed: Player bar not found.`);
+            console.error(`[TONFELD] [ID:${cmdId}] Failed: Player bar not found.`);
             return false;
         }
 
-        console.log(`[YTMamp] [ID:${cmdId}] Attempting ${type}...`);
+        console.log(`[TONFELD] [ID:${cmdId}] Attempting ${type}...`);
 
         // Fallback 1: CSS Selectors (Modern YTM)
         const selectors = {
@@ -60,7 +60,7 @@ const YTM_ADAPTER = {
         for (const sel of selectors[type]) {
             const el = root.querySelector(sel);
             if (el && typeof el.click === 'function') {
-                console.log(`[YTMamp] [ID:${cmdId}] Match found via Selector: ${sel}`);
+                console.log(`[TONFELD] [ID:${cmdId}] Match found via Selector: ${sel}`);
                 el.click();
                 return true;
             }
@@ -73,7 +73,7 @@ const YTM_ADAPTER = {
         for (const btn of allButtons) {
             const label = (btn.getAttribute('aria-label') || btn.getAttribute('title') || '').toLowerCase();
             if (possibleLabels.some(p => label.includes(p.toLowerCase()))) {
-                console.log(`[YTMamp] [ID:${cmdId}] Match found via Label: "${label}"`);
+                console.log(`[TONFELD] [ID:${cmdId}] Match found via Label: "${label}"`);
                 btn.click();
                 return true;
             }
@@ -87,15 +87,15 @@ const YTM_ADAPTER = {
             const indexMap = { prev: 0, playPause: 1, next: 2 };
             const targetIndex = indexMap[type];
             if (buttons[targetIndex]) {
-                console.log(`[YTMamp] [ID:${cmdId}] Match found via Index: ${targetIndex} of ${buttons.length}`);
+                console.log(`[TONFELD] [ID:${cmdId}] Match found via Index: ${targetIndex} of ${buttons.length}`);
                 buttons[targetIndex].click();
                 return true;
             }
         }
 
         // Failure
-        console.error(`[YTMamp] [ID:${cmdId}] CRITICAL: Could not find ${type} button after 3 fallbacks.`);
-        console.debug(`[YTMamp] [ID:${cmdId}] DOM State:`, logBarState(root));
+        console.error(`[TONFELD] [ID:${cmdId}] CRITICAL: Could not find ${type} button after 3 fallbacks.`);
+        console.debug(`[TONFELD] [ID:${cmdId}] DOM State:`, logBarState(root));
         return false;
     },
 

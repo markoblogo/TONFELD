@@ -1,4 +1,4 @@
-console.log('[YTMamp] Content script loaded');
+console.log('[TONFELD] Content script loaded');
 
 const WAVE_SEND_INTERVAL_MS = 100;
 const STATE_FALLBACK_INTERVAL_MS = 2000;
@@ -20,7 +20,7 @@ let domObserver = null;
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.v !== 1) return;
 
-    console.log(`[YTMamp] Received CMD: [ID:${request.id || 'N/A'}] ${request.cmd || request.type}`);
+    console.log(`[TONFELD] Received CMD: [ID:${request.id || 'N/A'}] ${request.cmd || request.type}`);
 
     if (request.type === 'cmd') {
         const cmdId = request.id || 'N/A';
@@ -30,16 +30,16 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             getMediaEl()?.pause();
         } else if (request.cmd === 'setVolume') {
             const res = setGainVolume(clamp01(request.value));
-            console.log(`[YTMamp] setVolume [ID:${request.id}] result: ${res}`);
+            console.log(`[TONFELD] setVolume [ID:${request.id}] result: ${res}`);
             chrome.runtime.sendMessage({ type: 'volStatus', v: 1, status: res });
         } else if (request.cmd === 'seek') {
             const media = getMediaEl();
             if (media && Number.isFinite(request.valueSec) && request.valueSec >= 0) {
                 media.currentTime = request.valueSec;
-                console.log(`[YTMamp] Seek [ID:${request.id}] to: ${request.valueSec}`);
+                console.log(`[TONFELD] Seek [ID:${request.id}] to: ${request.valueSec}`);
             }
         } else {
-            console.log(`[YTMamp] Unknown command: ${request.cmd}`);
+            console.log(`[TONFELD] Unknown command: ${request.cmd}`);
         }
         sendResponse({ ok: true });
     }
@@ -52,7 +52,7 @@ function clamp01(value) {
 function setGainVolume(value) {
     if (gainNode) {
         gainNode.gain.setTargetAtTime(value, audioCtx.currentTime, 0.05);
-        console.log(`[YTMamp] Gain set to ${value}`);
+        console.log(`[TONFELD] Gain set to ${value}`);
         return 'ok';
     }
     return window.YTM_ADAPTER.setVolume(value);
@@ -78,7 +78,7 @@ function reportTrack(info) {
     if (shouldSendVolume) {
         msg.volume = volume;
         lastSentVolume = volume;
-        console.log(`[YTMamp] Sharing volume: ${volume} (delta: ${delta.toFixed(3)})`);
+        console.log(`[TONFELD] Sharing volume: ${volume} (delta: ${delta.toFixed(3)})`);
     }
 
     chrome.runtime.sendMessage(msg);
@@ -90,7 +90,7 @@ function sendState(media = getMediaEl()) {
 
     if (isPlaying && !lastPlayingState) {
         if (audioCtx && audioCtx.state === 'suspended') {
-            audioCtx.resume().then(() => console.log('[YTMamp] AudioContext resumed on play'));
+            audioCtx.resume().then(() => console.log('[TONFELD] AudioContext resumed on play'));
         }
         chrome.storage.sync.get({ autoShow: true }, (data) => {
             if (data.autoShow) {
@@ -133,7 +133,7 @@ function hideYtmMiniPlayer() {
     for (const selector of selectors) {
         const btn = document.querySelector(selector);
         if (btn && btn.offsetParent !== null) {
-            console.log(`[YTMamp] miniplayer: detected via "${selector}", closing...`);
+            console.log(`[TONFELD] miniplayer: detected via "${selector}", closing...`);
             btn.click();
             return true;
         }
@@ -144,7 +144,7 @@ function hideYtmMiniPlayer() {
 function setupAudioCapture() {
     const media = getMediaEl();
     if (!media) {
-        console.warn('[YTMamp] wave: no media element found');
+        console.warn('[TONFELD] wave: no media element found');
         chrome.runtime.sendMessage({ type: 'waveFallback', v: 1, reason: 'No media element' });
         return;
     }
@@ -179,9 +179,9 @@ function setupAudioCapture() {
         if (!source) {
             source = audioCtx.createMediaElementSource(media);
             sources.set(media, source);
-            console.log('[YTMamp] wave: created new source for', media.tagName);
+            console.log('[TONFELD] wave: created new source for', media.tagName);
         } else {
-            console.log('[YTMamp] wave: reusing existing source for', media.tagName);
+            console.log('[TONFELD] wave: reusing existing source for', media.tagName);
         }
 
         source.connect(gainNode);
@@ -192,14 +192,14 @@ function setupAudioCapture() {
         currentGraphMediaEl = media;
         dataArray = new Uint8Array(analyser.frequencyBinCount);
 
-        console.log('[YTMamp] wave: graph connected successfully');
+        console.log('[TONFELD] wave: graph connected successfully');
 
         if (!isWaveLoopRunning) {
             isWaveLoopRunning = true;
             startStreamLoop();
         }
     } catch (e) {
-        console.error('[YTMamp] wave: capture failed:', e);
+        console.error('[TONFELD] wave: capture failed:', e);
         chrome.runtime.sendMessage({ type: 'waveFallback', v: 1, reason: e.message });
     }
     hideYtmMiniPlayer();
@@ -211,7 +211,7 @@ function startStreamLoop() {
 
         if (!analyser || media !== currentGraphMediaEl) {
             if (media && media !== currentGraphMediaEl) {
-                console.log('[YTMamp] wave: media element changed, re-binding...');
+                console.log('[TONFELD] wave: media element changed, re-binding...');
                 currentSource = null;
                 currentGraphMediaEl = null;
                 setupAudioCapture();
@@ -254,7 +254,7 @@ function observePlayerDom() {
     domObserver = new MutationObserver(() => {
         const media = getMediaEl();
         if (media && media !== currentMediaEl) {
-            console.log('[YTMamp] wave: new media detected via Observer');
+            console.log('[TONFELD] wave: new media detected via Observer');
             currentSource = null;
             currentGraphMediaEl = null;
             setupAudioCapture();

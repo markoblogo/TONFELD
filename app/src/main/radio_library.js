@@ -37,7 +37,7 @@ function filterStations(stations, query = {}) {
     const sort = fields[query.sort] || 'name';
     return filtered.sort((a, b) => String(a[sort]).localeCompare(String(b[sort]), undefined, { sensitivity: 'base' }) || a.name.localeCompare(b.name));
 }
-function stationKey(station) { return normalize(station.name).replace(/\([^)]*(?:aac|mp3|hifi|metadata|bose)[^)]*\)/g, '').replace(/[^\p{L}\p{N}]/gu, '') + '|' + station.countrycode; }
+function stationKey(station) { return fmCatalog.channelName(station.name) + '|' + station.countrycode; }
 function distinctStations(stations) {
     const groups = new Map();
     const score = (s) => (s.hls ? 0 : 100) + (/MP3|AAC|OGG|OPUS/i.test(s.codec) ? 10 : 0) + (s.favicon ? 1 : 0);
