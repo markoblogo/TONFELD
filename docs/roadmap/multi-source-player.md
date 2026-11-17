@@ -29,7 +29,7 @@ The owner reported that 0.8.0 works on Mac. Automated evidence and earlier nativ
 
 The owner explicitly confirmed that audit/sanitation/README/GitHub About is the final part of this block; discuss remaining development ideas afterwards.
 
-Owner acceptance: everything works; the station-art placeholder needs cosmetic alignment/proportion refinement, explicitly deferred without blocking release. Release reconciliation, builds and uploaded-asset verification are the final operational steps of this block. About remains prepared for manual owner insertion, Website empty.
+Owner acceptance: everything works; the station-art placeholder needs cosmetic alignment/proportion refinement, explicitly deferred without blocking release. **[v0.9.0 is published](https://github.com/markoblogo/TONFELD/releases/tag/v0.9.0)**; staged PR reconciliation, builds and uploaded-asset verification are complete. See [release verification](../releases/v0.9.0-verification.md). This block is closed. About remains prepared for manual owner insertion, Website empty.
 
 ## Deferred recording workspace
 
