@@ -76,3 +76,12 @@ npm start
 Electron desktop checks use generated audio and isolated profiles. macOS packaging builds the native location helper with Xcode command-line tools. The committed vector/raster brand assets require no font at runtime; `app/scripts/generate-brand.swift` regenerates them on macOS.
 
 See [contributing](CONTRIBUTING.md), [current roadmap](docs/roadmap/multi-source-player.md), [release notes](CHANGELOG.md) and [license](LICENSE). TONFELD is independent and is not affiliated with Google, YouTube, or the vintage electronics brands that informed its visual direction.
+
+<!-- ABVX:ECOSYSTEM:BEGIN -->
+## ABVX ecosystem
+
+- [AGENTS.md_generator](https://agentsmd.abvx.xyz/) — Keeps repository guidance and machine-readable context current. Current release: `v0.5.1`.
+- [abvx-agent-skills](https://abvx.xyz/work/abvx-agent-skills) — Uses shared, reviewable agent capabilities during maintenance. Current release: `v0.16.1`.
+
+_This block is generated from the reviewed ABVX ecosystem registry._
+<!-- ABVX:ECOSYSTEM:END -->
